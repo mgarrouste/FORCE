@@ -92,6 +92,21 @@
 
     <Component name="BOP2">
       <!-- produces electricity and consumes thermal heat, capacity optimized between 0 and max storage capacity -->
+      <produces name="electricity" dispatch="independent">
+        <consumes>thermal_heat</consumes>
+        <capacity resource="thermal_heat">
+          <opt_bounds>-948,0</opt_bounds>
+        </capacity>
+        <transfer>
+          <linear>
+            <rate resource="thermal_heat">-1</rate>
+            <rate resource="electricity">0.33</rate>
+          </linear>
+        </transfer>
+      </produces>
+      <economics>
+        <lifetime>30</lifetime>
+      </economics>
     </Component>
 
     <Component name="electricity_market">
