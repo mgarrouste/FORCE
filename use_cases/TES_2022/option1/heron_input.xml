@@ -26,4 +26,78 @@
       <persistence>3</persistence>
     </optimization_settings>
   </Case>
+
+  <Components>
+    <!-- PRODUCERS -->
+    <Component name="NPP">
+      <produces resource="reactor_heat" dispatch="fixed">
+        <capacity resource="reactor_heat">
+          <fixed_value>158</fixed_value> <!-- MWth -->
+        </capacity>
+      </produces>
+      <economics>
+        <lifetime>30</lifetime>
+      </economics>
+    </Component>
+
+    <Component name="Converter">
+      <!-- Virtual component to make sure heat from the TES does not go to the turbine -->
+      <produces resource="thermal_heat" dispatch="independent">
+        <consumes>reactor_heat</consumes>
+        <capacity resource="reactor_heat">
+          <fixed_value>158</fixed_value>
+          <!-- Reactor could send all its power to the TES -->
+        </capacity>
+        <economics>
+          <lifetime>30</lifetime>
+        </economics>
+      </produces>
+    </Component>
+
+    <Component name="BOP1">
+      <produces name="electricity" dispatch="independent">
+        <consumes>reactor_heat</consumes>
+        <capacity resource="reactor_heat">
+          <opt_bounds>-158,0</opt_bounds>
+        </capacity>
+        <transfer>
+          <linear>
+            <rate resource="reactor_heat">-1</rate>
+            <rate resource="electricity">0.33</rate>
+          </linear>
+        </transfer>
+      </produces>
+      <economics>
+        <lifetime>30</lifetime> <!-- TODO: check this value -->
+        <!-- TODO ADD Capex, FOM, VOM-->
+      </economics>
+    </Component>
+
+    <Component name="TES">
+      <stores resource="thermal_heat" dispatch="independent">
+        <capacity resource="thermal_heat">
+          <opt_bounds>0,948</opt_bounds>
+          <!-- Max 6 hours of heat stored -->
+        </capacity>
+        <initial_stored>
+          <fixed_value>30</fixed_value>
+        </initial_stored>
+        <RTE>0.9</RTE> <!--TODO: check this value -->
+      </stores>
+      <economics>
+        <lifetime>30</lifetime> <!-- TODO check this value-->
+        <!-- TODO: Add CAPEX, FOM, VOM -->
+      </economics>
+    </Component>
+
+    <Component name="BOP2">
+      <!-- produces electricity and consumes thermal heat, capacity optimized between 0 and max storage capacity -->
+    </Component>
+
+    <Component name="electricity_market">
+      <!-- Market sink with price signal from PJM ARMA -->
+    </Component>
+
+
+  </Components>
 </HERON>
