@@ -69,7 +69,25 @@
       </produces>
       <economics>
         <lifetime>30</lifetime> <!-- TODO: check this value -->
-        <!-- TODO ADD Capex, FOM, VOM-->
+        <!-- Assuming OM costs are negligible compared to NPP's -->
+        <CashFlow name="BOP1_capex" type="one-time" taxable="True" inflation="None" mult_target="False">
+          <!--TODO: dummy values, replace-->
+          <driver>
+            <variable>BOP1_capacity</variable>
+          </driver>
+          <reference_price>
+            <fixed_value>-1000</fixed_value>
+            <!--  $/MWth, TODO replace -->
+          </reference_price>
+          <scaling_factor_x>
+            <fixed_value>1</fixed_value>
+            <!-- TODO replace -->
+          </scaling_factor_x>
+          <reference_driver>
+            <fixed_value>1</fixed_value>
+            <!-- TODO replace -->
+          </reference_driver>
+        </CashFlow>
       </economics>
     </Component>
 
