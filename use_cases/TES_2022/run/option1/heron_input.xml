@@ -61,7 +61,7 @@
     </Component>
 
     <Component name="BOP1">
-      <produces name="electricity" dispatch="independent">
+      <produces resource="electricity" dispatch="independent">
         <consumes>reactor_heat</consumes>
         <capacity resource="reactor_heat">
           <opt_bounds>-158,0</opt_bounds>
@@ -134,7 +134,7 @@
 
     <Component name="BOP2">
       <!-- produces electricity and consumes thermal heat, capacity optimized between 0 and max storage capacity -->
-      <produces name="electricity" dispatch="independent">
+      <produces resource="electricity" dispatch="independent">
         <consumes>thermal_heat</consumes>
         <capacity resource="thermal_heat">
           <opt_bounds>-948,0</opt_bounds>
