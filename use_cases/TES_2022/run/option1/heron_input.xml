@@ -48,6 +48,12 @@
           <fixed_value>158</fixed_value>
           <!-- Reactor could send all its power to the TES -->
         </capacity>
+        <transfer>
+          <linear>
+            <rate resource="reactor_heat">-1</rate>
+            <rate resource="thermal_heat">1</rate>
+          </linear>
+        </transfer>
       </produces>
       <economics>
         <lifetime>30</lifetime>
