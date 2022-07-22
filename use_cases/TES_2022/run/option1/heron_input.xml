@@ -97,6 +97,27 @@
       </economics>
     </Component>
 
+    <Component name="TES_Charger">
+      <produces resource="tes_heat" dispatch="independent">
+        <consumes>thermal_heat</consumes>
+        <capacity resource="tes_heat">
+          <fixed_value>30</fixed_value> <!-- MWth-->
+          <!-- TODO: select real value for max charge power or may be part of the optimization?-->
+        </capacity>
+        <transfer>
+          <linear>
+            <rate resource="thermal_heat">-1</rate>
+            <rate resource="tes_heat">1</rate>
+          </linear>
+        </transfer>
+      </produces>
+      <economics>
+        <lifetime>30</lifetime>
+        <!--TODO: CAPEX?-->
+      </economics>
+    </Component>
+    
+    
     <Component name="TES">
       <stores resource="thermal_heat" dispatch="independent">
         <capacity resource="thermal_heat">
