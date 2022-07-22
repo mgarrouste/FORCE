@@ -171,15 +171,16 @@
     </Component>
 
     <Component name="BOP2">
-      <!-- produces electricity and consumes thermal heat, capacity optimized between 0 and max storage capacity -->
+      <!-- Include max discharge power from TES to electricity grid -->
       <produces resource="electricity" dispatch="independent">
-        <consumes>thermal_heat</consumes>
-        <capacity resource="thermal_heat">
-          <opt_bounds>-952.8,0</opt_bounds>
+        <consumes>tes_heat</consumes>
+        <capacity resource="tes_heat">
+          <opt_bounds>-500,0</opt_bounds>
+          <!-- TODO: replace lower bound with real max discharge power -->
         </capacity>
         <transfer>
           <linear>
-            <rate resource="thermal_heat">-1</rate>
+            <rate resource="tes_heat">-1</rate>
             <rate resource="electricity">0.33</rate>
           </linear>
         </transfer>
