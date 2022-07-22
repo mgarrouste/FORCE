@@ -101,7 +101,7 @@
       <produces resource="tes_heat" dispatch="independent">
         <consumes>thermal_heat</consumes>
         <capacity resource="tes_heat">
-          <fixed_value>30</fixed_value> <!-- MWth-->
+          <opt_bounds>0,160</opt_bounds> <!-- MWth-->
           <!-- TODO: select real value for max charge power or may be part of the optimization?-->
         </capacity>
         <transfer>
@@ -175,7 +175,7 @@
       <produces resource="electricity" dispatch="independent">
         <consumes>tes_heat</consumes>
         <capacity resource="tes_heat">
-          <opt_bounds>-500,0</opt_bounds>
+          <opt_bounds>-1000,0</opt_bounds>
           <!-- TODO: replace lower bound with real max discharge power -->
         </capacity>
         <transfer>
