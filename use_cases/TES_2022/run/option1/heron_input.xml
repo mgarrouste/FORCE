@@ -136,9 +136,9 @@
     
     
     <Component name="TES">
-      <stores resource="thermal_heat" dispatch="independent">
-        <capacity resource="thermal_heat">
-          <opt_bounds>0,948</opt_bounds>
+      <stores resource="tes_heat" dispatch="independent">
+        <capacity resource="tes_heat">
+          <opt_bounds>0,952.8</opt_bounds>
           <!-- Max 6 hours of heat stored -->
         </capacity>
         <initial_stored>
