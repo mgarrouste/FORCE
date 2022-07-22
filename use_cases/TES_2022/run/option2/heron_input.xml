@@ -42,14 +42,14 @@
 
     <Component name="TES_Charger">
       <produces resource="tes_heat" dispatch="independent">
-        <consumes>thermal_heat</consumes>
-        <capacity resource="thermal_heat">
-          <opt_bounds debug_value="-100">-160,0</opt_bounds> <!-- MWth-->
-          <!-- TODO: select real value for max charge power or may be part of the optimization?-->
+        <consumes>reactor_heat</consumes>
+        <capacity resource="reactor_heat">
+          <fixed_value>-158.8</fixed_value> <!-- MWth-->
+          <!-- Must be able to take in the power from the NPP-->
         </capacity>
         <transfer>
           <linear>
-            <rate resource="thermal_heat">-1</rate>
+            <rate resource="reactor_heat">-1</rate>
             <rate resource="tes_heat">1</rate>
           </linear>
         </transfer>
