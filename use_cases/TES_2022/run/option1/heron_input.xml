@@ -40,31 +40,11 @@
       </economics>
     </Component>
 
-    <Component name="Converter">
-      <!-- Virtual free component to make sure heat from the TES does not go to the turbine -->
-      <produces resource="thermal_heat" dispatch="independent">
-        <consumes>reactor_heat</consumes>
-        <capacity resource="reactor_heat">
-          <fixed_value>-160</fixed_value>
-          <!-- Reactor could send all its power to the TES -->
-        </capacity>
-        <transfer>
-          <linear>
-            <rate resource="reactor_heat">-1</rate>
-            <rate resource="thermal_heat">1</rate>
-          </linear>
-        </transfer>
-      </produces>
-      <economics>
-        <lifetime>30</lifetime>
-      </economics>
-    </Component>
-
     <Component name="BOP1">
       <produces resource="electricity" dispatch="independent">
         <consumes>reactor_heat</consumes>
         <capacity resource="reactor_heat">
-          <opt_bounds>-158.8,0</opt_bounds>
+          <opt_bounds debug_value="-58.8">-160,0</opt_bounds>
         </capacity>
         <transfer>
           <linear>
@@ -97,11 +77,31 @@
       </economics>
     </Component>
 
+    <Component name="Converter">
+      <!-- Virtual free component to make sure heat from the TES does not go to the turbine -->
+      <produces resource="thermal_heat" dispatch="independent">
+        <consumes>reactor_heat</consumes>
+        <capacity resource="reactor_heat">
+          <fixed_value>-160</fixed_value>
+          <!-- Reactor could send all its power to the TES -->
+        </capacity>
+        <transfer>
+          <linear>
+            <rate resource="reactor_heat">-1</rate>
+            <rate resource="thermal_heat">1</rate>
+          </linear>
+        </transfer>
+      </produces>
+      <economics>
+        <lifetime>30</lifetime>
+      </economics>
+    </Component>
+
     <Component name="TES_Charger">
       <produces resource="tes_heat" dispatch="independent">
         <consumes>thermal_heat</consumes>
-        <capacity resource="tes_heat">
-          <opt_bounds>0,160</opt_bounds> <!-- MWth-->
+        <capacity resource="thermal_heat">
+          <opt_bounds debug_value="-100">-160,0</opt_bounds> <!-- MWth-->
           <!-- TODO: select real value for max charge power or may be part of the optimization?-->
         </capacity>
         <transfer>
@@ -138,7 +138,7 @@
     <Component name="TES">
       <stores resource="tes_heat" dispatch="independent">
         <capacity resource="tes_heat">
-          <opt_bounds>0,952.8</opt_bounds>
+          <opt_bounds debug_value="200">0,952.8</opt_bounds>
           <!-- Max 6 hours of heat stored -->
         </capacity>
         <initial_stored>
@@ -175,7 +175,7 @@
       <produces resource="electricity" dispatch="independent">
         <consumes>tes_heat</consumes>
         <capacity resource="tes_heat">
-          <opt_bounds>-1000,0</opt_bounds>
+          <opt_bounds debug_value="-300">-1000,0</opt_bounds>
           <!-- TODO: replace lower bound with real max discharge power -->
         </capacity>
         <transfer>
