@@ -32,7 +32,7 @@
     <Component name="NPP">
       <produces resource="reactor_heat" dispatch="fixed">
         <capacity resource="reactor_heat">
-          <fixed_value>158</fixed_value> <!-- MWth -->
+          <fixed_value>158.8</fixed_value> <!-- MWth -->
         </capacity>
       </produces>
       <economics>
@@ -64,7 +64,7 @@
       <produces resource="electricity" dispatch="independent">
         <consumes>reactor_heat</consumes>
         <capacity resource="reactor_heat">
-          <opt_bounds>-158,0</opt_bounds>
+          <opt_bounds>-158.8,0</opt_bounds>
         </capacity>
         <transfer>
           <linear>
@@ -137,7 +137,7 @@
       <produces resource="electricity" dispatch="independent">
         <consumes>thermal_heat</consumes>
         <capacity resource="thermal_heat">
-          <opt_bounds>-948,0</opt_bounds>
+          <opt_bounds>-952.8,0</opt_bounds>
         </capacity>
         <transfer>
           <linear>
