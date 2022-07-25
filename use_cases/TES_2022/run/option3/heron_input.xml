@@ -44,8 +44,8 @@
       <produces resource="tes_heat" dispatch="independent">
         <consumes>reactor_heat</consumes>
         <capacity resource="reactor_heat">
-          <opt_bounds>-160,0</opt_bounds> <!-- MWth-->
-          <!-- Must be able to take in the power from the NPP-->
+          <fixed_value>-100</fixed_value><!-- MWth-->
+          <!-- Max charging power set to 100MWth-->
         </capacity>
         <transfer>
           <linear>
@@ -80,7 +80,7 @@
     <Component name="TES">
       <stores resource="tes_heat" dispatch="independent">
         <capacity resource="tes_heat">
-          <opt_bounds debug_value="200">0,952.8</opt_bounds>
+          <opt_bounds>0,952.8</opt_bounds>
           <!-- Max 6 hours of heat stored -->
         </capacity>
         <initial_stored>
@@ -117,8 +117,8 @@
       <produces resource="reactor_heat" dispatch="independent">
         <consumes>tes_heat</consumes>
         <capacity resource="tes_heat">
-          <fixed_value>-1000</fixed_value>
-          <!-- Reactor could send all its power to the TES -->
+          <fixed_value>-100</fixed_value>
+          <!-- Max discharge power 100MWth-->
         </capacity>
         <transfer>
           <linear>
@@ -136,8 +136,10 @@
       <produces resource="electricity" dispatch="independent">
         <consumes>reactor_heat</consumes>
         <capacity resource="reactor_heat">
-          <opt_bounds debug_value="-300">-1111.6,0</opt_bounds>
-          <!-- Bounds up to full capacity of NPP and TES -->
+          <opt_bounds>-258.8,0</opt_bounds>
+          <!-- Bounds up to full capacity of NPP and TES: 
+            Max discharge power =100 MWth
+            NPP output = 158.8MWth-->
         </capacity>
         <transfer>
           <linear>
