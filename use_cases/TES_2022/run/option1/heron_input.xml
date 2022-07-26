@@ -44,7 +44,7 @@
       <produces resource="electricity" dispatch="independent">
         <consumes>reactor_heat</consumes>
         <capacity resource="reactor_heat">
-          <opt_bounds debug_value="-58.8">-160,0</opt_bounds>
+          <opt_bounds debug_value="-150">-160,0</opt_bounds>
         </capacity>
         <transfer>
           <linear>
@@ -101,7 +101,8 @@
       <produces resource="tes_heat" dispatch="independent">
         <consumes>thermal_heat</consumes>
         <capacity resource="thermal_heat">
-          <opt_bounds debug_value="-100">-160,0</opt_bounds> <!-- MWth-->
+          <fixed_value>-40</fixed_value>
+          <!--<opt_bounds>-100,0</opt_bounds>--> <!-- MWth-->
           <!-- TODO: select real value for max charge power or may be part of the optimization?-->
         </capacity>
         <transfer>
@@ -138,11 +139,11 @@
     <Component name="TES">
       <stores resource="tes_heat" dispatch="independent">
         <capacity resource="tes_heat">
-          <opt_bounds debug_value="200">0,952.8</opt_bounds>
+          <opt_bounds debug_value="100">0,952.8</opt_bounds>
           <!-- Max 6 hours of heat stored -->
         </capacity>
         <initial_stored>
-          <fixed_value>30</fixed_value>
+          <fixed_value>50</fixed_value>
         </initial_stored>
         <RTE>0.9</RTE> <!--TODO: check this value -->
       </stores>
@@ -175,7 +176,7 @@
       <produces resource="electricity" dispatch="independent">
         <consumes>tes_heat</consumes>
         <capacity resource="tes_heat">
-          <opt_bounds debug_value="-300">-1000,0</opt_bounds>
+          <opt_bounds debug_value="-30">-50,0</opt_bounds>
           <!-- TODO: replace lower bound with real max discharge power -->
         </capacity>
         <transfer>
