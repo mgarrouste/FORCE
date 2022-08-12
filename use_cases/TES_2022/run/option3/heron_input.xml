@@ -57,21 +57,18 @@
       <economics>
         <lifetime>30</lifetime>
         <CashFlow name="TES_Charger_capex" type="one-time" taxable="True" inflation="None" mult_target="False">
-          <!--TODO: dummy values, replace-->
           <driver>
             <variable>TES_Charger_capacity</variable>
           </driver>
           <reference_price>
-            <fixed_value>-3000</fixed_value>
-            <!--  $/MWhth, TODO replace -->
+            <fixed_value>-2964480.3</fixed_value>
+            <!--  $/MWhth -->
           </reference_price>
           <scaling_factor_x>
-            <fixed_value>1</fixed_value>
-            <!-- TODO replace -->
+            <fixed_value>0.959</fixed_value>
           </scaling_factor_x>
           <reference_driver>
-            <fixed_value>1</fixed_value>
-            <!-- TODO replace -->
+            <fixed_value>-72.57</fixed_value>
           </reference_driver>
         </CashFlow>
       </economics>
@@ -92,21 +89,18 @@
         <lifetime>30</lifetime> <!-- TODO check this value-->
         <!-- TODO: OM ??-->
         <CashFlow name="TES_capex" type="one-time" taxable="True" inflation="None" mult_target="False">
-          <!--TODO: dummy values, replace-->
           <driver>
             <variable>TES_capacity</variable>
           </driver>
           <reference_price>
-            <fixed_value>-3000</fixed_value>
-            <!--  $/MWhth, TODO replace -->
+            <fixed_value>-36452122.78</fixed_value>
+            <!--  $/MWhth -->
           </reference_price>
           <scaling_factor_x>
-            <fixed_value>1</fixed_value>
-            <!-- TODO replace -->
+            <fixed_value>0.839</fixed_value>
           </scaling_factor_x>
           <reference_driver>
-            <fixed_value>1</fixed_value>
-            <!-- TODO replace -->
+            <fixed_value>435.42</fixed_value>
           </reference_driver>
         </CashFlow>
       </economics>
@@ -152,21 +146,18 @@
         <lifetime>30</lifetime> <!-- TODO: check this value -->
         <!-- Assuming OM costs are negligible compared to NPP's -->
         <CashFlow name="BOP_capex" type="one-time" taxable="True" inflation="None" mult_target="False">
-          <!--TODO: dummy values, replace-->
           <driver>
-            <variable>BOP_capacity</variable>
+            <variable>BOP2_capacity</variable>
           </driver>
           <reference_price>
-            <fixed_value>-1000</fixed_value>
-            <!--  $/MWth, TODO replace -->
+            <fixed_value>-10896427</fixed_value>
+            <!--  $/MWth -->
           </reference_price>
           <scaling_factor_x>
-            <fixed_value>1</fixed_value>
-            <!-- TODO replace -->
+            <fixed_value>0.692</fixed_value>
           </scaling_factor_x>
           <reference_driver>
-            <fixed_value>1</fixed_value>
-            <!-- TODO replace -->
+            <fixed_value>-18.57</fixed_value>
           </reference_driver>
         </CashFlow>
       </economics>
