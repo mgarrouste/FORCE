@@ -129,7 +129,7 @@
       <produces resource="electricity" dispatch="independent">
         <consumes>reactor_heat</consumes>
         <capacity resource="reactor_heat">
-          <opt_bounds debug_value="-250">-258.8,0</opt_bounds>
+          <opt_bounds debug_value="-258.8">-258.8,0</opt_bounds>
           <!-- Bounds up to full capacity of NPP and TES: 
             Max discharge power =100 MWth
             NPP output = 158.8MWth-->
