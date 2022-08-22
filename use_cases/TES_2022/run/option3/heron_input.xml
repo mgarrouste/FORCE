@@ -44,8 +44,7 @@
       <produces resource="tes_heat" dispatch="independent">
         <consumes>reactor_heat</consumes>
         <capacity resource="reactor_heat">
-          <fixed_value>-100</fixed_value><!-- MWth-->
-          <!-- Max charging power set to 100MWth-->
+          <opt_bounds>-158.8,-50</opt_bounds><!-- MWth-->
         </capacity>
         <transfer>
           <linear>
@@ -159,6 +158,33 @@
           <reference_driver>
             <fixed_value>-18.57</fixed_value>
           </reference_driver>
+        </CashFlow>
+      </economics>
+    </Component>
+
+    <Component name="electricity_market">
+      <!-- Market sink with price signal from PJM ARMA -->
+      <demands resource="electricity" dispatch="dependent">
+        <capacity>
+          <fixed_value>-1e200</fixed_value>
+        </capacity>
+      </demands>
+      <economics>
+        <lifetime>30</lifetime>
+        <CashFlow name="grid_sales" type="repeating" taxable="True" inflation="None" mult_target="False">
+          <driver>
+            <activity>electricity</activity>
+            <multiplier>-1</multiplier>
+          </driver>
+          <reference_price>
+            <ARMA variable='price'>price</ARMA> <!-- $/MWh -->
+          </reference_price>
+          <reference_driver>
+            <fixed_value>1</fixed_value>
+          </reference_driver>
+          <scaling_factor_x>
+            <fixed_value>1</fixed_value>
+          </scaling_factor_x>
         </CashFlow>
       </economics>
     </Component>
