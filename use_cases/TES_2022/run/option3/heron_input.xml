@@ -44,7 +44,7 @@
       <produces resource="tes_heat" dispatch="independent">
         <consumes>reactor_heat</consumes>
         <capacity resource="reactor_heat">
-          <opt_bounds>-158.8,-50</opt_bounds><!-- MWth-->
+          <opt_bounds debug_value="-100">-158.8,-50</opt_bounds><!-- MWth-->
         </capacity>
         <transfer>
           <linear>
@@ -76,7 +76,7 @@
     <Component name="TES">
       <stores resource="tes_heat" dispatch="independent">
         <capacity resource="tes_heat">
-          <opt_bounds>0,952.8</opt_bounds>
+          <opt_bounds debug_value="500">0,952.8</opt_bounds>
           <!-- Max 6 hours of heat stored -->
         </capacity>
         <initial_stored>
@@ -129,7 +129,7 @@
       <produces resource="electricity" dispatch="independent">
         <consumes>reactor_heat</consumes>
         <capacity resource="reactor_heat">
-          <opt_bounds>-258.8,0</opt_bounds>
+          <opt_bounds debug_value="-250">-258.8,0</opt_bounds>
           <!-- Bounds up to full capacity of NPP and TES: 
             Max discharge power =100 MWth
             NPP output = 158.8MWth-->
