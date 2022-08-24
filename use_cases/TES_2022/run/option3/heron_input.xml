@@ -146,7 +146,7 @@
         <!-- Assuming OM costs are negligible compared to NPP's -->
         <CashFlow name="BOP_capex" type="one-time" taxable="True" inflation="None" mult_target="False">
           <driver>
-            <variable>BOP2_capacity</variable>
+            <variable>BOP_capacity</variable>
           </driver>
           <reference_price>
             <fixed_value>-10896427</fixed_value>
