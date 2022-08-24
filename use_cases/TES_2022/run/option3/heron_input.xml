@@ -2,7 +2,7 @@
   <Case name="Option3">
     <mode>opt</mode>
     <verbosity>debug</verbosity>
-    <num_arma_samples>10</num_arma_samples>
+    <num_arma_samples>300</num_arma_samples>
     <!--<debug></debug>-->
     <time_discretization>
       <time_variable>hour</time_variable>
