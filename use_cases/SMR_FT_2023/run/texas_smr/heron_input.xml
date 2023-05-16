@@ -41,14 +41,33 @@
   <Components>
   
   <!-- PRODUCTION Components -->
-    <Component name="npp">
+    <Component name="smr">
       <produces resource="electricity" dispatch="fixed">
         <capacity resource="electricity">
-          <fixed_value>1280</fixed_value> <!-- MWe, 1 unit -->
+          <sweep_values>60,360,720,1080,1440</sweep_values> <!-- MWe; 1,6,12,18,24 modules of 60MWe-->
         </capacity>
       </produces>
       <economics>
         <lifetime>60</lifetime>
+        <CashFlow name="smrCAPEX" type="one-time" taxable="False" inflation="None" mult_target="False">
+          <driver>
+            <variable>smr_capacity</variable>
+          </driver>
+          <reference_price>
+            <fixed_value>-4199000</fixed_value> <!--$4,199,000/MWe-->
+          </reference_price>
+          <reference_driver>
+            <fixed_value>1</fixed_value>
+          </reference_driver>
+        </CashFlow>
+        <CashFlow name="smrVOM" type='repeating' taxable="True" inflation="None" mult_target="False">
+          <driver>
+            <activity>electricity</activity>
+          </driver>
+          <reference_price>
+            <fixed_value>25</fixed_value><!-- $25/MWh-->
+          </reference_price>
+        </CashFlow>
       </economics>
     </Component>
 
@@ -57,7 +76,7 @@
       <produces resource="h2" dispatch="independent">
         <consumes>electricity</consumes>
         <capacity resource="electricity">
-          <sweep_values>-1265,-650,-100</sweep_values> <!-- MWe -->
+          <sweep_values>-45,-345,-705,-1065,-1425</sweep_values> <!-- MWe -->
         </capacity>
         <minimum resource="electricity">
           <!-- To model hot standby mode, 0.85% of electrical capacity-->
@@ -126,7 +145,7 @@
       <produces resource='naphtha,diesel,jet_fuel' dispatch='fixed'>
         <consumes>h2</consumes>
         <capacity resource='h2'>
-          <sweep_values>-31789,-15000,-2513</sweep_values>
+          <sweep_values>-1133,-8672,-17719,-26766,-35813</sweep_values>
         </capacity>
         <transfer>
           <linear>
@@ -306,7 +325,7 @@
     <Component name='h2_storage'>
       <stores resource="h2" dispatch="independent">
         <capacity resource='h2'>
-          <sweep_values>10,500000,2000000,4000000</sweep_values> <!-- kg: Max is 4 hours worth of H2 for FT -->
+          <sweep_values>10,54400,416300,850600,1284800,1719100</sweep_values> <!-- kg: Max is 4 hours worth of H2 for FT -->
         </capacity>
         <initial_stored>
           <fixed_value>0.1</fixed_value>
