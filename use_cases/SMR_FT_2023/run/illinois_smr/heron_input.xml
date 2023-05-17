@@ -42,7 +42,7 @@
   
   <!-- PRODUCTION Components -->
     <Component name="smr">
-      <produces resource="electricity" dispatch="independent">
+      <produces resource="electricity" dispatch="fixed">
         <capacity resource="electricity">
           <sweep_values>60,360,720,1080,1440</sweep_values> <!-- MWe; 1,6,12,18,24 modules of 60MWe-->
         </capacity>
