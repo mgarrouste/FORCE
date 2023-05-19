@@ -1,8 +1,8 @@
 <HERON>
-  <Case name="braidwood_sweep">
+  <Case name="stp_sweep">
     <label name="scenario">ref</label>
-    <label name="location">braidwood</label>
-    <label name="fuel_region">illinois</label>
+    <label name="location">south_texas_project</label>
+    <label name="fuel_region">west_south_central</label>
     <label name="elec_data">covid</label>
     <mode>sweep</mode>
     <parallel>
@@ -14,7 +14,7 @@
     </parallel>
     <!--<debug></debug>-->
     <verbosity>debug</verbosity>
-    <num_arma_samples>4</num_arma_samples>
+    <num_arma_samples>10</num_arma_samples>
     <time_discretization>
       <time_variable>hour</time_variable>
       <year_variable>Year</year_variable>
@@ -24,7 +24,7 @@
     <economics>
       <ProjectTime>20</ProjectTime>
       <DiscountRate>0.1</DiscountRate>
-      <tax>0.2960</tax>
+      <tax>0.21</tax>
       <inflation>0.0218</inflation>
       <verbosity>50</verbosity>
     </economics>
@@ -44,7 +44,7 @@
     <Component name="npp">
       <produces resource="electricity" dispatch="fixed">
         <capacity resource="electricity">
-          <fixed_value>1193</fixed_value> <!-- MWe, 1 unit -->
+          <fixed_value>1280</fixed_value> <!-- MWe, 1 unit -->
         </capacity>
       </produces>
       <economics>
@@ -57,7 +57,7 @@
       <produces resource="h2" dispatch="independent">
         <consumes>electricity</consumes>
         <capacity resource="electricity">
-          <sweep_values>-985,-885,-785,-685,-585,-485,-385,-285,-85</sweep_values> <!-- MWe -->
+          <sweep_values>-985,-885,-785,-685,-585,-485,-385,-285,-185,-85</sweep_values> <!-- MWe -->
         </capacity>
         <minimum resource="electricity">
           <!-- To model hot standby mode, 0.85% of electrical capacity-->
@@ -80,7 +80,7 @@
           </driver>
           <reference_price>
             <fixed_value>-702600000</fixed_value> <!--New one term capex regression-->
-            <multiplier>0.75</multiplier>
+            <multiplier>1.25</multiplier>
           </reference_price>
           <reference_driver>
             <fixed_value>-1076</fixed_value>
@@ -127,7 +127,7 @@
       <produces resource='naphtha,diesel,jet_fuel' dispatch='fixed'>
         <consumes>h2</consumes>
         <capacity resource='h2'>
-          <sweep_values>-24756,-22243,-19730,-17217,-14704,-12191,-9678,-7165,-465,-2139</sweep_values>
+          <sweep_values>-24756,-22243,-19730,-17217,-14704,-12191,-9678,-7165,-4652,-2139</sweep_values>
         </capacity>
         <transfer>
           <linear>
@@ -150,7 +150,7 @@
           </reference_driver>
           <reference_price>
             <fixed_value>-158102945</fixed_value> <!-- $2020 -->
-            <multiplier>0.75</multiplier>
+            <multiplier>1.25</multiplier>
           </reference_price>
           <scaling_factor_x>
             <fixed_value>0.626</fixed_value>
@@ -308,7 +308,7 @@
     <Component name='h2_storage'>
       <stores resource="h2" dispatch="independent">
         <capacity resource='h2'>
-          <sweep_values>10,11002,22005,33007,44010,55012,66015,77017,88020,99022</sweep_values> <!-- kg: Max is 4 hours worth of H2 for FT -->
+          <sweep_values>10,924208,1848415,2772623,3696831,4621038,5545246,6469454,7393661,8317869</sweep_values> <!-- kg: Max is 4 hours worth of H2 for FT -->
         </capacity>
         <initial_stored>
           <fixed_value>0.1</fixed_value>
@@ -325,7 +325,7 @@
           </driver>
           <reference_price>
             <fixed_value>-500</fixed_value>
-            <multiplier>0.75</multiplier>
+            <multiplier>1.25</multiplier>
             <!-- Capex cost of $500/kg-H2: Assumption -->
           </reference_price>
           <depreciate>15</depreciate>
@@ -336,7 +336,7 @@
   </Components>
 
   <DataGenerators>
-    <ARMA name='price' variable="price">../../train/Output_braidwood_2012_2021_DA/arma.pk</ARMA>
+    <ARMA name='price' variable="price">../../train/Output_stp_1_2012_2021_DA/arma.pk</ARMA>
     <Function name="functions">../functions.py</Function>
   </DataGenerators>
 </HERON>

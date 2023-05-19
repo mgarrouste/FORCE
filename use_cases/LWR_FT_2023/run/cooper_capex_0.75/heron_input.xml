@@ -1,8 +1,8 @@
 <HERON>
-  <Case name="braidwood_sweep">
+  <Case name="cooper_sweep">
     <label name="scenario">ref</label>
-    <label name="location">braidwood</label>
-    <label name="fuel_region">illinois</label>
+    <label name="location">cooper</label>
+    <label name="fuel_region">nebraska</label>
     <label name="elec_data">covid</label>
     <mode>sweep</mode>
     <parallel>
@@ -24,7 +24,7 @@
     <economics>
       <ProjectTime>20</ProjectTime>
       <DiscountRate>0.1</DiscountRate>
-      <tax>0.2960</tax>
+      <tax>0.2717</tax>
       <inflation>0.0218</inflation>
       <verbosity>50</verbosity>
     </economics>
@@ -44,7 +44,7 @@
     <Component name="npp">
       <produces resource="electricity" dispatch="fixed">
         <capacity resource="electricity">
-          <fixed_value>1193</fixed_value> <!-- MWe, 1 unit -->
+          <fixed_value>769</fixed_value> <!-- MWe, 1 unit -->
         </capacity>
       </produces>
       <economics>
@@ -57,7 +57,7 @@
       <produces resource="h2" dispatch="independent">
         <consumes>electricity</consumes>
         <capacity resource="electricity">
-          <sweep_values>-985,-885,-785,-685,-585,-485,-385,-285,-85</sweep_values> <!-- MWe -->
+          <sweep_values>-754,-680,-605,-531,-457,-382,-308,-234,-159,-85</sweep_values> <!-- MWe -->
         </capacity>
         <minimum resource="electricity">
           <!-- To model hot standby mode, 0.85% of electrical capacity-->
@@ -127,7 +127,7 @@
       <produces resource='naphtha,diesel,jet_fuel' dispatch='fixed'>
         <consumes>h2</consumes>
         <capacity resource='h2'>
-          <sweep_values>-24756,-22243,-19730,-17217,-14704,-12191,-9678,-7165,-465,-2139</sweep_values>
+          <sweep_values>-18951,-17083,-15215,-13347,-11479,-9611,-7743,-5875,-4007,-2139</sweep_values>
         </capacity>
         <transfer>
           <linear>
@@ -308,7 +308,7 @@
     <Component name='h2_storage'>
       <stores resource="h2" dispatch="independent">
         <capacity resource='h2'>
-          <sweep_values>10,11002,22005,33007,44010,55012,66015,77017,88020,99022</sweep_values> <!-- kg: Max is 4 hours worth of H2 for FT -->
+          <sweep_values>10,8422,16845,25267,33690,42112,50535,58957,67380,75802</sweep_values> <!-- kg: Max is 4 hours worth of H2 for FT -->
         </capacity>
         <initial_stored>
           <fixed_value>0.1</fixed_value>
@@ -336,7 +336,7 @@
   </Components>
 
   <DataGenerators>
-    <ARMA name='price' variable="price">../../train/Output_braidwood_2012_2021_DA/arma.pk</ARMA>
+    <ARMA name='price' variable="price">../../train/Output_cooper_2014_2021_DA/arma.pk</ARMA>
     <Function name="functions">../functions.py</Function>
   </DataGenerators>
 </HERON>
