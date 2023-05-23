@@ -1,5 +1,5 @@
 <HERON>
-  <Case name="prairie_island_sweep">
+  <Case name="piSA_ptc_000">
     <label name="scenario">ref</label>
     <label name="location">prairie_island</label>
     <label name="fuel_region">minnesota</label>

@@ -1,5 +1,5 @@
 <HERON>
-  <Case name="davis_besse_sweep">
+  <Case name="dbSA_ptc_000">
     <label name="scenario">ref</label>
     <label name="location">davis_besse</label>
     <label name="fuel_region">ohio</label>
@@ -188,7 +188,7 @@
             <activity>h2</activity>
           </driver>
           <reference_price>
-            <Function method="h2_ptc_ft">functions</Function>
+            <Function method="h2_ptc_ft_000">functions</Function>
           </reference_price>
         </CashFlow>
       </economics>

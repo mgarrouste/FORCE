@@ -1,5 +1,5 @@
 <HERON>
-  <Case name="stp_sweep">
+  <Case name="stpSA_ptc_000">
     <label name="scenario">ref</label>
     <label name="location">south_texas_project</label>
     <label name="fuel_region">west_south_central</label>
