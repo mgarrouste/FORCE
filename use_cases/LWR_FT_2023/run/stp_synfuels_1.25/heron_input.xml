@@ -1,5 +1,5 @@
 <HERON>
-  <Case name="stpSA_ptc_100">
+  <Case name="stp_sweep">
     <label name="scenario">ref</label>
     <label name="location">south_texas_project</label>
     <label name="fuel_region">west_south_central</label>
@@ -188,7 +188,7 @@
             <activity>h2</activity>
           </driver>
           <reference_price>
-            <Function method="h2_ptc_ft_100">functions</Function>
+            <Function method="h2_ptc_ft">functions</Function>
           </reference_price>
         </CashFlow>
       </economics>
@@ -253,7 +253,7 @@
         <CashFlow name='naphtha_sales' type='repeating' taxable='True' inflation='none' mult_target='False'>
           <driver>
             <activity>naphtha</activity>
-            <multiplier>-1</multiplier>
+            <multiplier>-1.25</multiplier>
           </driver>
           <reference_price>
             <Function method='naphtha_price'>functions</Function>
@@ -273,7 +273,7 @@
         <CashFlow name='jet_fuel_sales' type='repeating' taxable='True' inflation='none' mult_target='False'>
           <driver>
             <activity>jet_fuel</activity>
-            <multiplier>-1</multiplier>
+            <multiplier>-1.25</multiplier>
           </driver>
           <reference_price>
             <Function method='jet_fuel_price'>functions</Function>
@@ -293,7 +293,7 @@
         <CashFlow name='diesel_sales' type='repeating' taxable='True' inflation='none' mult_target='False'>
           <driver>
             <activity>diesel</activity>
-            <multiplier>-1</multiplier>
+            <multiplier>-1.25</multiplier>
           </driver>
           <reference_price>
             <Function method='diesel_price'>functions</Function>
