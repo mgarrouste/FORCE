@@ -1,8 +1,8 @@
 <HERON>
-  <Case name="bSA_ptc_000">
+  <Case name="piSA_ptc_270">
     <label name="scenario">ref</label>
-    <label name="location">braidwood</label>
-    <label name="fuel_region">illinois</label>
+    <label name="location">prairie_island</label>
+    <label name="fuel_region">minnesota</label>
     <label name="elec_data">covid</label>
     <mode>sweep</mode>
     <parallel>
@@ -24,7 +24,7 @@
     <economics>
       <ProjectTime>20</ProjectTime>
       <DiscountRate>0.1</DiscountRate>
-      <tax>0.2960</tax>
+      <tax>0.2874</tax>
       <inflation>0.0218</inflation>
       <verbosity>50</verbosity>
     </economics>
@@ -34,7 +34,7 @@
     <optimization_settings>
       <metric>expectedValue</metric>
       <type>max</type>
-      <persistence>3</persistence>
+      <persistence>5</persistence>
     </optimization_settings>
   </Case>
 
@@ -44,7 +44,7 @@
     <Component name="npp">
       <produces resource="electricity" dispatch="fixed">
         <capacity resource="electricity">
-          <fixed_value>1193</fixed_value> <!-- MWe, 1 unit -->
+          <fixed_value>522</fixed_value> <!-- MWe, 1 unit -->
         </capacity>
       </produces>
       <economics>
@@ -57,7 +57,7 @@
       <produces resource="h2" dispatch="independent">
         <consumes>electricity</consumes>
         <capacity resource="electricity">
-          <sweep_values>-985,-785,-585,-385,-185</sweep_values> <!-- MWe -->
+          <sweep_values>-507,-460,-413,-366,-320,-273,-226,-179,-132,-85</sweep_values> <!-- MWe -->
         </capacity>
         <minimum resource="electricity">
           <!-- To model hot standby mode, 0.85% of electrical capacity-->
@@ -126,7 +126,7 @@
       <produces resource='naphtha,diesel,jet_fuel' dispatch='fixed'>
         <consumes>h2</consumes>
         <capacity resource='h2'>
-          <sweep_values>-24756,-19730,-14704,-9678,-4652</sweep_values>
+          <sweep_values>-12743,-11565,-10387,-9208,-8030,-6852,-5674,-4495,-3317,-2139</sweep_values>
         </capacity>
         <transfer>
           <linear>
@@ -188,7 +188,7 @@
             <activity>h2</activity>
           </driver>
           <reference_price>
-            <Function method="h2_ptc_ft_000">functions</Function>
+            <Function method="h2_ptc_ft_270">functions</Function>
           </reference_price>
         </CashFlow>
       </economics>
@@ -306,7 +306,7 @@
     <Component name='h2_storage'>
       <stores resource="h2" dispatch="independent">
         <capacity resource='h2'>
-          <sweep_values>10,22005,44010,66015,88020</sweep_values> <!-- kg: Max is 4 hours worth of H2 for FT -->
+          <sweep_values>10,5664,11327,16991,22655,28319,33982,39646,45310,50974</sweep_values> <!-- kg: Max is 4 hours worth of H2 for FT -->
         </capacity>
         <initial_stored>
           <fixed_value>0.1</fixed_value>
@@ -333,7 +333,7 @@
   </Components>
 
   <DataGenerators>
-    <ARMA name='price' variable="price">../../train/Output_braidwood_2012_2021_DA/arma.pk</ARMA>
+    <ARMA name='price' variable="price">../../train/Output_prairie_island_1_2013_2021_DA/arma.pk</ARMA>
     <Function name="functions">../functions.py</Function>
   </DataGenerators>
 </HERON>
