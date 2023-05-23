@@ -57,7 +57,7 @@
       <produces resource="h2" dispatch="independent">
         <consumes>electricity</consumes>
         <capacity resource="electricity">
-          <sweep_values>-985,-885,-785,-685,-585,-485,-385,-285,-85</sweep_values> <!-- MWe -->
+          <sweep_values>-985,-785,-585,-385,-185</sweep_values> <!-- MWe -->
         </capacity>
         <minimum resource="electricity">
           <!-- To model hot standby mode, 0.85% of electrical capacity-->
@@ -126,7 +126,7 @@
       <produces resource='naphtha,diesel,jet_fuel' dispatch='fixed'>
         <consumes>h2</consumes>
         <capacity resource='h2'>
-          <sweep_values>-24756,-22243,-19730,-17217,-14704,-12191,-9678,-7165,-465,-2139</sweep_values>
+          <sweep_values>-24756,-19730,-14704,-9678,-4652</sweep_values>
         </capacity>
         <transfer>
           <linear>
