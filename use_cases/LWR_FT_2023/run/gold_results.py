@@ -14,7 +14,8 @@ def save_sweep_results(case):
     raise Exception("More than 1 sweep folder: {}".format(opt_folder))
   else:
     #sort by mean NPV descending order and save in gold folder
-    sweep_results_df = pd.read_csv(os.path.join(opt_folder, "sweep.csv"))
+    opt_folder = opt_folder[0]
+    sweep_results_df = pd.read_csv(opt_folder+"/sweep.csv")
     sweep_results_df.sort_values(by=['mean_NPV'], ascending=False, inplace=True)
     print("Sorting and saving the latest sweep results to gold folder for case {}".format(case))
     sweep_results_df.to_csv(os.path.join(case, "gold", "sweep.csv"), index=False)
@@ -24,23 +25,20 @@ def get_final_npv(case):
   sweep_file = os.path.join(".", case, "gold", 'sweep.csv')
   df = pd.read_csv(sweep_file)
   df = df.iloc[:1,:]
-  final_npv = df.mean_NPV.to_list()
-  std_npv = df.std_NPV.to_list()
+  final_npv = float(df.mean_NPV.to_list()[0])
+  std_npv = float(df.std_NPV.to_list()[0])
   return final_npv, std_npv
 
 def save_final_out(case):
   final_npv, std_npv= get_final_npv(case)
-  for dirpath, dirnames, files in os.walk(case):
-    for folder in dirnames: 
-      if '_o' in folder:
-        opt_folder = folder
-  opt_folder = os.path.join(case,opt_folder, "sweep" )
+  opt_folder = glob.glob(case+"/*_o")
+  if len(opt_folder)>1:
+    raise Exception("More than 1 sweep folder: {}".format(opt_folder))
+  else:
+    opt_folder = opt_folder[0]
+  sweep_folder = opt_folder+ "/sweep"
   # Get all the out~inner files path in a list
-  out_files =[]
-  for f in os.listdir(opt_folder):
-    if not os.path.isfile(os.path.join(opt_folder,f)) and "_i" not in f:
-      out_file = os.path.join(opt_folder,f, "out~inner")
-      out_files.append(out_file)
+  out_files = glob.glob(sweep_folder+"/*/out~inner")
   # Map each out~inner to corresponding NPV
   out_to_npv = {}
   for out_file in out_files:
