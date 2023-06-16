@@ -14,6 +14,7 @@ def save_sweep_results(case):
     raise Exception("More than 1 sweep folder: {}".format(opt_folder))
   elif len(opt_folder) ==0:
     print("No optimization folder for case {}, skip saving sweep csv results file".format(case))
+    return None
   else:
     #sort by mean NPV descending order and save in gold folder
     opt_folder = opt_folder[0]
@@ -38,6 +39,7 @@ def save_final_out(case):
     raise Exception("More than 1 sweep folder: {}".format(opt_folder))
   elif len(opt_folder) ==0:
     print("No optimization folder for case {}, skip saving out~inner file".format(case))
+    return None
   else:
     opt_folder = opt_folder[0]
   sweep_folder = opt_folder+ "/sweep"
