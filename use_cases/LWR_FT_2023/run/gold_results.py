@@ -12,6 +12,8 @@ def save_sweep_results(case):
   opt_folder = glob.glob(case+"/*_o")
   if len(opt_folder)>1:
     raise Exception("More than 1 sweep folder: {}".format(opt_folder))
+  elif len(opt_folder) ==0:
+    print("No optimization folder for case {}, skip saving sweep csv results file".format(case))
   else:
     #sort by mean NPV descending order and save in gold folder
     opt_folder = opt_folder[0]
@@ -34,6 +36,8 @@ def save_final_out(case):
   opt_folder = glob.glob(case+"/*_o")
   if len(opt_folder)>1:
     raise Exception("More than 1 sweep folder: {}".format(opt_folder))
+  elif len(opt_folder) ==0:
+    print("No optimization folder for case {}, skip saving out~inner file".format(case))
   else:
     opt_folder = opt_folder[0]
   sweep_folder = opt_folder+ "/sweep"
@@ -73,7 +77,7 @@ def main():
   else: 
     cases = [os.path.join(dir, p) for p in list(args.pattern)]
   for case in cases:
-    if os.path.isdir(case):
+    if os.path.isdir(case) and not 'dispatch' in case:
       check_gold_dir(case)
       save_sweep_results(case)
       save_final_out(case)
