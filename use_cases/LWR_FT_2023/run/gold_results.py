@@ -26,6 +26,9 @@ def save_sweep_results(case):
 def get_final_npv(case):
   # Assumes sweep results csv file in gold folder and sorted
   sweep_file = os.path.join(".", case, "gold", 'sweep.csv')
+  if not os.path.isfile(sweep_file):
+    print('Results not found for '.format(case))
+    return None
   df = pd.read_csv(sweep_file)
   df = df.iloc[:1,:]
   final_npv = float(df.mean_NPV.to_list()[0])
@@ -79,7 +82,7 @@ def main():
   else: 
     cases = [os.path.join(dir, p) for p in list(args.pattern)]
   for case in cases:
-    if os.path.isdir(case) and not 'dispatch' in case:
+    if os.path.isdir(case) and not 'dispatch' in case and not 'baseline' in case:
       check_gold_dir(case)
       save_sweep_results(case)
       save_final_out(case)
