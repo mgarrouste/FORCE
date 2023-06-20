@@ -8,7 +8,8 @@ import matplotlib.pyplot as plt
 LOCATIONS = ['braidwood', 'cooper', 'davis_besse', 'prairie_island', 'stp']
 locations = ['Braidwood', 'Cooper', 'Davis-Besse', 'Prairie Island', 'South Texas Project']
 REG_VARIABLES = ['capex', 'elec', 'om', 'synfuels']
-reg_variables = ['CAPEX', 'Electricity prices', 'O&M', 'Synfuels prices']
+reg_variables =['CAPEX', 'Electricity prices', 'O&M', 'Synfuels prices']
+variables = ['CAPEX', 'Electricity prices', 'O&M', 'Synfuels prices','CO2', 'PTC']
 W_VARIABLES = ['co2_cost_high', 'co2_cost_med', 'ptc_000', 'ptc_100', 'ptc_270']
 w_variables = ['CO2', 'PTC']
 
@@ -49,10 +50,10 @@ def load_SA_results():
       low_values_sd.append(low_ddNPV_sd)
       high_values.append(high_ddNPV)
       high_values_sd.append(high_ddNPV_sd)
-    loc_dic_reg[loc] = {'low_values':low_values,
-                    'low_values_sd':low_values_sd, 
-                    'high_values':high_values, 
-                    'high_values_sd':high_values_sd}
+    loc_dic_reg[loc] = {'low_values':low_values+[0,0],
+                    'low_values_sd':low_values_sd+[0,0], 
+                    'high_values':high_values+[0,0], 
+                    'high_values_sd':high_values_sd+[0,0]}
     loc_dic_w[loc] ={}
     for v in W_VARIABLES: 
       c = os.path.join(dir,loc+'_'+v)
@@ -65,12 +66,47 @@ def load_SA_results():
               'sd ddNPV':ddNPV_sd}
       w_df = w_df.append(c_row, ignore_index=True)
       if 'co2' in c:
-        loc_dic_w[loc][v] = [ddNPV, 0]
-        loc_dic_w[loc][v+'_sd'] = [ddNPV_sd, 0]
+        loc_dic_reg[loc][v] = [0 for i in range(len(REG_VARIABLES))]+[ddNPV, 0]
+        loc_dic_reg[loc][v+'_sd'] = [0 for i in range(len(REG_VARIABLES))]+[ddNPV_sd, 0]
       else:
-        loc_dic_w[loc][v] = [0,ddNPV]
-        loc_dic_w[loc][v+'_sd'] = [0,ddNPV_sd]
+        loc_dic_reg[loc][v] = [0 for i in range(len(REG_VARIABLES))]+[0,ddNPV]
+        loc_dic_reg[loc][v+'_sd'] = [0 for i in range(len(REG_VARIABLES))]+[0,ddNPV_sd]
   return loc_dic_reg, loc_dic_w
+
+def plot_SA_locations(loc_dic): 
+
+  plt.style.use('ggplot')
+  fig, axes = plt.subplots(3,2, figsize=(12,10))
+  ax = fig.axes
+  print(loc_dic)
+  for i in range(len(LOCATIONS)):
+    val_dic = loc_dic[LOCATIONS[i]]
+    ind = np.arange(len(val_dic['low_values']))
+    width=0.35
+    p1 = ax[i].bar(ind, val_dic['low_values'], width, yerr=val_dic['low_values_sd'], label='Low (Ref x0.75)')
+    p2 = ax[i].bar(ind, val_dic['high_values'], width, yerr=val_dic['high_values_sd'], label='High (Ref x1.25)')
+    p3 = ax[i].bar(ind, val_dic['ptc_000'], width, yerr=val_dic['ptc_000_sd'], label='$0/kg-H2')
+    p4 = ax[i].bar(ind, val_dic['ptc_100'], width, yerr=val_dic['ptc_100_sd'], label='$1/kg-H2')
+    p5 = ax[i].bar(ind, val_dic['ptc_270'], width, yerr=val_dic['ptc_270_sd'], label='$2.7/kg-H2')
+    p7 = ax[i].bar(ind, val_dic['co2_cost_high'], width, yerr=val_dic['co2_cost_high_sd'], label='$60/kg-CO2')
+    p6 = ax[i].bar(ind, val_dic['co2_cost_med'], width, yerr=val_dic['co2_cost_med_sd'], label='$30/kg-CO2')
+    ax[i].axhline(0, color='grey', linewidth=0.8)
+    ax[i].set_ylabel('Change in profitability (%)')
+    ax[i].set_title(locations[i])
+    ax[i].set_xticks(ind)
+    ax[i].set_xticklabels(variables)
+
+  # dont need last space for graph
+  ax[-1].axis('tight')
+  ax[-1].axis('off')
+  # legend
+  lines_labels = [ax[0].get_legend_handles_labels()]
+  lines, labels = [sum(lol, []) for lol in zip(*lines_labels)]
+  fig.legend(lines, labels, loc='lower right', ncol=1)
+
+  fig.tight_layout()
+  plt.show()
+  #fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "SA_results_location.png"))
 
 def plot_SA_location(loc_dic): 
 
@@ -115,8 +151,8 @@ def plot_SA_location(loc_dic):
 def main():
   # Create dataframe with columns location, sensitivity, variable, delta NPV, std delta NPV
   loc_dic_reg, loc_dic_w = load_SA_results()
-  print(loc_dic_w)
-  plot_SA_location(loc_dic_reg)
+  print(loc_dic_reg['braidwood'])
+  plot_SA_locations(loc_dic_reg)
   # Plot results 2 subplots, 1 high values, 1 low values, x axis variables, y axis delta NPV, colors for location
 
 if __name__ == "__main__":
