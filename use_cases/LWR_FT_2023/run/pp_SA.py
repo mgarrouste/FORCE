@@ -1,5 +1,3 @@
-import pandas as pd
-import seaborn as sns
 import os
 from gold_results import get_final_npv
 import numpy as np
@@ -13,7 +11,7 @@ variables = ['CAPEX', 'Electricity prices', 'O&M', 'Synfuels prices','CO2', 'PTC
 W_VARIABLES = ['co2_cost_high', 'co2_cost_med', 'ptc_000', 'ptc_100', 'ptc_270']
 w_variables = ['CO2', 'PTC']
 total_var = W_VARIABLES+REG_VARIABLES
-total_variables = ['CO2 ($60/kg)', 'CO2 ($30/kg)', 'PTC ($0/kg-H2)','PTC ($2.7/kg-H2)','PTC ($3/kg-H2)', \
+total_variables = ['CO2 ($60/ton)', 'CO2 ($30/ton)', 'PTC ($0/kg-H2)','PTC ($1.0/kg-H2)','PTC ($2.7/kg-H2)', \
   'CAPEX', 'Electricity prices', 'O&M', 'Synfuels prices']
 
 def load_SA_results_loc(): 
@@ -85,8 +83,8 @@ def plot_SA_locations(loc_dic):
     p3 = ax[i].bar(ind, val_dic['ptc_000'], width, yerr=val_dic['ptc_000_sd'], label='$0/kg-H2')
     p4 = ax[i].bar(ind, val_dic['ptc_100'], width, yerr=val_dic['ptc_100_sd'], label='$1/kg-H2')
     p5 = ax[i].bar(ind, val_dic['ptc_270'], width, yerr=val_dic['ptc_270_sd'], label='$2.7/kg-H2')
-    p7 = ax[i].bar(ind, val_dic['co2_cost_high'], width, yerr=val_dic['co2_cost_high_sd'], label='$60/kg-CO2')
-    p6 = ax[i].bar(ind, val_dic['co2_cost_med'], width, yerr=val_dic['co2_cost_med_sd'], label='$30/kg-CO2')
+    p7 = ax[i].bar(ind, val_dic['co2_cost_high'], width, yerr=val_dic['co2_cost_high_sd'], label='$60/ton-CO2')
+    p6 = ax[i].bar(ind, val_dic['co2_cost_med'], width, yerr=val_dic['co2_cost_med_sd'], label='$30/ton-CO2')
     ax[i].axhline(0, color='grey', linewidth=0.8)
     ax[i].set_ylabel('Change in profitability (%)')
     ax[i].set_title(locations[i])
