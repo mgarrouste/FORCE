@@ -27,7 +27,7 @@ def get_final_npv(case):
   # Assumes sweep results csv file in gold folder and sorted
   sweep_file = os.path.join(".", case, "gold", 'sweep.csv')
   if not os.path.isfile(sweep_file):
-    print('Results not found for '.format(case))
+    print('Results not found for {}'.format(case))
     return None
   df = pd.read_csv(sweep_file)
   df = df.iloc[:1,:]
