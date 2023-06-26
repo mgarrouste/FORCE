@@ -1,5 +1,5 @@
 <HERON>
-  <Case name="braidwoodSA_ptc_000">
+  <Case name="bSA_ptc_000">
     <label name="scenario">ref</label>
     <label name="location">braidwood</label>
     <label name="fuel_region">illinois</label>
@@ -57,7 +57,7 @@
       <produces resource="h2" dispatch="independent">
         <consumes>electricity</consumes>
         <capacity resource="electricity">
-          <sweep_values>-1178,-750,-500</sweep_values><!-- MWe -->
+          <sweep_values>-985,-785,-585,-385,-185</sweep_values> <!-- MWe -->
         </capacity>
         <minimum resource="electricity">
           <!-- To model hot standby mode, 0.85% of electrical capacity-->
@@ -79,7 +79,7 @@
             <variable>htse_capacity</variable>
           </driver>
           <reference_price>
-            <fixed_value>-702600000</fixed_value> 
+            <fixed_value>-702600000</fixed_value> <!--New one term capex regression-->
           </reference_price>
           <reference_driver>
             <fixed_value>-1076</fixed_value>
@@ -126,7 +126,7 @@
       <produces resource='naphtha,diesel,jet_fuel' dispatch='fixed'>
         <consumes>h2</consumes>
         <capacity resource='h2'>
-          <sweep_values>-29603.14,-20000,-10000</sweep_values>
+          <sweep_values>-24756,-19730,-14704,-9678,-4652</sweep_values>
         </capacity>
         <transfer>
           <linear>
@@ -306,7 +306,7 @@
     <Component name='h2_storage'>
       <stores resource="h2" dispatch="independent">
         <capacity resource='h2'>
-          <sweep_values>10,10000,100000,200000</sweep_values> <!-- kg: Max is 4 hours worth of H2 for FT -->
+          <sweep_values>10,	264059,	528119,	792178,	1056237</sweep_values> <!-- kg: Max is 4 hours worth of H2 for FT -->
         </capacity>
         <initial_stored>
           <fixed_value>0.1</fixed_value>

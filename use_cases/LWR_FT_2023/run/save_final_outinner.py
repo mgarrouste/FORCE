@@ -1,6 +1,7 @@
 import os, shutil
 import pandas as pd
 import argparse
+from plot_sweep import get_baseline_NPV
 
 def get_final_npv(plant, baseline=False):
   opt_out_file = os.path.join(".", plant, "gold","opt_soln_0.csv")
@@ -16,7 +17,7 @@ def get_final_npv(plant, baseline=False):
     df.sort_values(by=['mean_NPV'], ascending=False, inplace=True)
     df.reset_index(inplace=True)
     df.to_csv(os.path.join('.', plant, 'gold', 'sorted_sweep.csv'))
-    df = df.iloc[:4,:]
+    df = df.iloc[:1,:]
     final_npv = df.mean_NPV.to_list()
     std_npv = df.std_NPV.to_list()
     tag = 'sweep'
@@ -103,12 +104,6 @@ def main():
     shutil.copy(final_out[0], os.path.join(case_folder, "gold", "out~inner_"+tag))
   else: 
     print("Final out~inner file(s) were not found, maybe the case has been re-run and the gold folder not updated?")
-
-def test(): 
-  plant = 'braidwood_sweep'
-  dir = os.path.dirname(os.path.abspath(__file__))
-  case_folder = os.path.join(dir, plant)
-  print(get_final_npv(case_folder))
 
 if __name__=="__main__":
  main()
