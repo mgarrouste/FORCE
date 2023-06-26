@@ -41,14 +41,33 @@
   <Components>
   
   <!-- PRODUCTION Components -->
-    <Component name="npp">
+    <Component name="smr">
       <produces resource="electricity" dispatch="fixed">
         <capacity resource="electricity">
-          <fixed_value>522</fixed_value> <!-- MWe, 1 unit -->
+          <fixed_value>720</fixed_value> <!-- MWe; 1,6,12,18,24 modules of 60MWe-->
         </capacity>
       </produces>
       <economics>
         <lifetime>60</lifetime>
+        <CashFlow name="smrCAPEX" type="one-time" taxable="False" inflation="None" mult_target="False">
+          <driver>
+            <variable>smr_capacity</variable>
+          </driver>
+          <reference_price>
+            <fixed_value>-4199000</fixed_value> <!--$4,199,000/MWe-->
+          </reference_price>
+          <reference_driver>
+            <fixed_value>1</fixed_value>
+          </reference_driver>
+        </CashFlow>
+        <CashFlow name="smrVOM" type='repeating' taxable="True" inflation="None" mult_target="False">
+          <driver>
+            <activity>electricity</activity>
+          </driver>
+          <reference_price>
+            <fixed_value>25</fixed_value><!-- $25/MWh-->
+          </reference_price>
+        </CashFlow>
       </economics>
     </Component>
 
