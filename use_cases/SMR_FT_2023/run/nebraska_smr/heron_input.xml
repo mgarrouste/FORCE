@@ -75,7 +75,7 @@
       <produces resource="h2" dispatch="independent">
         <consumes>electricity</consumes>
         <capacity resource="electricity">
-          <sweep_values>-754,-400,-100</sweep_values> <!-- MWe -->
+          <sweep_values>-1785,	-1596,	-1407,	-1218,	-1030,	-841,	-652,	-463,	-274,	-85</sweep_values> <!-- MWe -->
         </capacity>
         <minimum resource="electricity">
           <!-- To model hot standby mode, 0.85% of electrical capacity-->
