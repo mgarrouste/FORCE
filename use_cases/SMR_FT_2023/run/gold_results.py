@@ -69,7 +69,7 @@ def save_final_out(case, baseline):
         out_to_npv[out_file] = avg_npv
   final_out_file = ""
   for out_file, npv in out_to_npv.items():
-      if round(npv,1) == round(final_npv,1):
+      if round(npv,0) == round(final_npv,0):
         final_out_file = out_file
   if len(final_out_file) <=1:
     print("Final out~inner file not found! Re-run the case?")
