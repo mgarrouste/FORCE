@@ -347,7 +347,44 @@
         </CashFlow>
       </economics>
     </Component>
+  <!-- Soft constraints to make the problem feasible -->
+    <Component name='h2_import'>
+      <produces resource="h2" dispatch="independent">
+        <capacity resource="h2">
+          <fixed_value>1e200</fixed_value> 
+        </capacity>
+      </produces>
+      <economics>
+        <lifetime>60</lifetime>
+        <CashFlow name="h2IMPORTS" type='repeating' taxable="True" inflation="None" mult_target="False">
+          <driver>
+            <activity>h2</activity>
+          </driver>
+          <reference_price>
+            <fixed_value>-1000000</fixed_value><!-- $1,000,000/kg-h2-->
+          </reference_price>
+        </CashFlow>
+      </economics>
+    </Component>
 
+    <Component name='h2_export'>
+      <demands resource="h2" dispatch="independent">
+        <capacity resource="h2">
+          <fixed_value>-1e200</fixed_value> 
+        </capacity>
+      </demands>
+      <economics>
+        <lifetime>60</lifetime>
+        <CashFlow name="h2EXPORTS" type='repeating' taxable="True" inflation="None" mult_target="False">
+          <driver>
+            <activity>h2</activity>
+          </driver>
+          <reference_price>
+            <fixed_value>1000000</fixed_value><!-- $1,000,000/kg-h2-->
+          </reference_price>
+        </CashFlow>
+      </economics>
+    </Component>
   </Components>
 
   <DataGenerators>
