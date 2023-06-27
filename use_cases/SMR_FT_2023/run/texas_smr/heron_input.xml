@@ -5,9 +5,12 @@
     <label name="fuel_region">west_south_central</label>
     <label name="elec_data">covid</label>
     <mode>sweep</mode>
+    <data_handling>
+      <inner_to_outer>csv</inner_to_outer>  
+    </data_handling>
     <parallel>
       <runinfo>
-        <expectedTime>72:0:0</expectedTime>
+        <expectedTime>24:0:0</expectedTime>
         <clusterParameters>-P re_gen</clusterParameters>
         <memory>4gb</memory>
       </runinfo>
@@ -26,7 +29,7 @@
       <DiscountRate>0.1</DiscountRate>
       <tax>0.21</tax>
       <inflation>0.0218</inflation>
-      <verbosity>50</verbosity>
+      <verbosity>100</verbosity>
     </economics>
     <dispatcher>
       <pyomo></pyomo>
