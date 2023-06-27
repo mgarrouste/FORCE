@@ -1,6 +1,8 @@
 import glob, os, argparse, shutil
 import pandas as pd
 
+BASELINE_SMR_CAP_REF = 720.0
+
 def check_gold_dir(case):
   # Make gold dir if does not exist
   gold_dir = os.path.join(case, "gold")
@@ -23,20 +25,23 @@ def save_sweep_results(case):
     print("Sorting and saving the latest sweep results to gold folder for case {}".format(case))
     sweep_results_df.to_csv(os.path.join(case, "gold", "sweep.csv"), index=False)
 
-def get_final_npv(case):
+def get_final_npv(case, baseline=False):
   # Assumes sweep results csv file in gold folder and sorted
   sweep_file = os.path.join(".", case, "gold", 'sweep.csv')
   if not os.path.isfile(sweep_file):
     print('Results not found for {}'.format(case))
     return None
   df = pd.read_csv(sweep_file)
-  df = df.iloc[:1,:]
+  if not baseline:
+    df = df.iloc[:1,:]
+  else:
+    df = df[df['smr_capacity']==BASELINE_SMR_CAP_REF]
   final_npv = float(df.mean_NPV.to_list()[0])
   std_npv = float(df.std_NPV.to_list()[0])
   return final_npv, std_npv
 
-def save_final_out(case):
-  final_npv, std_npv= get_final_npv(case)
+def save_final_out(case, baseline):
+  final_npv, std_npv= get_final_npv(case, baseline=baseline)
   opt_folder = glob.glob(case+"/*_o")
   if len(opt_folder)>1:
     raise Exception("More than 1 sweep folder: {}".format(opt_folder))
@@ -83,9 +88,12 @@ def main():
     cases = [os.path.join(dir, p) for p in list(args.pattern)]
   for case in cases:
     if os.path.isdir(case) and not 'dispatch' in case:
+      baseline = False
+      if 'baseline' in case: 
+        baseline = True
       check_gold_dir(case)
       save_sweep_results(case)
-      save_final_out(case)
+      save_final_out(case, baseline=baseline)
       
       
 
