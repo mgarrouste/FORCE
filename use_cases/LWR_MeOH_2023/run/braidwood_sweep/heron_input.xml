@@ -303,7 +303,7 @@
     <Component name='h2_storage'>
       <stores resource="h2" dispatch="independent">
         <capacity resource='h2'>
-          <sweep_values>10,132030,	264059,	396089,	528119,	660148,	792178,	924208,	1056237,	1188267</sweep_values> <!-- kg: Max is 4 hours worth of H2 for FT -->
+          <sweep_values>10,	118721,	237443,	356164,	474886,	593607,	712329,	831050,	949772,	1068493</sweep_values> <!-- kg: Max is 4 hours worth of H2 for FT -->
         </capacity>
         <initial_stored>
           <fixed_value>0.1</fixed_value>
