@@ -2,8 +2,8 @@
   <Case name="illinois_smr">
     <label name="scenario">ref</label>
     <label name="location">braidwood</label>
+    <label name="co2_location">illinois</label>
     <label name="fuel_region">illinois</label>
-    <label name="elec_data">covid</label>
     <mode>sweep</mode>
     <data_handling>
       <inner_to_outer>csv</inner_to_outer>  
