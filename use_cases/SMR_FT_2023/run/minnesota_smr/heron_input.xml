@@ -10,7 +10,7 @@
     </data_handling>
     <parallel>
       <runinfo>
-        <expectedTime>24:0:0</expectedTime>
+        <expectedTime>36:0:0</expectedTime>
         <clusterParameters>-P re_gen</clusterParameters>
         <memory>4gb</memory>
       </runinfo>
@@ -34,11 +34,6 @@
     <dispatcher>
       <pyomo></pyomo>
     </dispatcher>
-    <optimization_settings>
-      <metric>expectedValue</metric>
-      <type>max</type>
-      <persistence>5</persistence>
-    </optimization_settings>
   </Case>
 
   <Components>
