@@ -7,7 +7,7 @@
     <mode>sweep</mode>
     <parallel>
       <runinfo>
-        <expectedTime>72:0:0</expectedTime>
+        <expectedTime>2:0:0</expectedTime>
         <clusterParameters>-P re_gen</clusterParameters>
         <memory>4gb</memory>
       </runinfo>
@@ -26,7 +26,7 @@
       <DiscountRate>0.1</DiscountRate>
       <tax>0.2717</tax>
       <inflation>0.0218</inflation>
-      <verbosity>50</verbosity>
+      <verbosity>0</verbosity>
     </economics>
     <dispatcher>
       <pyomo></pyomo>

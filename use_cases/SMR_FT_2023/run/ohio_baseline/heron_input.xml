@@ -5,16 +5,19 @@
     <label name="fuel_region">ohio</label>
     <label name="elec_data">covid</label>
     <mode>sweep</mode>
+    <verbosity>debug</verbosity>
     <parallel>
       <runinfo>
-        <expectedTime>72:0:0</expectedTime>
+        <expectedTime>2:0:0</expectedTime>
         <clusterParameters>-P re_gen</clusterParameters>
         <memory>4gb</memory>
       </runinfo>
     </parallel>
     <!--<debug></debug>-->
-    <verbosity>debug</verbosity>
     <num_arma_samples>10</num_arma_samples>
+    <data_handling>
+      <inner_to_outer>csv</inner_to_outer>
+    </data_handling>
     <time_discretization>
       <time_variable>hour</time_variable>
       <year_variable>Year</year_variable>
