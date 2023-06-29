@@ -79,13 +79,20 @@ def save_final_out(case, baseline):
 
 def main():
   parser = argparse.ArgumentParser()
-  parser.add_argument('pattern', type=str, nargs='+', help="pattern in cases names or cases' names")
+  parser.add_argument('-p', "--pattern", type=str, nargs='+', help="pattern in cases names or cases' names")
+  parser.add_argument('-c', "--case", type=str, help="case")
   args = parser.parse_args()
   dir = os.path.dirname(os.path.abspath(__file__))
-  if len(args.pattern)<=1:
-    cases = glob.glob(dir+"/*"+args.pattern[0]+"*")
+  if args.pattern:
+    if len(args.pattern)<=1:
+      cases = glob.glob(dir+"/*"+args.pattern[0]+"*")
+    else: 
+      cases = [os.path.join(dir, p) for p in list(args.pattern)]
+  elif args.case:
+    cases = [os.path.join(dir, args.case)]
   else: 
-    cases = [os.path.join(dir, p) for p in list(args.pattern)]
+    raise Exception("No case or input passed to this script!")
+  print("Cases to gold : {}\n".format(cases))
   for case in cases:
     if os.path.isdir(case) and not 'dispatch' in case:
       baseline = False
