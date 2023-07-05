@@ -39,7 +39,7 @@ def h2_ptc_ft(data, meta):
   data = {'reference_price':ptc}
   return data, meta
 
-def h2_ptc_ft_270(data, meta):
+def h2_ptc_270(data, meta):
   """
     Determines the PTC (Production Tax Credit) for hydrogen production when calculated for FT component: 
     PTC applicable only for the first 10 years of the simulation $2.70/kg-H2: simulates the case where the utility
@@ -57,7 +57,7 @@ def h2_ptc_ft_270(data, meta):
   data = {'reference_price':ptc}
   return data, meta
 
-def h2_ptc_ft_100(data, meta):
+def h2_ptc_100(data, meta):
   """
     Determines the PTC (Production Tax Credit) for hydrogen production when calculated for FT component: 
     PTC applicable only for the first 10 years of the simulation $2.70/kg-H2: simulates the case where the utility
@@ -75,7 +75,7 @@ def h2_ptc_ft_100(data, meta):
   data = {'reference_price':ptc}
   return data, meta
 
-def h2_ptc_ft_000(data, meta):
+def h2_ptc_000(data, meta):
   """
     Determines the PTC (Production Tax Credit) for hydrogen production when calculated for FT component: 
     PTC applicable only for the first 10 years of the simulation $2.70/kg-H2: simulates the case where the utility
