@@ -81,6 +81,7 @@ def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('-p', "--pattern", type=str, nargs='+', help="pattern in cases names or cases' names")
   parser.add_argument('-c', "--case", type=str, help="case")
+  parser.add_argument('-f',"--final_out", type=bool, help='Save out~inner?')
   args = parser.parse_args()
   dir = os.path.dirname(os.path.abspath(__file__))
   if args.pattern:
@@ -100,7 +101,8 @@ def main():
         baseline = True
       check_gold_dir(case)
       save_sweep_results(case)
-      save_final_out(case, baseline=baseline)
+      if args.final_out:
+        save_final_out(case, baseline=baseline)
       
       
 
