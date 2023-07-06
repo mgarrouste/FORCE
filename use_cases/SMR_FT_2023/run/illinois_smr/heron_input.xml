@@ -10,7 +10,7 @@
     </data_handling>
     <parallel>
       <runinfo>
-        <expectedTime>36:0:0</expectedTime>
+        <expectedTime>72:0:0</expectedTime>
         <clusterParameters>-P re_gen</clusterParameters>
         <memory>4gb</memory>
       </runinfo>
