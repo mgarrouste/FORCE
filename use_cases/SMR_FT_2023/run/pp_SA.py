@@ -18,6 +18,15 @@ total_variables = {'smr_20':'SMR low capacity\n(240 MWe)', 'smr_100':'SMR high c
                     'elec':'Electricity prices', 
                     'om':'O&M',
                     'synfuels':'Synfuels prices'}
+color_var = {'low_values':'tab:blue', 
+            'high_values':'tab:red',
+            'smr_20':'tab:purple',
+            'smr_100':'tab:orange',
+            'ptc_000':'tab:brown',
+            'ptc_100':'tab:green',
+            'ptc_270':'tab:pink',
+            'co2_high':'tab:olive',
+            'co2_low':'tab:gray'}
 
 def load_SA_results_loc(): 
   dir = os.path.dirname(os.path.abspath(__file__))
@@ -126,7 +135,7 @@ def plot_SA_variable(var_dic):
     width = 0.35
     
     if ('co2' in var) or ('ptc' in var) or ('smr' in var):
-      ax[i].bar(ind, val_dic['value'], width, yerr=val_dic['sd'])
+      ax[i].bar(ind, val_dic['value'], width, yerr=val_dic['sd'], color=color_var[var])
     else:
       ax[i].bar(ind, val_dic['low'], width, yerr=val_dic['low_sd'], label='Low (Ref x0.75)')
       ax[i].bar(ind, val_dic['high'], width, yerr=val_dic['high_sd'], label='High (Ref x1.25)')
