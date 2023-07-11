@@ -12,7 +12,7 @@
         <memory>4gb</memory>
       </runinfo>
     </parallel>
-    <!--<debug></debug>-->
+    
     <verbosity>debug</verbosity>
     <num_arma_samples>10</num_arma_samples>
     <time_discretization>
@@ -29,7 +29,7 @@
       <verbosity>50</verbosity>
     </economics>
     <dispatcher>
-      <pyomo></pyomo>
+      <pyomo />
     </dispatcher>
     <optimization_settings>
       <metric>expectedValue</metric>
@@ -40,7 +40,7 @@
 
   <Components>
   
-  <!-- PRODUCTION Components -->
+  
     <Component name="smr">
       <produces resource="electricity" dispatch="fixed">
         <capacity resource="electricity">
@@ -54,39 +54,39 @@
             <variable>smr_capacity</variable>
           </driver>
           <reference_price>
-            <fixed_value>-5569000</fixed_value> <!--$/MWe-->
-          </reference_price>
+            <fixed_value>-5569000</fixed_value> 
+          <multiplier>0.7</multiplier></reference_price>
           <reference_driver>
             <fixed_value>1</fixed_value>
           </reference_driver>
         </CashFlow>
-        <CashFlow name="smrVOM" type='repeating' taxable="True" inflation="None" mult_target="False">
+        <CashFlow name="smrVOM" type="repeating" taxable="True" inflation="None" mult_target="False">
           <driver>
             <activity>electricity</activity>
           </driver>
           <reference_price>
-            <fixed_value>23.2</fixed_value><!-- $25/MWh-->
+            <fixed_value>23.2</fixed_value>
           </reference_price>
         </CashFlow>
       </economics>
     </Component>
 
-  <!-- MARKETS Components -->
-    <Component name='electricity_market'>
-      <demands resource='electricity' dispatch='dependent'>
+  
+    <Component name="electricity_market">
+      <demands resource="electricity" dispatch="dependent">
         <capacity>
           <fixed_value>-1e200</fixed_value>
         </capacity>
       </demands>
       <economics>
         <lifetime>30</lifetime>
-        <CashFlow name='e_sales' type='repeating' period='hour' taxable='True' inflation='none' mult_target='False'>
+        <CashFlow name="e_sales" type="repeating" period="hour" taxable="True" inflation="none" mult_target="False">
           <driver>
             <activity>electricity</activity>
             <multiplier>-1</multiplier>
           </driver>
           <reference_price>
-            <ARMA variable='price'>price</ARMA> <!-- $/MWh-->
+            <ARMA variable="price">price</ARMA> 
           </reference_price>
           <reference_driver>
             <fixed_value>1</fixed_value>
@@ -98,7 +98,7 @@
   </Components>
 
   <DataGenerators>
-    <ARMA name='price' variable="price">../../train/Output_braidwood_2012_2021_DA/arma.pk</ARMA>
+    <ARMA name="price" variable="price">../../train/Output_braidwood_2012_2021_DA/arma.pk</ARMA>
     <Function name="functions">../functions.py</Function>
   </DataGenerators>
 </HERON>
