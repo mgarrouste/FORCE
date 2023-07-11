@@ -37,3 +37,5 @@ scaling,Year,filename
 1,2047,../data/electricity_markets/PJM_davis_besse/2017_davis_besse_DA.csv
 1,2048,../data/electricity_markets/PJM_davis_besse/2018_davis_besse_DA.csv
 1,2049,../data/electricity_markets/PJM_davis_besse/2019_davis_besse_DA.csv
+1,2050,../data/electricity_markets/PJM_davis_besse/2020_davis_besse_DA.csv
+1,2051,../data/electricity_markets/PJM_davis_besse/2021_davis_besse_DA.csv

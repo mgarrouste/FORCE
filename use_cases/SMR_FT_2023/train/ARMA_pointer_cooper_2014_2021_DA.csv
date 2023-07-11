@@ -35,3 +35,7 @@ scaling,Year,filename
 1,2047,../data/electricity_markets/SPP_cooper/2015_cooper_DA.csv
 1,2048,../data/electricity_markets/SPP_cooper/2016_cooper_DA.csv
 1,2049,../data/electricity_markets/SPP_cooper/2017_cooper_DA.csv
+1,2050,../data/electricity_markets/SPP_cooper/2018_cooper_DA.csv
+1,2051,../data/electricity_markets/SPP_cooper/2019_cooper_DA.csv
+1,2052,../data/electricity_markets/SPP_cooper/2020_cooper_DA.csv
+1,2053,../data/electricity_markets/SPP_cooper/2021_cooper_DA.csv
