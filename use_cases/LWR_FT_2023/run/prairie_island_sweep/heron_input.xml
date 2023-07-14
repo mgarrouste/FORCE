@@ -31,11 +31,6 @@
     <dispatcher>
       <pyomo></pyomo>
     </dispatcher>
-    <optimization_settings>
-      <metric>expectedValue</metric>
-      <type>max</type>
-      <persistence>5</persistence>
-    </optimization_settings>
   </Case>
 
   <Components>
