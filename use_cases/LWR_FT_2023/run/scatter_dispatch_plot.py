@@ -5,9 +5,22 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 CASES = ['braidwood', 'cooper', 'davis_besse', 'prairie_island', 'stp']
+loc_names = {'braidwood':'Braidwood', 
+              'cooper':'Cooper',
+              'davis_besse':'Davis-Besse',
+              'prairie_island':'Prairie Island',
+              'stp': 'South Texas Project'}
+npp_cap = {'braidwood':1193, 
+              'cooper':769,
+              'davis_besse':894,
+              'prairie_island':522,
+              'stp': 1280}
 CLUSTER_nb = 0
-START_YEAR = 2018
-STOP_YEAR = 2021
+START_YEAR = 2014
+STOP_YEAR = 2023
+
+plt.rc("figure", figsize=(8,6))
+plt.rc(["xtick", "ytick"], labelsize=16)
 
 """ Script to plot a scatter plot Y=MWh to the grid, X=price of electricity ($/MWh), 
 for each location a different color"""
@@ -23,9 +36,10 @@ def load_data(location):
   df = df[(df['_ROM_Cluster']==CLUSTER_nb) & (df['Year']>=START_YEAR) &(df['Year']<=STOP_YEAR)]
   df_loc = df[['Year','price','Dispatch__electricity_market__production__electricity']]
   df_loc['location'] = location
+  df_loc['Location'] = loc_names[location]
   df_loc.rename(columns={'Dispatch__electricity_market__production__electricity':'electricity_market'},
                 inplace=True)
-  df_loc['electricity_market'] = np.abs(df_loc['electricity_market'])
+  df_loc['electricity_market'] = np.abs(df_loc['electricity_market'])*100/npp_cap[location]
   return df_loc
 
 def aggregate_data(cases):
@@ -35,25 +49,49 @@ def aggregate_data(cases):
   df = pd.concat(list_df, axis=0, ignore_index=True)
   return df
 
+def plot_dispatch_scatter_2(df, year):
+  sns.set_theme(style='whitegrid')
+  fig, ax = plt.subplots(figsize = (6,6))
+  df_year = df[df['Year']==year]
+  df_year.reset_index(inplace=True)
+  g = sns.scatterplot(ax=ax, data=df_year, 
+                  x="price", 
+                  y='electricity_market', 
+                  hue='Location', 
+                  palette='colorblind', s=100, marker='.')
+  g.set_ylabel("Electricity sent to the grid \n(% NPP Capacity)")
+  g.set_xlabel("Electricity price ($/MWh)")
+  g.set(ylim=(-5, 105))
+  fig.tight_layout()
+  fig_name = "scatter_dispatch_{}_cluster_{}.png".format(year, CLUSTER_nb)
+  fig.savefig(os.path.join('dispatch_results',fig_name))
+
+
+
 def plot_dispatch_scatter(df):
   sns.set_theme(style='whitegrid')
-  fig, ax = plt.subplots(1,2)
-  g = sns.relplot( data=df, 
+  fig, ax = plt.subplots(figsize=(8,6))
+  for year in range(START_YEAR, STOP_YEAR+1):
+    df_year = df[df['Year']==year]
+    g = sns.relplot( data=df_year, 
                     x="price", 
                     y='electricity_market', 
-                    hue='location', 
-                    style='location', 
-                    col='Year', col_wrap=2)
-
-  g.set_ylabels("Electricity sent to the grid (MWh)")
-  g.set_xlabels("Electricity price ($/MWh)")
-  g.tight_layout()
-  fig_name = "scatter_dispatch_cluster_{}_years_{}_{}.png".format(CLUSTER_nb, START_YEAR, STOP_YEAR)
-  g.savefig(fig_name)
+                    hue='Location', 
+                    col='Location', 
+                    col_wrap=2, palette='colorblind',s=100,markers='.')
+    g.set_titles(col_template="{col_name}")
+    g.set_ylabels("Electricity sent to the grid \n(% NPP Capacity)")
+    g.set(ylim=(-5, 105))
+    g.set_xlabels("Electricity price ($/MWh)")
+    g.tight_layout()
+    fig_name = "scatter_dispatch_{}_cluster_{}_years_{}_{}.png".format(year, CLUSTER_nb, START_YEAR, STOP_YEAR)
+    g.savefig(os.path.join('dispatch_results',fig_name))
 
 def main():
   df = aggregate_data(cases=CASES)
   plot_dispatch_scatter(df)
+  for year in range(START_YEAR, STOP_YEAR+1):
+    plot_dispatch_scatter_2(df,year)
 
 
 def test():

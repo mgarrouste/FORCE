@@ -28,11 +28,6 @@
     <dispatcher>
       <pyomo></pyomo>
     </dispatcher>
-    <optimization_settings>
-      <metric>expectedValue</metric>
-      <type>max</type>
-      <persistence>3</persistence>
-    </optimization_settings>
   </Case>
 
   <Components>
@@ -54,7 +49,7 @@
       <produces resource="h2" dispatch="independent">
         <consumes>electricity</consumes>
         <capacity resource="electricity">
-          <sweep_values debug_value="-1178">-1178,-750,-500</sweep_values> <!-- MWe -->
+          <sweep_values debug_value="-885">-1178,-750,-500</sweep_values> <!-- MWe -->
         </capacity>
         <minimum resource="electricity">
           <!-- To model hot standby mode, 0.85% of electrical capacity-->
@@ -123,7 +118,7 @@
       <produces resource='naphtha,diesel,jet_fuel' dispatch='fixed'>
         <consumes>h2</consumes>
         <capacity resource='h2'>
-          <sweep_values debug_value="-29603.14">-29603.14,-20000,-10000</sweep_values>
+          <sweep_values debug_value="-24756">-29603.14,-20000,-10000</sweep_values>
         </capacity>
         <transfer>
           <linear>
@@ -303,7 +298,7 @@
     <Component name='h2_storage'>
       <stores resource="h2" dispatch="independent">
         <capacity resource='h2'>
-          <sweep_values debug_value="10">10,10000,100000,200000</sweep_values> <!-- kg: Max is 4 hours worth of H2 for FT -->
+          <sweep_values debug_value="792178.0">10,10000,100000,200000</sweep_values> <!-- kg: Max is 4 hours worth of H2 for FT -->
         </capacity>
         <initial_stored>
           <fixed_value>0.1</fixed_value>
