@@ -309,8 +309,8 @@
           <sweep_values>10,	353743,	707487,	1061230,	1414973,	1768716,	2122460,	2476203,	2829946,	3183690</sweep_values> <!-- kg: Max is 4 hours worth of H2 for FT -->
         </capacity>
         <initial_stored>
-          <fixed_value>0.1</fixed_value>
-          <!-- 10% of capacity to try and avoid crashing the optimization at the beginning of an inner run -->
+          <fixed_value>0.01</fixed_value>
+          <!-- 1% of capacity to try and avoid crashing the optimization at the beginning of an inner run -->
         </initial_stored>
         <RTE>0.9</RTE>
         <!-- Assumption -->
@@ -326,6 +326,44 @@
             <!-- Capex cost of $500/kg-H2: Assumption -->
           </reference_price>
           <depreciate>15</depreciate>
+        </CashFlow>
+      </economics>
+    </Component>
+
+    <Component name="h2_import">
+      <produces resource="h2" dispatch="independent">
+        <capacity resource="h2">
+          <fixed_value>1e200</fixed_value> 
+        </capacity>
+      </produces>
+      <economics>
+        <lifetime>60</lifetime>
+        <CashFlow name="h2IMPORTS" type="repeating" taxable="True" inflation="None" mult_target="False">
+          <driver>
+            <activity>h2</activity>
+          </driver>
+          <reference_price>
+            <fixed_value>-1000000</fixed_value>
+          </reference_price>
+        </CashFlow>
+      </economics>
+    </Component>
+
+    <Component name="h2_export">
+      <demands resource="h2" dispatch="independent">
+        <capacity resource="h2">
+          <fixed_value>-1e200</fixed_value> 
+        </capacity>
+      </demands>
+      <economics>
+        <lifetime>60</lifetime>
+        <CashFlow name="h2EXPORTS" type="repeating" taxable="True" inflation="None" mult_target="False">
+          <driver>
+            <activity>h2</activity>
+          </driver>
+          <reference_price>
+            <fixed_value>1000000</fixed_value>
+          </reference_price>
         </CashFlow>
       </economics>
     </Component>
