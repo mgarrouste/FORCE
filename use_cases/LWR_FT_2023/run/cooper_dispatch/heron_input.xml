@@ -6,7 +6,7 @@
     <label name="elec_data">covid</label>
     <mode>sweep</mode>
     <debug>
-      <inner_samples>2</inner_samples>
+      <inner_samples>1</inner_samples>
       <macro_steps>20</macro_steps>
       <dispatch_plot>False</dispatch_plot>
     </debug>
