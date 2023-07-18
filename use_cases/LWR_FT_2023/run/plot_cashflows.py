@@ -9,11 +9,11 @@ DISCOUNT_RATE = 0.1
 BASE_YEAR = 2020
 
 cashflows_names = {'h2_ptc':r'$H_2 \; PTC$', 
-                    'market_jet_fuel':'Jet Fuel', 
-                    'e':'Electricity', 
-                    'diesel':'Diesel', 
-                    'naphtha':'Naphtha', 
-                    'elec_cap_market':'Capacity\nMarket',
+                    'jet_fuel':'Jet Fuel', 
+                    'electricity_market':'Electricity', 
+                    'diesel_market':'Diesel', 
+                    'naphtha_market':'Naphtha', 
+                    'elec_cap':'Capacity\nMarket',
                     'om': 'O&M', 
                     'co2_shipping': r'$CO_2$',
                     'capex': 'CAPEX'}
@@ -34,31 +34,42 @@ def discount_cashflows(cashflows_file, discount_rate = 0.1):
 
 def create_final_cashflows(yearly_discounted_cashflows):
   new = yearly_discounted_cashflows.drop(columns=['index', 'cfYears', 'year'])
-  # Rename columns
-  new.rename(lambda x:"_".join(x.split('_')[1:-1]), axis='columns', inplace=True)
+  # compute useful cashflows
+  cashflow_names = list(new.columns)
+  # CAPEX
+  capex_c = [c for c in cashflow_names if 'CAPEX' in c]
+  print(capex_c)
+  new['capex'] = new[capex_c].sum(axis=1)
+  new.drop(columns= capex_c, inplace =True)
+
+  # O&M
+  om_cashflows = [c for c in cashflow_names if ('OM' in c)]# or ('co2' in c)]
+  new['om'] = new[om_cashflows].sum(axis=1)
+  new.drop(columns = om_cashflows, inplace=True)
+
+  # Capacity market
+  cap_cashflows = [c for c in cashflow_names if 'ELEC_CAP_MARKET' in c]
+  new['elec_cap_market'] = new[cap_cashflows].sum(axis=1)
+  new.drop(columns = cap_cashflows, inplace=True)
+  
+  # Rename remaining columns
+
   for c in list(new.columns): 
     if 'market' in c: 
-      new_cash_name = '_'.join(c.split('_')[1:-1])
+      new_cash_name = '_'.join(c.split('_')[0:2])
       new[new_cash_name] = new[c]
       new.drop(columns=c, inplace=True)
     if 'import' in c: 
       new.drop(columns=c, inplace=True)
     if 'export' in c:
       new.drop(columns=c, inplace=True)
-  # compute useful cashflows
-  cashflow_names = list(new.columns)
-  # CAPEX
-  capex_c = [c for c in cashflow_names if 'CAPEX' in c]
-  new['capex'] = new[capex_c].sum(axis=1)
-  new.drop(columns= capex_c, inplace =True)
-  # O&M
-  om_cashflows = [c for c in cashflow_names if ('OM' in c)]# or ('co2' in c)]
-  new['om'] = new[om_cashflows].sum(axis=1)
-  new.drop(columns = om_cashflows, inplace=True)
-  # Capacity market
-  cap_cashflows = [c for c in cashflow_names if 'ELEC_CAP_MARKET' in c]
-  new['elec_cap_market'] = new[cap_cashflows].sum(axis=1)
-  new.drop(columns = cap_cashflows, inplace=True)
+    if 'co2' in c:
+      new['co2_shipping'] = new[c]
+      new.drop(columns=c, inplace=True)
+    if 'ptc' in c: 
+      new['h2_ptc'] = new[c]
+      new.drop(columns=c, inplace=True)
+  
   lifetime_cashflows = new.sum().to_frame()
   return lifetime_cashflows
 
@@ -138,8 +149,10 @@ if __name__ == "__main__":
   cashflows_file = os.path.join(dispatch_dir, 'gold', 'cashflows_0.csv')
   if os.path.isfile(cashflows_file):
     discounted_cashflows = discount_cashflows(cashflows_file, discount_rate = DISCOUNT_RATE)
+    discounted_cashflows.to_csv(os.path.join(dir, dispatch_dir, 'yearly_discounted_cashflows.csv'))
     #print(discounted_cashflows['ft_h2_ptc_CashFlow'])
     lifetime_cashflows = create_final_cashflows(discounted_cashflows)
+    lifetime_cashflows.to_csv(os.path.join(dir,dispatch_dir, 'lifetime_cashflows.csv'))
     plot_lifetime_cashflows(lifetime_cashflows, plant=args.case_name, dispatch_dir=dispatch_dir)
   else: 
     print('No cashflows from dispatch run in {}'.format(cashflows_file))
