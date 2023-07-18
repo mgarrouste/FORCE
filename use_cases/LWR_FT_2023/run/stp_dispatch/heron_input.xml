@@ -49,7 +49,7 @@
       <produces resource="h2" dispatch="independent">
         <consumes>electricity</consumes>
         <capacity resource="electricity">
-          <sweep_values debug_value="-185">-1265,-650,-100</sweep_values> <!-- MWe -->
+          <sweep_values debug_value="-985">-1265,-650,-100</sweep_values> <!-- MWe -->
         </capacity>
         <minimum resource="electricity">
           <!-- To model hot standby mode, 0.85% of electrical capacity-->
@@ -118,7 +118,7 @@
       <produces resource='naphtha,diesel,jet_fuel' dispatch='fixed'>
         <consumes>h2</consumes>
         <capacity resource='h2'>
-          <sweep_values debug_value="-24756">-31789,-15000,-2513</sweep_values>
+          <sweep_values debug_value="-22243">-31789,-15000,-2513</sweep_values>
         </capacity>
         <transfer>
           <linear>
@@ -298,10 +298,10 @@
     <Component name='h2_storage'>
       <stores resource="h2" dispatch="independent">
         <capacity resource='h2'>
-          <sweep_values debug_value="5545246">10,500000,2000000,4000000,8000000</sweep_values> <!-- kg: Max is 4 hours worth of H2 for FT -->
+          <sweep_values debug_value="10">10,500000,2000000,4000000,8000000</sweep_values> <!-- kg: Max is 4 hours worth of H2 for FT -->
         </capacity>
         <initial_stored>
-          <fixed_value>0.1</fixed_value>
+          <fixed_value>0.01</fixed_value>
           <!-- 10% of capacity to try and avoid crashing the optimization at the beginning of an inner run -->
         </initial_stored>
         <RTE>0.9</RTE>
@@ -318,6 +318,44 @@
             <!-- Capex cost of $500/kg-H2: Assumption -->
           </reference_price>
           <depreciate>15</depreciate>
+        </CashFlow>
+      </economics>
+    </Component>
+
+    <Component name="h2_import">
+      <produces resource="h2" dispatch="independent">
+        <capacity resource="h2">
+          <fixed_value>1e200</fixed_value> 
+        </capacity>
+      </produces>
+      <economics>
+        <lifetime>60</lifetime>
+        <CashFlow name="h2IMPORTS" type="repeating" taxable="True" inflation="None" mult_target="False">
+          <driver>
+            <activity>h2</activity>
+          </driver>
+          <reference_price>
+            <fixed_value>-1000000</fixed_value>
+          </reference_price>
+        </CashFlow>
+      </economics>
+    </Component>
+
+    <Component name="h2_export">
+      <demands resource="h2" dispatch="independent">
+        <capacity resource="h2">
+          <fixed_value>-1e200</fixed_value> 
+        </capacity>
+      </demands>
+      <economics>
+        <lifetime>60</lifetime>
+        <CashFlow name="h2EXPORTS" type="repeating" taxable="True" inflation="None" mult_target="False">
+          <driver>
+            <activity>h2</activity>
+          </driver>
+          <reference_price>
+            <fixed_value>1000000</fixed_value>
+          </reference_price>
         </CashFlow>
       </economics>
     </Component>
