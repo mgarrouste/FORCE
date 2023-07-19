@@ -38,7 +38,8 @@ def get_results():
     @ In, std_NPV_baseline, float, value for the std NPV of the baseline (elec) case
     @ Out, sweep_df, pd.DataFrame, sorted dataframe of results
   """
-  sweep_df = pd.DataFrame(columns=['location', 'name', 'mean_NPV', 'std_NPV', 'baseline_NPV', 'std_baseline_NPV'])
+  sweep_df = pd.DataFrame(columns=['location', 'name', 'mean_NPV', 'std_NPV', 'baseline_NPV', 'std_baseline_NPV', \
+    'npp_capacity','htse_capacity','ft_capacity', 'h2_storage_capacity'])
   for location, location_name in locations_names.items():
     s_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), location+'_sweep', 'gold', 'sweep.csv')
     if os.path.isfile(s_file):
@@ -49,7 +50,11 @@ def get_results():
                 'mean_NPV': [s_df.loc[0,'mean_NPV']], 
                 'std_NPV': [s_df.loc[0, 'std_NPV']],
                 'baseline_NPV': [baseline_NPV], 
-                'std_baseline_NPV': [std_baseline_NPV]}
+                'std_baseline_NPV': [std_baseline_NPV], 
+                'htse_capacity': [s_df.loc[0, 'htse_capacity']],
+                'h2_storage_capacity': [s_df.loc[0, 'h2_storage_capacity']],
+                'ft_capacity': [s_df.loc[0, 'ft_capacity']],
+                'npp_capacity': [s_df.loc[0, 'npp_capacity']]}
       sweep_df = pd.concat([sweep_df,pd.DataFrame.from_dict(to_add)], ignore_index=True)
     else: 
       print(f'No sweep results for {location} there: {s_file}')
@@ -74,6 +79,7 @@ def main():
   dir = os.path.dirname(os.path.abspath(__file__))
   os.chdir(dir)
   df = get_results()
+  df.to_csv(os.path.join(dir,'sweep_results.csv'))
   plot_hist(df)
 
 if __name__ == "__main__":
