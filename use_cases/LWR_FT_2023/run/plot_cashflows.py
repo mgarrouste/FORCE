@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import os, argparse
-from plot_sweep import get_baseline_NPV
 
 
 DISCOUNT_RATE = 0.1
@@ -20,7 +19,20 @@ cashflows_names = {'h2_ptc':r'$H_2 \; PTC$',
 
 NPP_CAPACITIES = {'braidwood':1193, 'cooper':769, 'davis_besse':894, 'prairie_island':522, 'stp':1280}
 
-
+def get_baseline_NPV(case):
+  baseline_case = case+'_baseline'
+  print("Baseline case :{}".format(baseline_case))
+  baseline_file = os.path.join(baseline_case, 'gold', 'sweep.csv')
+  if os.path.isfile(baseline_file):
+    df = pd.read_csv(baseline_file)
+    # Assume the right case is printed on the first line
+    mean_NPV = float(df.iloc[0,:].mean_NPV)
+    print('Baseline case mean NPV: {}'.format(mean_NPV))
+    std_NPV = float(df.iloc[0,:].std_NPV)
+    print('Baseline case std NPV: {}'.format(std_NPV))
+  else:
+    raise FileNotFoundError("Baseline results not found")
+  return mean_NPV, std_NPV
 
 def discount_cashflows(cashflows_file, discount_rate = 0.1):
   yearly_df = pd.read_csv(cashflows_file)
