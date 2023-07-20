@@ -164,7 +164,7 @@ if __name__ == "__main__":
     discounted_cashflows.to_csv(os.path.join(dir, dispatch_dir, 'yearly_discounted_cashflows.csv'))
     #print(discounted_cashflows['ft_h2_ptc_CashFlow'])
     lifetime_cashflows = create_final_cashflows(discounted_cashflows)
-    lifetime_cashflows.to_csv(os.path.join(dir,dispatch_dir, 'lifetime_cashflows.csv'))
+    lifetime_cashflows.transpose().to_csv(os.path.join(dir,dispatch_dir, 'lifetime_cashflows.csv'))
     plot_lifetime_cashflows(lifetime_cashflows, plant=args.case_name, dispatch_dir=dispatch_dir)
   else: 
     print('No cashflows from dispatch run in {}'.format(cashflows_file))
