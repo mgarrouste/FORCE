@@ -111,8 +111,8 @@ def co2_supply_curve(data, meta):
   """
   co2_cost = 0
   ft_cap = meta['HERON']['RAVEN_vars']['ft_capacity'] #kg-H2
-  h2_rate = 1.06
-  co2_rate = 6.58
+  h2_rate = 1.0
+  co2_rate = 6.0429
   co2_demand_year = 365*24*np.abs(ft_cap)*co2_rate/h2_rate #(kg/year)
   # Get the data for the NPP
   labels = meta['HERON']['Case'].get_labels()
