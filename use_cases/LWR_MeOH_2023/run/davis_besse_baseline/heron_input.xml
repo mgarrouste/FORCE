@@ -9,7 +9,7 @@
         <memory>2gb</memory>
       </runinfo>
     </parallel>
-    <num_arma_samples>50</num_arma_samples>
+    <num_arma_samples>2</num_arma_samples>
     <time_discretization>
       <time_variable>hour</time_variable>
       <year_variable>Year</year_variable>
@@ -24,7 +24,7 @@
       <verbosity>50</verbosity>
     </economics>
     <dispatcher>
-      <pyomo></pyomo>
+      <pyomo />
     </dispatcher>
   </Case>
 
@@ -70,7 +70,7 @@
   </Components>
 
   <DataGenerators>
-    <ARMA name='price' variable="price">../../train/Output_davis_besse_2012_2021_DA/arma.pk</ARMA>
+    <ARMA name="price" variable="price">../../train/Output_davis_besse_2012_2021_DA/arma.pk</ARMA>
     <Function name="functions">../functions.py</Function>
   </DataGenerators>
 
