@@ -25,7 +25,7 @@
       <verbosity>50</verbosity>
     </economics>
     <dispatcher>
-      <pyomo></pyomo>
+      <pyomo />
     </dispatcher> 
   </Case>
 
@@ -71,7 +71,7 @@
   </Components>
 
   <DataGenerators>
-    <ARMA name='price' variable="price">../../train/Output_cooper_2014_2021_DA/arma.pk</ARMA>
+    <ARMA name="price" variable="price">../../train/Output_cooper_2014_2021_DA/arma.pk</ARMA>
     <Function name="functions">../functions.py</Function>
   </DataGenerators>
 

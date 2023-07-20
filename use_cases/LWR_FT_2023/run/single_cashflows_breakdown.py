@@ -11,6 +11,17 @@ CASHFLOWS = ['htseCAPEX', 'htseFOM', 'htseVOM','htseELEC_CAP_MARKET','htse_amort
               'ftCAPEX', 'ftFOM', 'ftVOM', 'co2_shipping', 'h2_ptc', 'ft_amortize_ftCAPEX', 'ft_depreciate_ftCAPEX',\
                 'ftELEC_CAP_MARKET', 'e_sales', 'naphtha_sales','diesel_sales', 'jet_fuel_sales','storageCAPEX']
 DISCOUNT_RATE = 0.1 #10% used 
+cashflows_names = {'h2_ptc':r'$H_2 \; PTC$', 
+                    'jet_fuel_sales':'Jet Fuel', 
+                    'e_sales':'Electricity', 
+                    'diesel_sales':'Diesel', 
+                    'naphtha_sales':'Naphtha', 
+                    'elec_cap_market':'Capacity\nMarket',
+                    'om': 'O&M', 
+                    'co2_shipping': r'$CO_2$',
+                    'capex': 'CAPEX'}
+NPP_CAPACITIES = {'braidwood':1193, 'cooper':769, 'davis_besse':894, 'prairie_island':522, 'stp':1280}
+
 
 def get_yearly_cashflows(plant, final_out):
   with open(final_out) as fp:
@@ -61,23 +72,6 @@ def get_yearly_fcff(plant, final_out):
   df.set_index(['year'], inplace=True)
   return df
 
-def compute_taxes(yearly_df, plant):
-  min_year = min(yearly_df.index)
-  max_year = max(yearly_df.index)
-  list_rows = []
-  for year in range(min_year, max_year+1):
-    # Compute taxes as fcff - (revenues+costs)
-    rc = 0
-    for c in CASHFLOWS:
-      c_value = yearly_df.at[year, c]
-      rc += c_value
-    fcff = yearly_df.at[year,'fcff']
-    taxes = fcff -rc
-    new_row = pd.DataFrame.from_dict({"year":[year],"tax":[taxes]})
-    list_rows.append(new_row)
-  df = pd.concat(list_rows, ignore_index=True)
-  df.set_index(['year'], inplace=True)
-  return df
 
 def plot_yearly_cashflow(yearly_df, plant_dir, plant, tag): 
   """
@@ -166,9 +160,13 @@ def plot_lifetime_cashflow(plant, plant_dir, lifetime_df, tag):
   df.rename(columns={'index':'category', 0:'value'}, inplace=True)
   df = df.sort_values(by=['value'], ascending=False)
   df.reset_index(inplace=True)
-  df['value'] = df['value'].div(1e6)
-  # TODO rename categories with lambda x: " ".join(x.split("_")).upper()
-  df['category'] = df['category'].apply(lambda x: " ".join(x.split("_")).upper())
+
+  print(plant)
+  # In $M/NPP capacity (MWe)
+  df['value'] = df['value'].div(1e6*NPP_CAPACITIES[plant])
+
+
+  # Waterfall calculations
   # calculate running totals
   y='value'
   x='category'
@@ -178,33 +176,47 @@ def plot_lifetime_cashflow(plant, plant_dir, lifetime_df, tag):
   lower = df[['tot','tot1']].min(axis=1)
   upper = df[['tot','tot1']].max(axis=1)
   # mid-point for label position
-  mid = (lower + upper)/2
+  mid = upper+0.03
   # positive number shows green, negative number shows red
   df.loc[df[y] >= 0, 'color'] = 'green'
   df.loc[df[y] < 0, 'color'] = 'red'
   # calculate connection points
   connect= df['tot1'].repeat(3).shift(-1)
   connect[1::3] = np.nan
+
+  # Names
+  df['name'] = df['category'].map(cashflows_names)
+  print(df)
+
+  #Plot
   fig,ax = plt.subplots()
   # plot first bar with colors
   bars = ax.bar(x=df[x],height=upper, color =df['color'])
   ax.yaxis.grid(which='major',color='gray', linestyle='dashed', alpha=0.7)
   # plot second bar - invisible
   ax.bar(x=df[x], height=lower,color='white')
-  ax.set_ylabel('M$(2020(USD))')
+  ax.set_ylabel('M$(2020(USD)) / MWe')
   # plot connectors
   ax.plot(connect.index,connect.values, 'k' )
   # plot bar labels
   for i, v in enumerate(upper):
-      ax.text(i-.15, mid[i], f"{df[y][i]:,.0f}")
+      ax.text(i-.15, mid[i], f"{df[y][i]:,.3f}")
   # Baseline case as horizontal line
   baseline_NPV, std_NPV = get_baseline_NPV(plant)
   baseline_NPV /=1e6
-  ax.axhline(baseline_NPV, color='b', linewidth=4)
-  ax.text(7, baseline_NPV+100, 'BAU NPV', color='b')
-  plt.xticks(rotation=70)
-  plt.gcf().set_size_inches(13, 6)
-  fig.tight_layout()
+  baseline_NPV /= NPP_CAPACITIES[plant]
+  ax.axhline(baseline_NPV, color='b', linewidth=2)
+  bau_text = 'BAU NPV: '+str(np.round(baseline_NPV,3))+" M$/MWe"
+  ax.text(5, baseline_NPV+0.1, bau_text, color='b')
+
+  # Rename cashflows
+  ax.set_xticklabels(df['name'])
+
+  ax.grid(axis='y',color='black', linestyle='--', alpha=0.7,linewidth=0.8)
+
+  #plt.xticks(rotation=70)
+  plt.gcf().set_size_inches(12, 7)
+  #fig.tight_layout()
   plt.savefig(os.path.join(plant_dir, plant+"_"+tag+"_total_cashflow_breakdown.png"))
   return None
 
@@ -275,8 +287,10 @@ if __name__ == "__main__":
   plant_dir = os.path.join(dir, args.case_name)
   print("Case directory : {}".format(plant_dir))
   for final_out in glob.glob(plant_dir+'/gold/out~inner*'):
-    print("Breaking down cashflows for {}".format(final_out))
-    tag = final_out.split("_")[-1]
+    plant = args.case_name.split('_')[0]
+    print("Breaking down cashflows for plant {}".format(plant))
+    tag = args.case_name.split("_")[-1]
+
     case_n = None
     if tag == "opt":
       print("Optimization case")
@@ -285,4 +299,7 @@ if __name__ == "__main__":
       print("Case # {} in sweep results ".format(case_n))
     elif tag == "baseline":
       print("Baseline case")
-    test(args.case_name, final_out, plant_dir, tag=tag, case_number=case_n)
+    else:
+      case_n = final_out.split("/")[-1].split("_")[0][-1]
+      print("Case # {} in sweep results ".format(case_n))
+    test(plant, final_out, plant_dir, tag=tag, case_number=case_n)

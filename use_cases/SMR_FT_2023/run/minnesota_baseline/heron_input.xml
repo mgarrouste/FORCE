@@ -1,0 +1,99 @@
+<HERON>
+  <Case name="minnesota_baseline">
+    <label name="scenario">ref</label>
+    <label name="location">prairie_island</label>
+    <label name="fuel_region">minnesota</label>
+    <label name="elec_data">covid</label>
+    <mode>sweep</mode>
+    <parallel>
+      <runinfo>
+        <expectedTime>72:0:0</expectedTime>
+        <clusterParameters>-P re_gen</clusterParameters>
+        <memory>4gb</memory>
+      </runinfo>
+    </parallel>
+    
+    <verbosity>debug</verbosity>
+    <num_arma_samples>10</num_arma_samples>
+    <time_discretization>
+      <time_variable>hour</time_variable>
+      <year_variable>Year</year_variable>
+      <end_time>23</end_time>
+      <num_steps>24</num_steps>
+    </time_discretization>
+    <economics>
+      <ProjectTime>40</ProjectTime>
+      <DiscountRate>0.1</DiscountRate>
+      <tax>0.2874</tax>
+      <inflation>0.0218</inflation>
+      <verbosity>50</verbosity>
+    </economics>
+    <dispatcher>
+      <pyomo />
+    </dispatcher>
+  </Case>
+
+  <Components>
+  
+  
+    <Component name="smr">
+      <produces resource="electricity" dispatch="fixed">
+        <capacity resource="electricity">
+          <sweep_values>720,240,480,960,1200</sweep_values> 
+        </capacity>
+      </produces>
+      <economics>
+        <lifetime>60</lifetime>
+        <CashFlow name="smrCAPEX" type="one-time" taxable="False" inflation="None" mult_target="False">
+          <driver>
+            <variable>smr_capacity</variable>
+          </driver>
+          <reference_price>
+            <fixed_value>-5569000</fixed_value> 
+          <multiplier>0.7</multiplier></reference_price>
+          <reference_driver>
+            <fixed_value>1</fixed_value>
+          </reference_driver>
+        </CashFlow>
+        <CashFlow name="smrVOM" type="repeating" taxable="True" inflation="None" mult_target="False">
+          <driver>
+            <activity>electricity</activity>
+          </driver>
+          <reference_price>
+            <fixed_value>23.2</fixed_value>
+          </reference_price>
+        </CashFlow>
+      </economics>
+    </Component>
+
+  
+    <Component name="electricity_market">
+      <demands resource="electricity" dispatch="dependent">
+        <capacity>
+          <fixed_value>-1e200</fixed_value>
+        </capacity>
+      </demands>
+      <economics>
+        <lifetime>30</lifetime>
+        <CashFlow name="e_sales" type="repeating" period="hour" taxable="True" inflation="none" mult_target="False">
+          <driver>
+            <activity>electricity</activity>
+            <multiplier>-1</multiplier>
+          </driver>
+          <reference_price>
+            <ARMA variable="price">price</ARMA> 
+          </reference_price>
+          <reference_driver>
+            <fixed_value>1</fixed_value>
+          </reference_driver>
+        </CashFlow>
+      </economics>
+    </Component>
+
+  </Components>
+
+  <DataGenerators>
+    <ARMA name="price" variable="price">../../train/Output_prairie_island_1_2013_2021_DA/arma.pk</ARMA>
+    <Function name="functions">../functions.py</Function>
+  </DataGenerators>
+</HERON>
