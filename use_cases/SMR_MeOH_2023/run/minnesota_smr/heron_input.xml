@@ -53,7 +53,7 @@
           </driver>
           <reference_price>
             <fixed_value>-5569000</fixed_value> 
-          <multiplier>0.7</multiplier></reference_price>
+          <multiplier>0.7</multiplier><multiplier>0.7</multiplier></reference_price>
           <reference_driver>
             <fixed_value>1</fixed_value>
           </reference_driver>
@@ -74,7 +74,7 @@
       <produces resource="h2" dispatch="independent">
         <consumes>electricity</consumes>
         <capacity resource="electricity">
-          <sweep_values>-705,	-636,	-567,	-498,	-430,	-361,	-292,	-223,	-154,	-85</sweep_values> 
+          <sweep_values>-667.0,-598.0,-529.0,-460.0,-391.0,-323.0,-254.0,-185.0,-116.0,-47.0</sweep_values> 
         </capacity>
         <minimum resource="electricity">
           
@@ -142,7 +142,7 @@
       <produces resource="naphtha,diesel,jet_fuel" dispatch="fixed">
         <consumes>h2</consumes>
         <capacity resource="h2">
-          <sweep_values>-19901,	-17937,	-15973,	-14009,	-12045,	-10081,	-8118,	-6154,	-4190,	-2226</sweep_values>
+          <sweep_values>-16762.0,-15031.0,-13299.0,-11568.0,-9837.0,-8106.0,-6375.0,-4643.0,-2912.0,-1181.0</sweep_values>
         </capacity>
         <transfer>
           <linear>
@@ -151,7 +151,7 @@
             <rate resource="naphtha">0.0419</rate>
             <rate resource="jet_fuel">0.3443</rate>
             <rate resource="diesel">1.4813</rate>
-          <rate resource="electricity">-0.0004</rate></linear>
+          <rate resource="electricity">-0.0004</rate><rate resource="electricity">-0.0004</rate></linear>
         </transfer>
       </produces>
       <economics>
@@ -298,7 +298,7 @@
     <Component name="h2_storage">
       <stores resource="h2" dispatch="independent">
         <capacity resource="h2">
-          <sweep_values>10,47251,	94502,	141753,	189004,	236256,	283507,	330758,	378009,	425260</sweep_values> 
+          <sweep_values>10.0,44698.0,89396.0,134094.0,178792.0,223489.0,268187.0,312885.0,357583.0,402281.0</sweep_values> 
         </capacity>
         <initial_stored>
           <fixed_value>0.01</fixed_value>

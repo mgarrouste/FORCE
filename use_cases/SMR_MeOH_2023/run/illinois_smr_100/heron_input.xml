@@ -17,7 +17,7 @@
     </parallel>
     
     <verbosity>debug</verbosity>
-    <num_arma_samples>4</num_arma_samples>
+    <num_arma_samples>2</num_arma_samples>
     <time_discretization>
       <time_variable>hour</time_variable>
       <year_variable>Year</year_variable>
@@ -53,7 +53,7 @@
           </driver>
           <reference_price>
             <fixed_value>-5569000</fixed_value> 
-          <multiplier>0.7</multiplier></reference_price>
+          <multiplier>0.7</multiplier><multiplier>0.7</multiplier></reference_price>
           <reference_driver>
             <fixed_value>1</fixed_value>
           </reference_driver>
@@ -74,7 +74,7 @@
       <produces resource="h2" dispatch="independent">
         <consumes>electricity</consumes>
         <capacity resource="electricity">
-          <sweep_values>-985,	-785,	-585,	-385,	-185</sweep_values> 
+          <sweep_values>-947.0,-747.0,-547.0,-347.0,-147.0</sweep_values> 
         </capacity>
         <minimum resource="electricity">
           
@@ -141,7 +141,7 @@
       <produces resource="naphtha,diesel,jet_fuel" dispatch="fixed">
         <consumes>h2</consumes>
         <capacity resource="h2">
-          <sweep_values>-19901,	-15973,	-12045,	-8118,-4190</sweep_values>
+          <sweep_values>-23798.0,-18772.0,-13746.0,-8720.0,-3694.0</sweep_values>
         </capacity>
         <transfer>
           <linear>
@@ -150,7 +150,7 @@
             <rate resource="naphtha">0.0419</rate>
             <rate resource="jet_fuel">0.3443</rate>
             <rate resource="diesel">1.4813</rate>
-          <rate resource="electricity">-0.0004</rate></linear>
+          <rate resource="electricity">-0.0004</rate><rate resource="electricity">-0.0004</rate></linear>
         </transfer>
       </produces>
       <economics>
@@ -296,7 +296,7 @@
     <Component name="h2_storage">
       <stores resource="h2" dispatch="independent">
         <capacity resource="h2">
-          <sweep_values>10,	264059,	528119,	792178,	1056237</sweep_values> 
+          <sweep_values>10.0,253847.0,507693.0,761540.0,1015386.0</sweep_values> 
         </capacity>
         <initial_stored>
           <fixed_value>0.01</fixed_value>
