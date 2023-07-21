@@ -52,7 +52,7 @@
       <produces resource="h2" dispatch="independent">
         <consumes>electricity</consumes>
         <capacity resource="electricity">
-          <sweep_values>-522,	-475,	-428,	-381,	-334,	-288,	-241,	-194,	-147,	-100</sweep_values> 
+          <sweep_values>-522.0,-475.0,-428.0,-381.0,-334.0,-288.0,-241.0,-194.0,-147.0,-100.0</sweep_values> 
         </capacity>
         <minimum resource="electricity">
           
@@ -120,7 +120,7 @@
       <produces resource="naphtha,diesel,jet_fuel" dispatch="fixed">
         <consumes>h2</consumes>
         <capacity resource="h2">
-          <sweep_values>-11620,	-10576,	-9532,	-8489,	-7445,	-6401,	-5357,	-4314,	-3270,	-2226</sweep_values>
+          <sweep_values>-12615.0,-11482.0,-10349.0,-9216.0,-8082.0,-6949.0,-5816.0,-4683.0,-3550.0,-2417.0</sweep_values>
         </capacity>
         <transfer>
           <linear>
@@ -280,7 +280,7 @@
     <Component name="h2_storage">
       <stores resource="h2" dispatch="independent">
         <capacity resource="h2">
-          <sweep_values>10,	30986,	61973,	92959,	123945,	154932,	185918,	216904,	247890,	278877</sweep_values> 
+          <sweep_values>10.0,33640.0,67280.0,100920.0,134560.0,168200.0,201840.0,235480.0,269120.0,302760.0</sweep_values> 
         </capacity>
         <initial_stored>
           <fixed_value>0.01</fixed_value>
