@@ -53,7 +53,7 @@
           </driver>
           <reference_price>
             <fixed_value>-5569000</fixed_value> 
-          <multiplier>0.7</multiplier><multiplier>0.7</multiplier></reference_price>
+          </reference_price>
           <reference_driver>
             <fixed_value>1</fixed_value>
           </reference_driver>
