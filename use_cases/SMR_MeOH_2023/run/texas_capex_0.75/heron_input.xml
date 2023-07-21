@@ -152,7 +152,7 @@
             <rate resource="naphtha">0.0419</rate>
             <rate resource="jet_fuel">0.3443</rate>
             <rate resource="diesel">1.4813</rate>
-          <rate resource="electricity">-0.0004</rate><rate resource="electricity">-0.0004</rate></linear>
+          <rate resource="electricity">-0.0004</rate></linear>
         </transfer>
       </produces>
       <economics>

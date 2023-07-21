@@ -217,7 +217,7 @@ def main():
   for case in cases:
     itc(case)
     init_storage(case)
-    meoh_ratios(case)
+    #meoh_ratios(case)
     reduced_arma_samples = True
     if '_smr' in case:
       reduced_arma_samples = False
