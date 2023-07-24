@@ -20,7 +20,7 @@ def plot_hist(sweep_df):
   sweep_df['mean_NPV'] /=1e6
   sweep_df['baseline_NPV'] /=1e6
 
-  sweep_df.plot(ax = ax[1], x='name',kind = "bar", y ='delta_NPV', yerr='2std_dNPV', label=r'$\Delta (NPV)$', legend = False,color='green') 
+  sweep_df.plot(ax = ax[1], x='name',kind = "bar", y ='delta_NPV', yerr='2std_dNPV', label=r'$\Delta (NPV)$', capsize=2, ecolor='black', error_kw={'markeredgewidth':1}, legend = False,color='green') 
   ax[1].set_ylabel(r'$\$M \;USD(2020)$')
 
   sweep_df.plot(ax = ax[0], x= 'name', kind='bar', y=['mean_NPV', 'baseline_NPV'], label=['NPV', 'BAU NPV'],legend = False)#, yerr = ['2std_mean_NPV','2std_baseline_NPV'])#, color='blue')
