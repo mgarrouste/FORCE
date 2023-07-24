@@ -17,8 +17,9 @@ def itc(case):
       for cash in comp.findall('CashFlow'):
         if cash.get('name') == 'smrCAPEX':
           ref_price = cash.find('reference_price')
-          mult = ET.SubElement(ref_price, 'multiplier')
+          mult = ET.Element('multiplier')
           mult.text = str(ITC_VALUE)
+          ref_price.append(mult)
   with open(os.path.join(case, 'heron_input.xml'), 'wb') as f:
     tree.write(f)
 
@@ -215,6 +216,16 @@ def sweep_values_storage(case):
   with open(os.path.join(case, 'heron_input.xml'), 'wb') as f:
     tree.write(f)
 
+def add_elec_consumption_meoh(case):
+  tree = ET.parse(os.path.join(case, 'heron_input.xml'))
+  root = tree.getroot().find('Components')
+
+  for comp in root.findall('Component'):
+    if comp.get('name') =='meoh':
+      consumes_node = comp.find('produces').find('consumes')
+      consumes_node.text = 'h2,electricity'
+  with open(os.path.join(case, 'heron_input.xml'), 'wb') as f:
+    tree.write(f)
 
 
 def main():
@@ -235,6 +246,7 @@ def main():
   print("Cases to modify: {}\n".format(cases))
   for case in cases:
     #delete_double_itc(case)
+    #itc(case)
     init_storage(case)
     #meoh_ratios(case)
     reduced_arma_samples = True
@@ -250,6 +262,7 @@ def main():
       arma_samples(case)
     sweep_values_htse(case)
     sweep_values_meoh(case)
+    add_elec_consumption_meoh(case)
     sweep_values_storage(case)
 
       
