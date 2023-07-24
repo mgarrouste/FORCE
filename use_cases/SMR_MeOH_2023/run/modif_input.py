@@ -227,6 +227,13 @@ def add_elec_consumption_meoh(case):
   with open(os.path.join(case, 'heron_input.xml'), 'wb') as f:
     tree.write(f)
 
+def project_lifetime(case, lifetime):
+  tree = ET.parse(os.path.join(case, 'heron_input.xml'))
+  root = tree.getroot().find('Case')
+  time = root.find('economics').find('ProjectTime')
+  time.text =str(lifetime)
+  with open(os.path.join(case, 'heron_input.xml'), 'wb') as f:
+    tree.write(f)
 
 def main():
   parser = argparse.ArgumentParser()
@@ -263,6 +270,7 @@ def main():
     sweep_values_htse(case)
     sweep_values_meoh(case)
     add_elec_consumption_meoh(case)
+    project_lifetime(case=case, lifetime=60)
     sweep_values_storage(case)
 
       
