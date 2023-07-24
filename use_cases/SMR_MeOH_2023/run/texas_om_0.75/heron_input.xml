@@ -142,7 +142,7 @@
 
     <Component name="meoh">
       <produces resource="naphtha,diesel,jet_fuel" dispatch="fixed">
-        <consumes>h2</consumes>
+        <consumes>h2,electricity</consumes>
         <capacity resource="h2">
           <sweep_values>-16762.0,-13299.0,-9837.0,-6375.0,-2912.0</sweep_values>
         </capacity>
