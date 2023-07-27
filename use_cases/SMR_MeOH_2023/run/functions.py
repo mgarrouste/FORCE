@@ -22,7 +22,7 @@ GAL_to_L = 3.785 # L/gal
 MG_to_N = 0.8026335 # Will Jenson data
 HTSE_ELEC_to_H2 = 25.13 #kg-H2/MWe
 
-def h2_ptc_ft(data, meta):
+def h2_ptc_meoh(data, meta):
   """
     Determines the PTC (Production Tax Credit) for hydrogen production when calculated for FT component: 
     PTC applicable only for the first 10 years of the simulation $3/kg-H2
@@ -39,7 +39,7 @@ def h2_ptc_ft(data, meta):
   data = {'reference_price':ptc}
   return data, meta
 
-def h2_ptc_270(data, meta):
+def h2_ptc_meoh_270(data, meta):
   """
     Determines the PTC (Production Tax Credit) for hydrogen production when calculated for FT component: 
     PTC applicable only for the first 10 years of the simulation $2.70/kg-H2: simulates the case where the utility
@@ -57,7 +57,7 @@ def h2_ptc_270(data, meta):
   data = {'reference_price':ptc}
   return data, meta
 
-def h2_ptc_100(data, meta):
+def h2_ptc_meoh_100(data, meta):
   """
     Determines the PTC (Production Tax Credit) for hydrogen production when calculated for FT component: 
     PTC applicable only for the first 10 years of the simulation $2.70/kg-H2: simulates the case where the utility
@@ -75,7 +75,7 @@ def h2_ptc_100(data, meta):
   data = {'reference_price':ptc}
   return data, meta
 
-def h2_ptc_000(data, meta):
+def h2_ptc_meoh_000(data, meta):
   """
     Determines the PTC (Production Tax Credit) for hydrogen production when calculated for FT component: 
     PTC applicable only for the first 10 years of the simulation $2.70/kg-H2: simulates the case where the utility
@@ -100,7 +100,7 @@ def find_lower_nearest_idx(array, value):
       idx = i
   return idx
 
-def co2_supply_curve(data, meta):
+def co2_supply_curve_meoh(data, meta):
   """
     Determines the cost of CO2 as a function of the quantity asked for, 
     Based on data from D. Wendt analysis on CO2 feedstock
@@ -110,13 +110,13 @@ def co2_supply_curve(data, meta):
     @ In, meta, dict, state information
   """
   co2_cost = 0
-  ft_cap = meta['HERON']['RAVEN_vars']['ft_capacity'] #kg-H2
-  h2_rate = 1.0
+  ft_cap = meta['HERON']['RAVEN_vars']['meoh_capacity'] #kg-H2
+  h2_rate = 1.00
   co2_rate = 6.0429
   co2_demand_year = 365*24*np.abs(ft_cap)*co2_rate/h2_rate #(kg/year)
   # Get the data for the NPP
   labels = meta['HERON']['Case'].get_labels()
-  location = labels['co2_location']
+  location = labels['location']
   location_path = '../data/'+str(location)+'_co2.csv'
   df = pd.read_csv(os.path.join(os.path.dirname(__file__), location_path))
   cost_data = df.iloc[:,-1].to_numpy()
@@ -198,3 +198,12 @@ def diesel_price(data, meta):
   price = priceGal*(1/GAL_to_L)*(1/FUEL_DENSITY['diesel']) #in $/kg
   data = {'reference_price': price}
   return data, meta 
+
+
+if __name__ == "__main__":
+  #test_co2_supply_curve()# Works!
+  # Test jet fuel get price with reference EIA AEO
+  meta = {'HERON':{'active_index':{'year':23}, 'Case':{''}}}
+  data = {}
+  data, meta = jet_fuel_price(data, meta)
+  print(data['driver'])
