@@ -5,6 +5,7 @@ import numpy as np
 
 ITC_VALUE = 0.7
 STORAGE_INIT = 0.01 # 1% filled at the beginning of the day
+MACRS = 15
 steps_data = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', 'data', 'HERON_model_data.xlsx')
 
 def itc(case):
@@ -227,6 +228,19 @@ def add_elec_consumption_meoh(case):
   with open(os.path.join(case, 'heron_input.xml'), 'wb') as f:
     tree.write(f)
 
+def add_depreciation(case):
+  tree = ET.parse(os.path.join(case, 'heron_input.xml'))
+  root = tree.getroot().find('Components')
+  for comp in root.findall('Component'):
+    if comp.get('name') == 'smr':
+      cash = comp.find('economics').findall('CashFlow')
+      for c in cash:
+        if c.get('name')=='smrCAPEX':
+          mult = ET.SubElement(c, 'depreciate')
+          mult.text = str(MACRS)
+  with open(os.path.join(case, 'heron_input.xml'), 'wb') as f:
+    tree.write(f)
+
 def project_lifetime(case, lifetime):
   tree = ET.parse(os.path.join(case, 'heron_input.xml'))
   root = tree.getroot().find('Case')
@@ -269,7 +283,8 @@ def main():
       arma_samples(case)
     sweep_values_htse(case)
     sweep_values_meoh(case)
-    add_elec_consumption_meoh(case)
+    #add_depreciation(case)
+    #add_elec_consumption_meoh(case)
     project_lifetime(case=case, lifetime=60)
     sweep_values_storage(case)
 
