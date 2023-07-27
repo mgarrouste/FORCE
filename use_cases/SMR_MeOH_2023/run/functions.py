@@ -116,7 +116,7 @@ def co2_supply_curve_meoh(data, meta):
   co2_demand_year = 365*24*np.abs(ft_cap)*co2_rate/h2_rate #(kg/year)
   # Get the data for the NPP
   labels = meta['HERON']['Case'].get_labels()
-  location = labels['location']
+  location = labels['co2_location']
   location_path = '../data/'+str(location)+'_co2.csv'
   df = pd.read_csv(os.path.join(os.path.dirname(__file__), location_path))
   cost_data = df.iloc[:,-1].to_numpy()
