@@ -58,7 +58,7 @@
           <reference_driver>
             <fixed_value>1</fixed_value>
           </reference_driver>
-        </CashFlow>
+        <depreciate>15</depreciate></CashFlow>
         <CashFlow name="smrVOM" type="repeating" taxable="True" inflation="None" mult_target="False">
           <driver>
             <activity>electricity</activity>
