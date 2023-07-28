@@ -5,9 +5,6 @@
     <label name="co2_location">illinois</label>
     <label name="fuel_region">illinois</label>
     <mode>sweep</mode>
-    <data_handling>
-      <inner_to_outer>csv</inner_to_outer>  
-    </data_handling>
     <parallel>
       <runinfo>
         <expectedTime>72:0:0</expectedTime>
@@ -17,7 +14,7 @@
     </parallel>
     
     <verbosity>debug</verbosity>
-    <num_arma_samples>4</num_arma_samples>
+    <num_arma_samples>2</num_arma_samples>
     <time_discretization>
       <time_variable>hour</time_variable>
       <year_variable>Year</year_variable>
