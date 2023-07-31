@@ -41,7 +41,7 @@ def get_results():
     @ Out, sweep_df, pd.DataFrame, sorted dataframe of results
   """
   sweep_df = pd.DataFrame(columns=['location', 'name', 'mean_NPV', 'std_NPV', 'baseline_NPV', 'std_baseline_NPV', \
-    'npp_capacity','htse_capacity','ft_capacity', 'h2_storage_capacity'])
+    'npp_capacity','htse_capacity','meoh_capacity', 'h2_storage_capacity'])
   for location, location_name in locations_names.items():
     s_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), location+'_sweep', 'gold', 'sweep.csv')
     if os.path.isfile(s_file):
