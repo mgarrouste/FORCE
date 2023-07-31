@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import os
 import numpy as np
 import seaborn as sns
+from matplotlib.ticker import (MultipleLocator, AutoMinorLocator)
 
 locations_names = {'braidwood':'Braidwood', 'cooper':'Cooper', 'davis_besse':'Davis-Besse', 'prairie_island':'Prairie Island', 
                     'stp':'South Texas Project'}
@@ -22,6 +23,7 @@ def plot_hist(sweep_df):
   ax.set_xticklabels(locations_names.values(), rotation=0)
   ax.set_ylabel(r'$\Delta(NPV) \;\$M \;USD(2020)$')
 
+  ax.yaxis.set_major_locator(MultipleLocator(100))
   sns.despine(ax=ax, trim=True)
 
   fig.tight_layout()
