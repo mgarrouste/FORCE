@@ -86,11 +86,10 @@ def create_final_cashflows(yearly_discounted_cashflows):
   return lifetime_cashflows
 
 
-def plot_lifetime_cashflows(lifetime_cashflows, figure, plant, dispatch_dir): 
+def plot_lifetime_cashflows(lifetime_cashflows, axis, plant, dispatch_dir, title): 
   df = lifetime_cashflows.reset_index()
   #df.rename({0:'value'}, axis='rows', inplace=True)
   df.rename(columns={'index':'category', 0:'value'}, inplace=True)
-  print(df)
   df = df.sort_values(by='value', axis=0, ascending=False)
   df.reset_index(inplace=True)
 
@@ -117,22 +116,22 @@ def plot_lifetime_cashflows(lifetime_cashflows, figure, plant, dispatch_dir):
 
   # Names
   df['name'] = df['category'].map(cashflows_names)
-  print(df)
 
   #Plot
-  fig = figure
-  ax = fig.gca()
+  ax = axis
+
+  ax.set_title(title)
   # plot first bar with colors
   bars = ax.bar(x=df[x],height=upper, color =df['color'])
   ax.yaxis.grid(which='major',color='gray', linestyle='dashed', alpha=0.7)
   # plot second bar - invisible
   ax.bar(x=df[x], height=lower,color='white')
-  ax.set_ylabel('M$(2020(USD)) / MWe')
+  #ax.set_ylabel('M$(2020(USD)) / MWe')
   # plot connectors
   ax.plot(connect.index,connect.values, 'k' )
   # plot bar labels
   for i, v in enumerate(upper):
-      ax.text(i-.15, mid[i], f"{df[y][i]:,.3f}")
+      ax.text(i-.15, mid[i], f"{df[y][i]:,.2f}")
   # Baseline case as horizontal line
   baseline_NPV, std_NPV = get_baseline_NPV(plant)
   baseline_NPV /=1e6
@@ -142,15 +141,43 @@ def plot_lifetime_cashflows(lifetime_cashflows, figure, plant, dispatch_dir):
   ax.text(5, baseline_NPV+0.1, bau_text, color='b')
 
   # Rename cashflows
-  ax.set_xticklabels(df['name'])
+  ax.set_xticklabels(df['name'], rotation = 70)
 
   ax.grid(axis='y',color='black', linestyle='--', alpha=0.7,linewidth=0.8)
 
-  #plt.xticks(rotation=70)
-  plt.gcf().set_size_inches(12, 7)
+  #plt.gcf().set_size_inches(12, 7)
   #fig.tight_layout()
   plt.savefig(os.path.join(dispatch_dir, plant+"_total_cashflow_breakdown.png"))
   return fig
+
+def plot_all_locations():
+  locations = NPP_CAPACITIES.keys()
+  dir = os.path.dirname(os.path.abspath(__file__))
+
+  fig, axs = plt.subplots(3,2, figsize = (11,13), sharey= True,layout='constrained')
+  fig.supylabel('M$ 2020(USD) / MWe')
+  title_letters = ['(a)', '(b)', '(c)', '(d)', '(e)']
+
+  for ax,loc, title in zip(axs.flat, locations, title_letters):
+    # Get results from dispatch run
+    dispatch_dir = os.path.join(dir, loc+'_dispatch')
+    cashflows_file = os.path.join(dispatch_dir, 'gold', 'cashflows_0.csv')
+
+    # Discount cashflows
+    discounted_cashflows = discount_cashflows(cashflows_file, discount_rate = DISCOUNT_RATE)
+    discounted_cashflows.to_csv(os.path.join(dir, dispatch_dir, 'yearly_discounted_cashflows.csv'))
+
+    # Aggregate cashflows
+    lifetime_cashflows = create_final_cashflows(discounted_cashflows)
+    lifetime_cashflows.transpose().to_csv(os.path.join(dir,dispatch_dir, 'lifetime_cashflows.csv'))
+
+    plot_lifetime_cashflows(lifetime_cashflows, axis = ax, plant = loc, dispatch_dir=dispatch_dir, title=title)
+  # dont need last space for graph
+  axs.flat[-1].axis('tight')
+  axs.flat[-1].axis('off')
+  plt.savefig(os.path.join(dir, "total_cashflow_breakdown.png"))
+
+
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
@@ -167,7 +194,9 @@ if __name__ == "__main__":
     lifetime_cashflows = create_final_cashflows(discounted_cashflows)
     lifetime_cashflows.transpose().to_csv(os.path.join(dir,dispatch_dir, 'lifetime_cashflows.csv'))
     fig = plt.figure()
-    plot_lifetime_cashflows(lifetime_cashflows, figure = fig, plant=args.case_name, dispatch_dir=dispatch_dir)
+    ax = fig.gca()
+    plot_lifetime_cashflows(lifetime_cashflows, axis=ax, plant=args.case_name, dispatch_dir=dispatch_dir, title=args.case_name)
   else: 
     print('No cashflows from dispatch run in {}'.format(cashflows_file))
     exit()
+  plot_all_locations()
