@@ -86,7 +86,7 @@ def create_final_cashflows(yearly_discounted_cashflows):
   return lifetime_cashflows
 
 
-def plot_lifetime_cashflows(lifetime_cashflows, plant, dispatch_dir): 
+def plot_lifetime_cashflows(lifetime_cashflows, figure, plant, dispatch_dir): 
   df = lifetime_cashflows.reset_index()
   #df.rename({0:'value'}, axis='rows', inplace=True)
   df.rename(columns={'index':'category', 0:'value'}, inplace=True)
@@ -120,7 +120,8 @@ def plot_lifetime_cashflows(lifetime_cashflows, plant, dispatch_dir):
   print(df)
 
   #Plot
-  fig,ax = plt.subplots()
+  fig = figure
+  ax = fig.gca()
   # plot first bar with colors
   bars = ax.bar(x=df[x],height=upper, color =df['color'])
   ax.yaxis.grid(which='major',color='gray', linestyle='dashed', alpha=0.7)
@@ -149,7 +150,7 @@ def plot_lifetime_cashflows(lifetime_cashflows, plant, dispatch_dir):
   plt.gcf().set_size_inches(12, 7)
   #fig.tight_layout()
   plt.savefig(os.path.join(dispatch_dir, plant+"_total_cashflow_breakdown.png"))
-  return None
+  return fig
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
@@ -165,7 +166,8 @@ if __name__ == "__main__":
     #print(discounted_cashflows['ft_h2_ptc_CashFlow'])
     lifetime_cashflows = create_final_cashflows(discounted_cashflows)
     lifetime_cashflows.transpose().to_csv(os.path.join(dir,dispatch_dir, 'lifetime_cashflows.csv'))
-    plot_lifetime_cashflows(lifetime_cashflows, plant=args.case_name, dispatch_dir=dispatch_dir)
+    fig = plt.figure()
+    plot_lifetime_cashflows(lifetime_cashflows, figure = fig, plant=args.case_name, dispatch_dir=dispatch_dir)
   else: 
     print('No cashflows from dispatch run in {}'.format(cashflows_file))
     exit()
