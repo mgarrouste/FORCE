@@ -36,11 +36,11 @@ def meoh_ratios(case):
 
   #Ratios from updated MeOH data in HERON_info.xlsx
   h2 = -1.0
-  co2 = -6.0429
+  co2 = -5.9316
   electricity = -0.0004
-  naphtha = 0.0419
-  jet_fuel = 0.3443
-  diesel = 1.4813
+  naphtha = 0.0923
+  jet_fuel = 0.4135
+  diesel = 1.6097
 
   for comp in root.findall('Component'):
     if comp.get('name') =='meoh':
