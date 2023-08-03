@@ -71,17 +71,21 @@ def meoh_ratios(case):
 
   #Ratios from updated MeOH data in HERON_info.xlsx
   h2 = -1.0
-  co2 = -6.0429
+  co2 = -5.9316
   electricity = -0.0004
-  naphtha = 0.0419
-  jet_fuel = 0.3443
-  diesel = 1.4813
+  naphtha = 0.0923
+  jet_fuel = 0.4135
+  diesel = 1.6097
 
   for comp in root.findall('Component'):
     if comp.get('name') =='meoh':
       linear = comp.find('produces').find('transfer').find('linear')
       rate_nodes = linear.findall('rate')
+      
+      add_elec = True
       for rate in rate_nodes:
+        if rate.get('resource') == 'electricity':
+          add_elec = False
         if rate.get('resource') == 'h2':
           rate.text = str(h2)
         elif rate.get('resource') == 'naphtha':
@@ -90,9 +94,12 @@ def meoh_ratios(case):
           rate.text = str(jet_fuel)
         elif rate.get('resource') == 'diesel':
           rate.text = str(diesel)
+      
       # Add electricity
-      mult = ET.SubElement(linear, 'rate', resource='electricity')
-      mult.text = str(electricity)
+      if add_elec:
+        mult = ET.SubElement(linear, 'rate', resource='electricity')
+        mult.text = str(electricity)
+
   with open(os.path.join(case, 'heron_input.xml'), 'wb') as f:
     tree.write(f)
 
@@ -269,7 +276,7 @@ def main():
     #delete_double_itc(case)
     #itc(case)
     init_storage(case)
-    #meoh_ratios(case)
+    meoh_ratios(case)
     reduced_arma_samples = True
     if '_smr' in case:
       reduced_arma_samples = False
