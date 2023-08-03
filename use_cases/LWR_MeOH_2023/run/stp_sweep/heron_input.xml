@@ -120,15 +120,15 @@
       <produces resource="naphtha,diesel,jet_fuel" dispatch="fixed">
         <consumes>h2,electricity</consumes>
         <capacity resource="h2">
-          <sweep_values>-24167.0,-21750.0,-19333.0,-16917.0,-14500.0,-12083.0,-9667.0,-7250.0,-4833.0,-2417.0</sweep_values>
+          <sweep_values>-24583.0,-22125.0,-19667.0,-17208.0,-14750.0,-12292.0,-9833.0,-7375.0,-4917.0,-2458.0</sweep_values>
         </capacity>
         <transfer>
           <linear>
             
             <rate resource="h2">-1.0</rate>
-            <rate resource="naphtha">0.0419</rate>
-            <rate resource="jet_fuel">0.3443</rate>
-            <rate resource="diesel">1.4813</rate>
+            <rate resource="naphtha">0.0923</rate>
+            <rate resource="jet_fuel">0.4135</rate>
+            <rate resource="diesel">1.6097</rate>
           <rate resource="electricity">-0.0004</rate></linear>
         </transfer>
       </produces>
@@ -281,7 +281,7 @@
     <Component name="h2_storage">
       <stores resource="h2" dispatch="independent">
         <capacity resource="h2">
-          <sweep_values>10.0,902222.0,1804444.0,2706667.0,3608889.0,4511111.0,5413333.0,6315556.0,7217778.0,8120000.0</sweep_values> 
+          <sweep_values>10.0,917778.0,1835556.0,2753333.0,3671111.0,4588889.0,5506667.0,6424444.0,7342222.0,8260000.0</sweep_values> 
         </capacity>
         <initial_stored>
           <fixed_value>0.01</fixed_value>
