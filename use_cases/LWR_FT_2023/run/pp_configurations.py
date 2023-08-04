@@ -66,7 +66,7 @@ def plot_configurations(df_list):
       # Labels
       ax.set_ylabel('Change in profitability (%)')
       ax.set_xlabel(f'{dic_var_names[var]} capacity ({dic_var_units[var]})')
-      sns.despine(ax=ax, trim=True)
+      sns.despine(ax=ax)#, trim=True)
       ax.legend(title=dic_var_names[leg_var]+'\n('+dic_var_units[leg_var]+')',bbox_to_anchor=(1,1) )
       
   fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "SA_results_configurations.png"))
