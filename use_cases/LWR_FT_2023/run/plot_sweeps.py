@@ -17,7 +17,8 @@ def plot_hist(sweep_df):
   sweep_df['delta_NPV'] /=1e6
   sweep_df['2std_dNPV'] /=1e6
 
-  sweep_df.plot(ax = ax, kind = "bar", y ='delta_NPV', yerr='2std_dNPV' ,legend = False) 
+  sweep_df.plot(ax = ax, kind = "bar", y ='delta_NPV', yerr='2std_dNPV' ,legend = False, 
+                error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3)) 
   ax.set_xticks(np.arange(len(list(locations_names.keys()))))
   ax.set_xticklabels(locations_names.values(), rotation=0)
   ax.set_ylabel(r'$\Delta(NPV) \;\$M \;USD(2020)$')
