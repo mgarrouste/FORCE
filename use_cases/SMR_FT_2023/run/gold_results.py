@@ -10,7 +10,43 @@ def check_gold_dir(case):
     print("Gold folder not found for case {}, creating it".format(case))
     os.mkdir(gold_dir)
 
-def save_sweep_results(case):
+def check_run_status(case, results_df):
+  case_name = case.split('/')[-1]
+  if 'smr_' in case:
+    SA = True
+  elif 'smr' in case:
+    SA = False
+    baseline = False
+  elif 'baseline' in case:
+    SA = False
+    baseline = True
+  else: 
+    SA = True
+  length = len(results_df)
+  if SA:
+    if length<125:
+      print(f'Run not finished for {case_name}: \n only {length} runs')
+      save = False
+    else:
+      save = True
+  else:
+    if baseline:
+      if length<2: 
+        print(f'Run not finished for {case_name}: \n only {length} runs')
+        save = False
+      else:
+        save = True
+    else:
+      if length<1000:
+        print(f'Run not finished for {case_name}: \n only {length} runs')
+        save = False
+      else:
+        save = True
+  return save
+    
+
+
+def save_sweep_results(case, force=False):
   opt_folder = glob.glob(case+"/*_o")
   if len(opt_folder)>1:
     raise Exception("More than 1 sweep folder: {}".format(opt_folder))
@@ -21,9 +57,11 @@ def save_sweep_results(case):
     #sort by mean NPV descending order and save in gold folder
     opt_folder = opt_folder[0]
     sweep_results_df = pd.read_csv(opt_folder+"/sweep.csv")
-    sweep_results_df.sort_values(by=['mean_NPV'], ascending=False, inplace=True)
-    print("Sorting and saving the latest sweep results to gold folder for case {}".format(case))
-    sweep_results_df.to_csv(os.path.join(case, "gold", "sweep.csv"), index=False)
+    save = check_run_status(case,sweep_results_df)
+    if save or force:
+      sweep_results_df.sort_values(by=['mean_NPV'], ascending=False, inplace=True)
+      print("Sorting and saving the latest sweep results to gold folder for case {}".format(case))
+      sweep_results_df.to_csv(os.path.join(case, "gold", "sweep.csv"), index=False)
 
 def get_final_npv(case, baseline=False):
   # Assumes sweep results csv file in gold folder and sorted
@@ -81,7 +119,7 @@ def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('-p', "--pattern", type=str, nargs='+', help="pattern in cases names or cases' names")
   parser.add_argument('-c', "--case", type=str, help="case")
-  parser.add_argument('-f',"--final_out", type=bool, help='Save out~inner?')
+  parser.add_argument('-f',"--force", type=bool, help='Force saving results even in run not finished')
   args = parser.parse_args()
   dir = os.path.dirname(os.path.abspath(__file__))
   if args.pattern:
@@ -100,10 +138,10 @@ def main():
       if 'baseline' in case: 
         baseline = True
       check_gold_dir(case)
-      save_sweep_results(case)
-      if args.final_out:
-        save_final_out(case, baseline=baseline)
-      
+      if args.force:
+        save_sweep_results(case, force=args.force)
+      else:
+        save_sweep_results(case)
       
 
 if __name__=="__main__":
