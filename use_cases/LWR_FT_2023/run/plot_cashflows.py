@@ -153,6 +153,7 @@ def plot_lifetime_cashflows(lifetime_cashflows, axis, plant, dispatch_dir, title
 def plot_all_locations():
   locations = NPP_CAPACITIES.keys()
   dir = os.path.dirname(os.path.abspath(__file__))
+  all_to_csv = pd.DataFrame()
 
   fig, axs = plt.subplots(3,2, figsize = (11,13), sharey= True,layout='constrained')
   fig.supylabel('M$ 2020(USD) / MWe')
@@ -169,12 +170,18 @@ def plot_all_locations():
 
     # Aggregate cashflows
     lifetime_cashflows = create_final_cashflows(discounted_cashflows)
-    lifetime_cashflows.transpose().to_csv(os.path.join(dir,dispatch_dir, 'lifetime_cashflows.csv'))
+    lifetime_cashflows_to_csv = lifetime_cashflows.transpose()
+    lifetime_cashflows_to_csv.rename(index={0:loc}, inplace=True)
+    print(lifetime_cashflows_to_csv)
+    lifetime_cashflows_to_csv.to_csv(os.path.join(dir,dispatch_dir, 'lifetime_cashflows.csv'))
+    all_to_csv = pd.concat([all_to_csv, lifetime_cashflows_to_csv], axis=0)
 
     plot_lifetime_cashflows(lifetime_cashflows, axis = ax, plant = loc, dispatch_dir=dispatch_dir, title=title)
   # dont need last space for graph
   axs.flat[-1].axis('tight')
   axs.flat[-1].axis('off')
+
+  all_to_csv.to_csv(os.path.join(dir, 'lwr_ft_cashflow_breakdown.csv'))
   plt.savefig(os.path.join(dir, "total_cashflow_breakdown.png"))
 
 
