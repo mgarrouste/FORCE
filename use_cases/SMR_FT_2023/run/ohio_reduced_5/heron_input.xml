@@ -1,9 +1,9 @@
 <HERON>
-  <Case name="nebraska_smr">
+  <Case name="ohio_smr">
     <label name="scenario">ref</label>
-    <label name="location">cooper</label>
-    <label name="fuel_region">nebraska</label>
-    <label name="co2_location">nebraska</label>
+    <label name="location">davis_besse</label>
+    <label name="fuel_region">ohio</label>
+    <label name="co2_location">ohio</label>
     <mode>sweep</mode>
     <data_handling>
       <inner_to_outer>csv</inner_to_outer>  
@@ -27,7 +27,7 @@
     <economics>
       <ProjectTime>60</ProjectTime>
       <DiscountRate>0.1</DiscountRate>
-      <tax>0.2717</tax>
+      <tax>0.2100</tax>
       <inflation>0.0218</inflation>
       <verbosity>0</verbosity>
     </economics>
@@ -73,7 +73,7 @@
       <produces resource="h2" dispatch="independent">
         <consumes>electricity</consumes>
         <capacity resource="electricity">
-          <sweep_values>-705.1,-616.5,-528.0,-439.4,-350.8,-262.2,-173.7,-85.1</sweep_values> 
+          <sweep_values>-705.1,-550.1,-395.1,-240.1,-85.1</sweep_values> 
         </capacity>
         <minimum resource="electricity">
           
@@ -142,7 +142,7 @@
       <produces resource="naphtha,diesel,jet_fuel" dispatch="fixed">
         <consumes>h2</consumes>
         <capacity resource="h2">
-          <sweep_values>-17719.2,-15493.4,-13267.6,-11041.8,-8816.0,-6590.2,-4364.4,-2138.6</sweep_values>
+          <sweep_values>-17719.2,-13824.0,-9928.9,-6033.7,-2138.6</sweep_values>
         </capacity>
         <transfer>
           <linear>
@@ -322,7 +322,7 @@
     <Component name="h2_storage">
       <stores resource="h2" dispatch="independent">
         <capacity resource="h2">
-          <sweep_values>10.0,7093755.0,14187509.0,21281264.0,28375018.0,35468773.0,42562527.0,49656282.0</sweep_values> 
+          <sweep_values>10.0,212630.0,425260.0,637890.0,850520.0</sweep_values> 
         </capacity>
         <initial_stored>
           <fixed_value>0.01</fixed_value>
@@ -345,8 +345,7 @@
         </CashFlow>
       </economics>
     </Component>
-
-    
+  
     <Component name="h2_import">
       <produces resource="h2" dispatch="independent">
         <capacity resource="h2">
@@ -384,11 +383,10 @@
         </CashFlow>
       </economics>
     </Component>
-
   </Components>
 
   <DataGenerators>
-    <ARMA name="price" variable="price">../../train/Output_cooper_2014_2021_DA/arma.pk</ARMA>
+    <ARMA name="price" variable="price">../../train/Output_davis_besse_2012_2021_DA/arma.pk</ARMA>
     <Function name="functions">../functions.py</Function>
   </DataGenerators>
 </HERON>

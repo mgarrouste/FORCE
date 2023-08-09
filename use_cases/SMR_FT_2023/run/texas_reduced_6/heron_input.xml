@@ -1,9 +1,9 @@
 <HERON>
-  <Case name="minnesota_smr">
+  <Case name="texas_smr">
     <label name="scenario">ref</label>
-    <label name="location">prairie_island</label>
-    <label name="fuel_region">minnesota</label>
-    <label name="co2_location">minnesota</label>
+    <label name="location">south_texas_project</label>
+    <label name="fuel_region">west_south_central</label>
+    <label name="co2_location">texas</label>
     <mode>sweep</mode>
     <data_handling>
       <inner_to_outer>csv</inner_to_outer>  
@@ -27,7 +27,7 @@
     <economics>
       <ProjectTime>60</ProjectTime>
       <DiscountRate>0.1</DiscountRate>
-      <tax>0.2874</tax>
+      <tax>0.21</tax>
       <inflation>0.0218</inflation>
       <verbosity>0</verbosity>
     </economics>
@@ -74,7 +74,7 @@
       <produces resource="h2" dispatch="independent">
         <consumes>electricity</consumes>
         <capacity resource="electricity">
-          <sweep_values>-705.1,-616.5,-528.0,-439.4,-350.8,-262.2,-173.7,-85.1</sweep_values> 
+          <sweep_values>-705.1,-581.1,-457.1,-333.1,-209.1,-85.1</sweep_values> 
         </capacity>
         <minimum resource="electricity">
           
@@ -143,7 +143,7 @@
       <produces resource="naphtha,diesel,jet_fuel" dispatch="fixed">
         <consumes>h2</consumes>
         <capacity resource="h2">
-          <sweep_values>-17719.2,-15493.4,-13267.6,-11041.8,-8816.0,-6590.2,-4364.4,-2138.6</sweep_values>
+          <sweep_values>-17719.2,-14603.0,-11486.9,-8370.8,-5254.7,-2138.6</sweep_values>
         </capacity>
         <transfer>
           <linear>
@@ -323,7 +323,7 @@
     <Component name="h2_storage">
       <stores resource="h2" dispatch="independent">
         <capacity resource="h2">
-          <sweep_values>10.0,1013394.0,2026787.0,3040181.0,4053574.0,5066968.0,6080361.0,7093755.0</sweep_values> 
+          <sweep_values>10.0,1190728.0,2381456.0,3572183.0,4762911.0,5953639.0</sweep_values> 
         </capacity>
         <initial_stored>
           <fixed_value>0.01</fixed_value>
@@ -346,7 +346,7 @@
         </CashFlow>
       </economics>
     </Component>
-
+  
   
     <Component name="h2_import">
       <produces resource="h2" dispatch="independent">
@@ -385,10 +385,11 @@
         </CashFlow>
       </economics>
     </Component>
+
   </Components>
 
   <DataGenerators>
-    <ARMA name="price" variable="price">../../train/Output_prairie_island_1_2013_2021_DA/arma.pk</ARMA>
+    <ARMA name="price" variable="price">../../train/Output_stp_1_2012_2021_DA/arma.pk</ARMA>
     <Function name="functions">../functions.py</Function>
   </DataGenerators>
 </HERON>
