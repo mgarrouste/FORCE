@@ -1,4 +1,4 @@
-import argparse, os, glob
+import argparse, os, glob, shutil
 import xml.etree.ElementTree as ET
 import pandas as pd
 import numpy as np
@@ -6,6 +6,7 @@ import numpy as np
 ITC_VALUE = 0.7
 STORAGE_INIT = 0.01 # 1% filled at the beginning of the day
 MACRS = 15
+locations  = ['illinois', 'minnesota', 'nebraska', 'ohio', 'texas']
 steps_data = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', 'data', 'HERON_model_data.xlsx')
 
 def itc(case):
@@ -248,6 +249,47 @@ def add_depreciation(case):
   with open(os.path.join(case, 'heron_input.xml'), 'wb') as f:
     tree.write(f)
 
+def create_reduced_inputs(number): 
+  dir = os.path.dirname(os.path.abspath(__file__))
+  for loc in locations: 
+    # Copy heron input from smr to reduced folder
+    red_fold = os.path.join(dir,loc+'_reduced'+'_'+str(number))
+    if not os.path.isdir(red_fold):
+      os.mkdir(os.path.join(dir,loc+'_reduced'+'_'+str(number)))
+    shutil.copy(os.path.join(dir, loc+'_smr', 'heron_input.xml'), red_fold)
+
+    # Read steps from csv
+    sheet_name = 'Boundaries_'+str(number)+'steps'
+    steps_df = pd.read_excel(steps_data, sheet_name=sheet_name, nrows=number)
+    htse_steps = list(steps_df['htse'])
+    htse_steps = [str(np.round(v,1)) for v in htse_steps]
+    htse_steps = ','.join(htse_steps)
+    meoh_steps = list(steps_df['meoh'])
+    meoh_steps = [str(np.round(v,1))  for v in meoh_steps]
+    meoh_steps = ','.join(meoh_steps)
+    h2_steps = list(steps_df[loc])
+    h2_steps = [str(np.round(v))  for v in h2_steps]
+    h2_steps = ','.join(h2_steps)
+
+    # XML modif
+    tree = ET.parse(os.path.join(red_fold, 'heron_input.xml'))
+    root = tree.getroot().find('Components')
+
+    for comp in root.findall('Component'):
+      if comp.get('name') == 'htse':
+        sweep_val_node = comp.find('produces').find('capacity').find('sweep_values')
+        sweep_val_node.text = htse_steps
+      elif comp.get('name') =='meoh':
+        sweep_val_node = comp.find('produces').find('capacity').find('sweep_values')
+        sweep_val_node.text = meoh_steps
+      elif comp.get('name') =='h2_storage':
+        sweep_val_node = comp.find('stores').find('capacity').find('sweep_values')
+        sweep_val_node.text = h2_steps
+    
+    with open(os.path.join(red_fold, 'heron_input.xml'), 'wb') as f:
+      tree.write(f)
+
+
 def project_lifetime(case, lifetime):
   tree = ET.parse(os.path.join(case, 'heron_input.xml'))
   root = tree.getroot().find('Case')
@@ -260,6 +302,7 @@ def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('-p', "--pattern", type=str, nargs='+', help="pattern in cases names or cases' names")
   parser.add_argument('-c', "--case", type=str, help="case")
+  parser.add_argument('-r', '--reduced', type=bool, help='create reduced reference cases')
   args = parser.parse_args()
   dir = os.path.dirname(os.path.abspath(__file__))
   if args.pattern:
@@ -269,31 +312,35 @@ def main():
       cases = [os.path.join(dir, p) for p in list(args.pattern)]
   elif args.case:
     cases = [os.path.join(dir, args.case)]
+  elif args.reduced:
+    for number in range(5,9):
+      create_reduced_inputs(number)
   else: 
     raise Exception("No case or input passed to this script!")
-  print("Cases to modify: {}\n".format(cases))
-  for case in cases:
-    #delete_double_itc(case)
-    #itc(case)
-    init_storage(case)
-    meoh_ratios(case)
-    reduced_arma_samples = True
-    if '_smr' in case:
-      reduced_arma_samples = False
-    if 'baseline' in case:
-      reduced_arma_samples = False
-    if 'smr_20' in case:
+  if not args.reduced:
+    print("Cases to modify: {}\n".format(cases))
+    for case in cases:
+      #delete_double_itc(case)
+      #itc(case)
+      init_storage(case)
+      meoh_ratios(case)
       reduced_arma_samples = True
-    if 'smr_100' in case:
-      reduced_arma_samples = True
-    if reduced_arma_samples:
-      arma_samples(case)
-    sweep_values_htse(case)
-    sweep_values_meoh(case)
-    #add_depreciation(case)
-    #add_elec_consumption_meoh(case)
-    project_lifetime(case=case, lifetime=60)
-    sweep_values_storage(case)
+      if '_smr' in case:
+        reduced_arma_samples = False
+      if 'baseline' in case:
+        reduced_arma_samples = False
+      if 'smr_20' in case:
+        reduced_arma_samples = True
+      if 'smr_100' in case:
+        reduced_arma_samples = True
+      if reduced_arma_samples:
+        arma_samples(case)
+      sweep_values_htse(case)
+      sweep_values_meoh(case)
+      #add_depreciation(case)
+      #add_elec_consumption_meoh(case)
+      project_lifetime(case=case, lifetime=60)
+      sweep_values_storage(case)
 
       
 
