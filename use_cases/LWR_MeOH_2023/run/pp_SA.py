@@ -9,6 +9,8 @@ LOCATIONS = ['braidwood', 'cooper', 'davis_besse', 'prairie_island', 'stp']
 locations = ['Braidwood', 'Cooper', 'Davis-Besse', 'Prairie Island', 'South Texas Project']
 locations_names = {'braidwood':'Braidwood', 'cooper':'Cooper', 'davis_besse':'Davis-Besse', 'prairie_island':'Prairie Island', 
                     'stp':'South Texas Project'}
+locations_names_reg = {'braidwood':'Braidwood', 'cooper':'Cooper', 'davis_besse':'Davis-Besse', 'prairie_island':'Prairie Island'}
+locations_names_stp = {'stp':'South Texas\nProject'}
 REG_VARIABLES = ['capex', 'elec', 'om', 'synfuels']
 reg_variables =['CAPEX', 'Electricity\nprices', 'O&M', 'Synfuels\nprices']
 variables = ['CAPEX', 'Electricity\nprices', 'O&M', 'Synfuels\nprices','CO2', 'PTC']
@@ -16,7 +18,7 @@ W_VARIABLES = ['co2_high', 'co2_low', 'ptc_000', 'ptc_100', 'ptc_270']
 w_variables = ['CO2', 'PTC']
 total_var = W_VARIABLES+REG_VARIABLES
 ptc_var = ['ptc_000', 'ptc_100', 'ptc_270']
-co2_var = ['co2_cost_med','co2_cost_high']
+co2_var = ['co2_low','co2_high']
 toplot_var = ['ptc_000', 'ptc_100', 'ptc_270','co2_low','co2_high']
 variables_names = {'co2_high':r'$CO_2 (\$60/ton)$', 'co2_low':r'$CO_2\; (\$30/ton)$', 'ptc_000':r'$PTC\; (\$0/kg-H_2)$',
                     'ptc_100':r'$PTC\; (\$1.0/kg-H_2)$','ptc_270':r'$PTC\; (\$2.7/kg-H_2)$', 
@@ -183,13 +185,13 @@ def plot_SA_variable_v2(var_dic):
     val_dic = var_dic[var]
     co2_df[var+'_value'] = val_dic['value']
     co2_df[var+'_sd'] =val_dic['sd']
-  
+
   plt.style.use('seaborn-paper')
   fig, ax = plt.subplots(2,1, sharex=True)# figsize=(10,8))
   
   # Error bars
   yerr_ptc = ptc_df[['ptc_000_sd', 'ptc_100_sd', 'ptc_270_sd']].to_numpy().T
-  yerr_co2 = co2_df[['co2_cost_med_sd', 'co2_cost_high_sd']].to_numpy().T
+  yerr_co2 = co2_df[['co2_low_sd', 'co2_high_sd']].to_numpy().T
 
   # PTC first
   ptc_df.plot(ax = ax[0], kind = "bar", y =['ptc_000_value', 'ptc_100_value', 'ptc_270_value'], 
@@ -201,19 +203,99 @@ def plot_SA_variable_v2(var_dic):
   ax[0].legend( [r'$PTC\; (\$0/kg-H_2)$',r'$PTC\; (\$1.0/kg-H_2)$',r'$PTC\; (\$2.7/kg-H_2)$'])
 
   # CO2
-  co2_df.plot(ax = ax[1], kind = "bar", y =['co2_cost_med_value', 'co2_cost_high_value'], 
+  co2_df.plot(ax = ax[1], kind = "bar", y =['co2_low_value', 'co2_high_value'], 
               yerr=yerr_co2, width=0.3, color=['black', 'grey'], 
               error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
   ax[1].set_xticks(np.arange(len(list(locations_names.keys()))))
   ax[1].set_xticklabels(locations_names.values(), rotation=0)
   ax[1].set_ylabel('Change in profitability (%)')
   ax[1].set_xlabel('')
-  ax[1].legend( [r'$CO_2 (\$60/ton)$', r'$CO_2\; (\$30/ton)$'])
+  ax[1].legend( [r'$CO_2\; (\$30/ton)$', r'$CO_2 (\$60/ton)$'])
 
   sns.despine()
   fig.tight_layout()
   fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "SA_results_variable.png"))
 
+def plot_SA_variable_v3(var_dic):
+  ptc_df = pd.DataFrame()
+  co2_df = pd.DataFrame()
+  for var in ptc_var:
+    val_dic = var_dic[var]
+    ptc_df[var+'_value'] = val_dic['value']
+    ptc_df[var+'_sd'] =val_dic['sd']
+  for var in co2_var:
+    val_dic = var_dic[var]
+    co2_df[var+'_value'] = val_dic['value']
+    co2_df[var+'_sd'] =val_dic['sd']
+
+
+  ptc_df_stp = ptc_df.iloc[-1,:].to_frame().transpose()
+  co2_df_stp = co2_df.iloc[-1,:].to_frame().transpose()
+  ptc_df.drop(index=4, inplace=True)
+  co2_df.drop(index=4, inplace=True)
+  
+  plt.style.use('seaborn-paper')
+
+  # create the subfigures and subplots
+  fig = plt.figure(figsize=(8, 6), constrained_layout=True)
+  subfigs = fig.subfigures(1, 2, width_ratios=[4, 1.25], wspace=.05)
+
+  # Reg locations
+  ax = subfigs[0].subplots(2, 1, sharex=True)
+  # Error bars
+  yerr_ptc = ptc_df[['ptc_000_sd', 'ptc_100_sd', 'ptc_270_sd']].to_numpy().T
+  yerr_co2 = co2_df[['co2_low_sd', 'co2_high_sd']].to_numpy().T
+
+  # PTC first
+  ptc_df.plot(ax = ax[0], kind = "bar", y =['ptc_000_value', 'ptc_100_value', 'ptc_270_value'], 
+              yerr=yerr_ptc , width=0.3, color=['red', 'orange', 'green'], error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
+  ax[0].set_xticks(np.arange(len(list(locations_names_reg.keys()))))
+  ax[0].set_xticklabels(locations_names_reg.values(), rotation=0)
+  ax[0].set_ylabel('Change in profitability (%)')
+  ax[0].set_xlabel('')
+  ax[0].legend( [r'$PTC\; (\$0/kg-H_2)$',r'$PTC\; (\$1.0/kg-H_2)$',r'$PTC\; (\$2.7/kg-H_2)$'])
+
+  # CO2
+  co2_df.plot(ax = ax[1], kind = "bar", y =['co2_low_value', 'co2_high_value'], 
+              yerr=yerr_co2, width=0.3, color=['black', 'grey'], 
+              error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
+  ax[1].set_xticks(np.arange(len(list(locations_names_reg.keys()))))
+  ax[1].set_xticklabels(locations_names_reg.values(), rotation=0)
+  ax[1].set_ylabel('Change in profitability (%)')
+  ax[1].set_xlabel('')
+  ax[1].legend( [r'$CO_2\; (\$30/ton)$', r'$CO_2 (\$60/ton)$'])
+  sns.despine()
+
+
+  # STP
+  ax_stp = subfigs[1].subplots(2, 1, sharex=True)
+  # Error bars
+  yerr_ptc_stp = ptc_df_stp[['ptc_000_sd', 'ptc_100_sd', 'ptc_270_sd']].to_numpy().T
+  yerr_co2_stp = co2_df_stp[['co2_low_sd', 'co2_high_sd']].to_numpy().T
+
+  # PTC first
+  ptc_df_stp.plot(ax = ax_stp[0], kind = "bar", y =['ptc_000_value', 'ptc_100_value', 'ptc_270_value'], 
+              yerr=yerr_ptc_stp , width=0.3, color=['red', 'orange', 'green'], error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
+  ax_stp[0].set_xticks(np.arange(len(list(locations_names_stp.keys()))))
+  ax_stp[0].set_xticklabels(locations_names_stp.values(), rotation=0)
+  ax_stp[0].set_ylabel('Change in profitability (%)')
+  ax_stp[0].set_xlabel('')
+  ax_stp[0].get_legend().remove()
+  #ax_stp[0].legend( [r'$PTC\; (\$0/kg-H_2)$',r'$PTC\; (\$1.0/kg-H_2)$',r'$PTC\; (\$2.7/kg-H_2)$'])
+
+  # CO2
+  co2_df_stp.plot(ax = ax_stp[1], kind = "bar", y =['co2_low_value', 'co2_high_value'], 
+              yerr=yerr_co2_stp, width=0.3, color=['black', 'grey'], 
+              error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
+  ax_stp[1].set_xticks(np.arange(len(list(locations_names_stp.keys()))))
+  ax_stp[1].set_xticklabels(locations_names_stp.values(), rotation=0)
+  ax_stp[1].set_ylabel('Change in profitability (%)')
+  ax_stp[1].set_xlabel('')
+  ax_stp[1].get_legend().remove()
+  #ax_stp[1].legend( [r'$CO_2\; (\$30/ton)$', r'$CO_2 (\$60/ton)$'])
+  sns.despine()
+
+  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "SA_results_variable.png"))
 
 
 def plot_SA_variable(var_dic):
@@ -251,7 +333,7 @@ def main():
   loc_dic, var_dic = load_SA_results_loc()
   plot_SA_locations(loc_dic)
   plot_SA_one_location(loc_dic, location='stp',type='regular')
-  plot_SA_variable_v2(var_dic)
+  plot_SA_variable_v3(var_dic)
 
 if __name__ == "__main__":
   main()
