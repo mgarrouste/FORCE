@@ -1,2 +1,3 @@
-npp_capacity,elec_market_capacity,location_label,mean_NPV,std_NPV,med_NPV,max_NPV,min_NPV,perc_5_NPV,perc_95_NPV,samp_NPV,var_NPV,PointProbability,ProbabilityWeight-npp_capacity,ProbabilityWeight,prefix
-522.0,-1e+200,prairie_island,262742193.285,576560.55896,262742193.285,263149883.166,262334503.404,262375272.392,263109114.178,2.0,332422078149.0,0.00191570881226,0.5,0.5,1
+npp_capacity,elec_market_capacity,location_label,mean_NPV,std_NPV,med_NPV,max_NPV,min_NPV,perc_5_NPV,perc_95_NPV,samp_NPV,var_NPV,ProbabilityWeight,ProbabilityWeight-npp_capacity,PointProbability,prefix
+1044.0,-1e+200,prairie_island,1408441409.24,637326.324409,1408441409.24,1408892067.0,1407990751.47,1408035817.25,1408847001.23,2.0,406184843785.0,0.5,0.5,0.00191570881226,2
+522.0,-1e+200,prairie_island,703169487.856,14226.2356283,703169487.856,703179547.324,703159428.388,703160434.335,703178541.377,2.0,202385780.153,0.5,0.5,0.00191570881226,1
