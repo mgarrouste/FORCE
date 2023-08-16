@@ -14,7 +14,7 @@
     </parallel>
     
     <verbosity>debug</verbosity>
-    <num_arma_samples>4</num_arma_samples>
+    <num_arma_samples>2</num_arma_samples>
     <time_discretization>
       <time_variable>hour</time_variable>
       <year_variable>Year</year_variable>
@@ -52,7 +52,7 @@
       <produces resource="h2" dispatch="independent">
         <consumes>electricity</consumes>
         <capacity resource="electricity">
-          <sweep_values>-507,-413,-320,-226,-132</sweep_values> 
+          <sweep_values>-507.0,-413.0,-320.0,-226.0,-132.0</sweep_values> 
         </capacity>
         <minimum resource="electricity">
           
@@ -122,7 +122,7 @@
       <produces resource="naphtha,diesel,jet_fuel" dispatch="fixed">
         <consumes>h2</consumes>
         <capacity resource="h2">
-          <sweep_values>-12743,-10387,-8030,-5674,-3317</sweep_values>
+          <sweep_values>-12743.0,-10387.0,-8030.0,-5674.0,-3317.0</sweep_values>
         </capacity>
         <transfer>
           <linear>
@@ -303,10 +303,10 @@
     <Component name="h2_storage">
       <stores resource="h2" dispatch="independent">
         <capacity resource="h2">
-          <sweep_values>10,	67965,135930,	203895,	271860</sweep_values> 
+          <sweep_values>10.0,67965.0,135930.0,203895.0,271860.0</sweep_values> 
         </capacity>
         <initial_stored>
-          <fixed_value>0.01</fixed_value>
+          <fixed_value>0.0</fixed_value>
           
         </initial_stored>
         <RTE>0.9</RTE>

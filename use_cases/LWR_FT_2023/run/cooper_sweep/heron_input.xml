@@ -14,7 +14,7 @@
     </parallel>
     
     <verbosity>debug</verbosity>
-    <num_arma_samples>4</num_arma_samples>
+    <num_arma_samples>2</num_arma_samples>
     <time_discretization>
       <time_variable>hour</time_variable>
       <year_variable>Year</year_variable>
@@ -52,7 +52,7 @@
       <produces resource="h2" dispatch="independent">
         <consumes>electricity</consumes>
         <capacity resource="electricity">
-          <sweep_values>-754,-680,-605,-531,-457,-382,-308,-234,-159,-85</sweep_values> 
+          <sweep_values>-754.0,-680.0,-605.0,-531.0,-457.0,-382.0,-308.0,-234.0,-159.0,-85.0</sweep_values> 
         </capacity>
         <minimum resource="electricity">
           
@@ -121,7 +121,7 @@
       <produces resource="naphtha,diesel,jet_fuel" dispatch="fixed">
         <consumes>h2</consumes>
         <capacity resource="h2">
-          <sweep_values>-18951,-17083,-15215,-13347,-11479,-9611,-7743,-5875,-4007,-2139</sweep_values>
+          <sweep_values>-18951.0,-17083.0,-15215.0,-13347.0,-11479.0,-9611.0,-7743.0,-5875.0,-4007.0,-2139.0</sweep_values>
         </capacity>
         <transfer>
           <linear>
@@ -301,10 +301,10 @@
     <Component name="h2_storage">
       <stores resource="h2" dispatch="independent">
         <capacity resource="h2">
-          <sweep_values>10,	353743,	707487,	1061230,	1414973,	1768716,	2122460,	2476203,	2829946,	3183690</sweep_values> 
+          <sweep_values>10.0,50535.0,101070.0,151604.0,202139.0,252674.0,303209.0,353743.0,404278.0,454813.0</sweep_values> 
         </capacity>
         <initial_stored>
-          <fixed_value>0.01</fixed_value>
+          <fixed_value>0.0</fixed_value>
           
         </initial_stored>
         <RTE>0.9</RTE>
