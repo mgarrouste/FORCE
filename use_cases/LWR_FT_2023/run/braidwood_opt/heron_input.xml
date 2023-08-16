@@ -1,15 +1,18 @@
 <HERON>
-  <Case name="prairie_island_sweep">
+  <Case name="braidwood_sweep">
     <label name="scenario">ref</label>
-    <label name="location">prairie_island</label>
-    <label name="fuel_region">minnesota</label>
+    <label name="location">braidwood</label>
+    <label name="fuel_region">illinois</label>
     <label name="elec_data">covid</label>
     <mode>sweep</mode>
-    <debug>
-      <inner_samples>1</inner_samples>
-      <macro_steps>20</macro_steps>
-      <dispatch_plot>False</dispatch_plot>
-    </debug>
+    <parallel>
+      <runinfo>
+        <expectedTime>72:0:0</expectedTime>
+        <clusterParameters>-P re_gen</clusterParameters>
+        <memory>4gb</memory>
+      </runinfo>
+    </parallel>
+    
     <verbosity>debug</verbosity>
     <num_arma_samples>2</num_arma_samples>
     <time_discretization>
@@ -21,7 +24,7 @@
     <economics>
       <ProjectTime>20</ProjectTime>
       <DiscountRate>0.1</DiscountRate>
-      <tax>0.2874</tax>
+      <tax>0.2960</tax>
       <inflation>0.0218</inflation>
       <verbosity>50</verbosity>
     </economics>
@@ -36,7 +39,7 @@
     <Component name="npp">
       <produces resource="electricity" dispatch="fixed">
         <capacity resource="electricity">
-          <fixed_value>522</fixed_value> 
+          <fixed_value>1193</fixed_value> 
         </capacity>
       </produces>
       <economics>
@@ -49,7 +52,7 @@
       <produces resource="h2" dispatch="independent">
         <consumes>electricity</consumes>
         <capacity resource="electricity">
-          <sweep_values debug_value="-507">-507.0,-413.0,-320.0,-226.0,-132.0</sweep_values> 
+          <sweep_values>-985.0,-785.0,-585.0,-385.0,-185.0</sweep_values> 
         </capacity>
         <minimum resource="electricity">
           
@@ -118,7 +121,7 @@
       <produces resource="naphtha,diesel,jet_fuel" dispatch="fixed">
         <consumes>h2</consumes>
         <capacity resource="h2">
-          <sweep_values debug_value="-12743">-12743.0,-10387.0,-8030.0,-5674.0,-3317.0</sweep_values>
+          <sweep_values>-24756.0,-19730.0,-14704.0,-9678.0,-4652.0</sweep_values>
         </capacity>
         <transfer>
           <linear>
@@ -298,7 +301,7 @@
     <Component name="h2_storage">
       <stores resource="h2" dispatch="independent">
         <capacity resource="h2">
-          <sweep_values debug_value="33982">10.0,67965.0,135930.0,203895.0,271860.0</sweep_values> 
+          <sweep_values>10.0,132030.0,264059.0,396089.0,528119.0</sweep_values> 
         </capacity>
         <initial_stored>
           <fixed_value>0.0</fixed_value>
@@ -363,7 +366,7 @@
   </Components>
 
   <DataGenerators>
-    <ARMA name="price" variable="price">../../train/Output_prairie_island_1_2013_2021_DA/arma.pk</ARMA>
+    <ARMA name="price" variable="price">../../train/Output_braidwood_2012_2021_DA/arma.pk</ARMA>
     <Function name="functions">../functions.py</Function>
   </DataGenerators>
 </HERON>
