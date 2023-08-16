@@ -283,7 +283,7 @@
           <sweep_values>10.0,34220.0,68440.0,102660.0,136880.0,171100.0,205320.0,239540.0,273760.0,307980.0</sweep_values> 
         </capacity>
         <initial_stored>
-          <fixed_value>0.01</fixed_value>
+          <fixed_value>0.0</fixed_value>
           
         </initial_stored>
         <RTE>0.9</RTE>
