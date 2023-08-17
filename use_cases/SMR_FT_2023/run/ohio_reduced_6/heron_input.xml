@@ -322,10 +322,10 @@
     <Component name="h2_storage">
       <stores resource="h2" dispatch="independent">
         <capacity resource="h2">
-          <sweep_values>10.0,170104.0,340208.0,510312.0,680416.0,850520.0</sweep_values> 
+          <sweep_values>10.0,85052.0,170104.0,255156.0,340208.0,425260.0</sweep_values> 
         </capacity>
         <initial_stored>
-          <fixed_value>0.01</fixed_value>
+          <fixed_value>0.0</fixed_value>
           
         </initial_stored>
         <RTE>0.9</RTE>
