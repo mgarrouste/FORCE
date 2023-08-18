@@ -2,8 +2,8 @@ import os
 from gold_results import get_final_npv
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib
 import seaborn as sns
+import pandas as pd
 
 locations_names = {'illinois':'Illinois', 'minnesota':'Minnesota', 'nebraska':'Nebraska', 'ohio':'Ohio', 
                     'texas':'Texas'}
@@ -13,6 +13,8 @@ variables = ['CAPEX', 'Electricity\nprices', 'O&M', 'Synfuels\nprices','CO2', 'P
 W_VARIABLES = ['co2_high', 'co2_low', 'ptc_000', 'ptc_100', 'ptc_270']
 w_variables = ['CO2', 'PTC']
 total_var = W_VARIABLES+REG_VARIABLES
+ptc_var = ['ptc_000', 'ptc_100', 'ptc_270']
+co2_var = ['co2_low','co2_high']
 toplot_var = ['ptc_000', 'ptc_100', 'ptc_270','co2_low','co2_high']
 variables_names = {'co2_high':r'$CO_2 (\$60/ton)$', 'co2_low':r'$CO_2\; (\$30/ton)$', 'ptc_000':r'$PTC\; (\$0/kg-H_2)$',
                     'ptc_100':r'$PTC\; (\$1.0/kg-H_2)$','ptc_270':r'$PTC\; (\$2.7/kg-H_2)$', 
@@ -88,19 +90,21 @@ def plot_SA_locations(loc_dic, type='regular'):
     ind = np.arange(len(val_dic['low_values']))
     width=0.35
     if type=='regular': 
-      p1 = ax[i].bar(ind, val_dic['low_values'], width, yerr=val_dic['low_values_sd'], capsize=2, ecolor='black', error_kw={'markeredgewidth':1},label='Low (Ref x0.75)')
-      p2 = ax[i].bar(ind, val_dic['high_values'], width, yerr=val_dic['high_values_sd'], capsize=2, ecolor='black', error_kw={'markeredgewidth':1},label='High (Ref x1.25)')
+      p1 = ax[i].bar(ind, val_dic['low_values'], width, yerr=val_dic['low_values_sd'], label='Low (Ref x0.75)', 
+      error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
+      p2 = ax[i].bar(ind, val_dic['high_values'], width, yerr=val_dic['high_values_sd'], label='High (Ref x1.25)', 
+      error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
       ax[i].set_xticks(ind)
       ax[i].set_xticklabels(reg_variables)
     elif type=='ptc':
-      p3 = ax[i].bar(ind, val_dic['ptc_000'], width, yerr=val_dic['ptc_000_sd'], capsize=2, ecolor='black', error_kw={'markeredgewidth':1},label=r'$\$0/kg-H_2$')
-      p4 = ax[i].bar(ind, val_dic['ptc_100'], width, yerr=val_dic['ptc_100_sd'], capsize=2, ecolor='black', error_kw={'markeredgewidth':1},label=r'$\$1/kg-H_2$')
-      p5 = ax[i].bar(ind, val_dic['ptc_270'], width, yerr=val_dic['ptc_270_sd'], capsize=2, ecolor='black', error_kw={'markeredgewidth':1},label=r'$\$2.7/kg-H_2$')
+      p3 = ax[i].bar(ind, val_dic['ptc_000'], width, yerr=val_dic['ptc_000_sd'], label=r'$\$0/kg-H_2$')
+      p4 = ax[i].bar(ind, val_dic['ptc_100'], width, yerr=val_dic['ptc_100_sd'], label=r'$\$1/kg-H_2$')
+      p5 = ax[i].bar(ind, val_dic['ptc_270'], width, yerr=val_dic['ptc_270_sd'], label=r'$\$2.7/kg-H_2$')
       ax.set_xticks(ind)
       ax.set_xticklabels(w_variables[1])
     elif type=='co2':
-      p7 = ax[i].bar(ind, val_dic['co2_cost_high'], width, yerr=val_dic['co2_cost_high_sd'], capsize=2, ecolor='black', error_kw={'markeredgewidth':1},label=r'$\$60/ton-CO_2$')
-      p6 = ax[i].bar(ind, val_dic['co2_cost_med'], width, yerr=val_dic['co2_cost_med_sd'], capsize=2, ecolor='black', error_kw={'markeredgewidth':1},label=r'$\$30/ton-CO_2$')
+      p7 = ax[i].bar(ind, val_dic['co2_cost_high'], width, yerr=val_dic['co2_cost_high_sd'], label=r'$\$60/ton-CO_2$')
+      p6 = ax[i].bar(ind, val_dic['co2_cost_med'], width, yerr=val_dic['co2_cost_med_sd'], label=r'$\$30/ton-CO_2$')
       ax.set_xticks(ind)
       ax.set_xticklabels(w_variables[0])
     ax[i].axhline(0, color='grey', linewidth=0.8)
@@ -119,7 +123,7 @@ def plot_SA_locations(loc_dic, type='regular'):
   fig.legend(lines, labels, bbox_to_anchor=(0,1), ncol=1)
 
   fig.tight_layout()
-  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "SA_results_location_"+type+".png"))
+  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "smr_ft_SA_results_location_"+type+".png"))
 
 
 
@@ -132,8 +136,10 @@ def plot_SA_one_location(loc_dic, location, type='regular'):
   ind = np.arange(len(val_dic['low_values']))
   width=0.35
   if type=='regular': 
-    p2 = ax.bar(ind, val_dic['high_values'], width, yerr=val_dic['high_values_sd'],capsize=2, ecolor='black', error_kw={'markeredgewidth':1},label='High (Ref x1.25)')
-    p1 = ax.bar(ind, val_dic['low_values'], width, yerr=val_dic['low_values_sd'], capsize=2, ecolor='black', error_kw={'markeredgewidth':1},label='Low (Ref x0.75)')
+    p1 = ax.bar(ind, val_dic['low_values'], width, yerr=val_dic['low_values_sd'], label='Low (Ref x0.75)', 
+    error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
+    p2 = ax.bar(ind, val_dic['high_values'], width, yerr=val_dic['high_values_sd'], label='High (Ref x1.25)', 
+    error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
     ax.set_xticks(ind)
     ax.set_xticklabels(reg_variables)
   elif type=='ptc':
@@ -150,7 +156,7 @@ def plot_SA_one_location(loc_dic, location, type='regular'):
   ax.axhline(0, color='grey', linewidth=0.8)
   ax.set_ylabel('Change in profitability (%)')
   ax.set_title(locations_names[location])
-  sns.despine(ax=ax, trim=True)
+  sns.despine(ax=ax)
   
   # legend
   lines_labels = [ax.get_legend_handles_labels()]
@@ -158,36 +164,50 @@ def plot_SA_one_location(loc_dic, location, type='regular'):
   fig.legend(lines, labels, bbox_to_anchor=(1,1), ncol=1)
 
   fig.tight_layout()
-  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "SA_results_location_"+location+'_'+type+".png"))
+  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "smr_ft_SA_results_location_"+location+'_'+type+".png"))
 
 
-
-def plot_SA_variable(var_dic):
-  plt.style.use('seaborn-paper')
-  fig, axes = plt.subplots(2,3)#, figsize=(12,10))
-  ax = fig.axes 
-  
-  for i in range(len(toplot_var)):
-    var = toplot_var[i]
+def plot_SA_variable_v2(var_dic):
+  ptc_df = pd.DataFrame()
+  co2_df = pd.DataFrame()
+  for var in ptc_var:
     val_dic = var_dic[var]
-    ind = np.arange(len(locations_names.keys()))
-    width = 0.35
-    ax[i].bar(ind, val_dic['value'], width, yerr=val_dic['sd'], capsize=2, ecolor='black', error_kw={'markeredgewidth':1})
+    ptc_df[var+'_value'] = val_dic['value']
+    ptc_df[var+'_sd'] =val_dic['sd']
+  for var in co2_var:
+    val_dic = var_dic[var]
+    co2_df[var+'_value'] = val_dic['value']
+    co2_df[var+'_sd'] =val_dic['sd']
+  
+  plt.style.use('seaborn-paper')
+  fig, ax = plt.subplots(2,1, sharex=True)# figsize=(10,8))
+  
+  # Error bars
+  yerr_ptc = ptc_df[['ptc_000_sd', 'ptc_100_sd', 'ptc_270_sd']].to_numpy().T
+  yerr_co2 = co2_df[['co2_low_sd', 'co2_high_sd']].to_numpy().T
 
-    ax[i].set_ylabel('Change in\nprofitability (%)')
-    ax[i].set_title(variables_names[var])
-    ax[i].set_xticks(ind)
-    ax[i].set_xticklabels(locations_names.values(), rotation=50)
-    sns.despine(ax=ax[i], trim=True)
-  # dont need last space for graph
-  ax[-1].axis('tight')
-  ax[-1].axis('off')
-  # legend
-  lines_labels = [ax[-1].get_legend_handles_labels()]
-  lines, labels = [sum(lol, []) for lol in zip(*lines_labels)]
-  fig.legend(lines, labels, loc='lower right', ncol=1)
+  # PTC first
+  ptc_df.plot(ax = ax[0], kind = "bar", y =['ptc_000_value', 'ptc_100_value', 'ptc_270_value'], 
+              yerr=yerr_ptc , width=0.3, color=['red', 'orange', 'green'], error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
+  ax[0].set_xticks(np.arange(len(list(locations_names.keys()))))
+  ax[0].set_xticklabels(locations_names.values(), rotation=0)
+  ax[0].set_ylabel('Change in profitability (%)')
+  ax[0].set_xlabel('')
+  ax[0].legend( [r'$PTC\; (\$0/kg-H_2)$',r'$PTC\; (\$1.0/kg-H_2)$',r'$PTC\; (\$2.7/kg-H_2)$'])
+
+  # CO2
+  co2_df.plot(ax = ax[1], kind = "bar", y =['co2_low_value', 'co2_high_value'], 
+              yerr=yerr_co2, width=0.3, color=['black', 'grey'], 
+              error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
+  ax[1].set_xticks(np.arange(len(list(locations_names.keys()))))
+  ax[1].set_xticklabels(locations_names.values(), rotation=0)
+  ax[1].set_ylabel('Change in profitability (%)')
+  ax[1].set_xlabel('')
+  ax[1].legend( [r'$CO_2 (\$60/ton)$', r'$CO_2\; (\$30/ton)$'])
+
+  sns.despine()
   fig.tight_layout()
-  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "SA_results_variable.png"))
+  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "smr_ft_SA_results_variable.png"))
 
 
 
@@ -197,7 +217,7 @@ def main():
   loc_dic, var_dic = load_SA_results_loc()
   plot_SA_locations(loc_dic)
   plot_SA_one_location(loc_dic, location='texas',type='regular')
-  plot_SA_variable(var_dic)
+  plot_SA_variable_v2(var_dic)
 
 if __name__ == "__main__":
   main()
