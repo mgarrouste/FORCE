@@ -19,25 +19,31 @@ def plot_hist(sweep_df):
   sweep_df['2std_dNPV'] /=1e6
   sweep_df['mean_NPV'] /=1e6
   sweep_df['baseline_NPV'] /=1e6
+  sweep_df['2std_mean_NPV'] /=1e6
+  sweep_df['2std_baseline_NPV'] /=1e6
 
-  sweep_df.plot(ax = ax[1], x='name',kind = "bar", y ='delta_NPV', yerr='2std_dNPV', label=r'$\Delta (NPV)$', capsize=2, ecolor='black', error_kw={'markeredgewidth':1}, legend = False,color='green') 
+  sweep_df.plot(ax = ax[1], x='name',kind = "bar", y ='delta_NPV', yerr='2std_dNPV', label=r'$\Delta (NPV)$', width=0.3,capsize=2, ecolor='black', error_kw={'markeredgewidth':1}, legend = False,color='green') 
   ax[1].set_ylabel(r'$\$M \;USD(2020)$')
 
-  sweep_df.plot(ax = ax[0], x= 'name', kind='bar', y=['mean_NPV', 'baseline_NPV'], label=['NPV', 'BAU NPV'],legend = False)#, yerr = ['2std_mean_NPV','2std_baseline_NPV'])#, color='blue')
+
+  yerr = sweep_df[['2std_mean_NPV', '2std_baseline_NPV']].to_numpy().T
+  sweep_df.plot(ax = ax[0], x= 'name', kind='bar', y=['mean_NPV', 'baseline_NPV'], label=['NPV', 'BAU NPV'],legend = False,yerr=yerr , width=0.3, 
+                error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3) )#, yerr = ['2std_mean_NPV','2std_baseline_NPV'])#, color='blue')
   #sweep_df.plot(ax = ax[0], kind='bar', y='baseline_NPV', yerr = '2std_baseline_NPV', color='red')
   ax[0].set_ylabel(r'$\$M \;USD(2020)$')
   ax[0].set_xlabel('')
   ax[1].set_xticks(np.arange(len(list(locations_names.keys()))))
   ax[1].set_xticklabels(locations_names.values(), rotation=0)
+  ax[1].set_xlabel('')
 
   # Legend
   h1, l1, h2,l2= ax[0].get_legend_handles_labels() + ax[1].get_legend_handles_labels()
   fig.legend(h1+h2, l1+l2, bbox_to_anchor = (1,0.5))
 
-  sns.despine( trim=True)
+  sns.despine()
 
   fig.tight_layout()
-  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "sweep_results.png"))
+  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "smr_ft_results.png"))
   return None
 
 
@@ -76,7 +82,7 @@ def get_results():
   sweep_df['2std_baseline_NPV'] = 2*sweep_df['std_baseline_NPV']
   sweep_df['delta_NPV'] = sweep_df['mean_NPV']-sweep_df['baseline_NPV']
   sweep_df['2std_dNPV'] = 2*np.sqrt(np.power(sweep_df['std_NPV'],2)+np.power(sweep_df['std_baseline_NPV'],2))
-  print(sweep_df)
+  print(sweep_df.columns)
   return sweep_df
 
 def get_baseline_NPV(case):
@@ -95,7 +101,7 @@ def main():
   dir = os.path.dirname(os.path.abspath(__file__))
   os.chdir(dir)
   df = get_results()
-  df.to_csv(os.path.join(dir,'sweep_results.csv'))
+  df.to_csv(os.path.join(dir,'smr_ft_results.csv'))
   plot_hist(df)
 
 if __name__ == "__main__":
