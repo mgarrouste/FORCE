@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib
 import matplotlib.pyplot as plt
 import os
 import numpy as np
@@ -22,7 +23,8 @@ def plot_hist(sweep_df):
   ax.set_xticks(np.arange(len(list(locations_names.keys()))))
   ax.set_xticklabels(locations_names.values(), rotation=0)
   ax.set_ylabel(r'$\Delta(NPV) \;\$M \;USD(2020)$')
-
+  ax.yaxis.set_major_locator(matplotlib.ticker.MultipleLocator(100))
+  ax.set_ylim(-100+min(sweep_df['delta_NPV']), 100+max(sweep_df['delta_NPV']))
   sns.despine(ax=ax, trim=True)
 
   fig.tight_layout()

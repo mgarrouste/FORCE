@@ -121,7 +121,7 @@ def plot_SA_locations(loc_dic, type='regular'):
   fig.legend(lines, labels, bbox_to_anchor=(0,1), ncol=1)
 
   fig.tight_layout()
-  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "SA_results_location_"+type+".png"))
+  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "lwr_ft_SA_results_location_"+type+".png"))
 
 
 
@@ -162,7 +162,7 @@ def plot_SA_one_location(loc_dic, location, type='regular'):
   fig.legend(lines, labels, bbox_to_anchor=(1,1), ncol=1)
 
   fig.tight_layout()
-  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "SA_results_location_"+location+'_'+type+".png"))
+  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "lwr_ft_SA_results_location_"+location+'_'+type+".png"))
 
 
 def plot_SA_variable_v2(var_dic):
@@ -205,7 +205,7 @@ def plot_SA_variable_v2(var_dic):
 
   sns.despine()
   fig.tight_layout()
-  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "SA_results_variable.png"))
+  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "lwr_ft_SA_results_variable.png"))
 
 
 
