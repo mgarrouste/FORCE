@@ -26,7 +26,7 @@ def plot_hist(sweep_df):
   sns.despine(ax=ax, trim=True)
 
   fig.tight_layout()
-  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "sweep_results.png"))
+  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "lwr_ft_sweep_results.png"))
   return None
 
 
@@ -80,7 +80,8 @@ def main():
   dir = os.path.dirname(os.path.abspath(__file__))
   os.chdir(dir)
   df = get_results()
-  df.to_csv(os.path.join(dir,'sweep_results.csv'))
+  df.to_csv(os.path.join(dir,'lwr_ft_sweep_results.csv'))
+  print(df)
   plot_hist(df)
 
 if __name__ == "__main__":
