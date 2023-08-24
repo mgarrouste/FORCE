@@ -35,7 +35,7 @@ def load_SA_results_loc():
   for loc in locations_names.keys(): 
     baseline = os.path.join(dir, loc+'_baseline')
     baseline_npv, baseline_npv_sd = get_final_npv(baseline)
-    ref = os.path.join(dir, loc+'_smr')
+    ref = os.path.join(dir, loc+'_reduced_8')
     ref_npv, ref_npv_sd = get_final_npv(ref)
     low_values = []
     high_values = []
@@ -196,7 +196,7 @@ def plot_SA_variable_v2(var_dic):
   ax[0].legend( [r'$PTC\; (\$0/kg-H_2)$',r'$PTC\; (\$1.0/kg-H_2)$',r'$PTC\; (\$2.7/kg-H_2)$'])
 
   # CO2
-  co2_df.plot(ax = ax[1], kind = "bar", y =['co2_low_value', 'co2_high_value'], 
+  co2_df.plot(ax = ax[1], kind = "bar", y =['co2_high_value', 'co2_low_value'], 
               yerr=yerr_co2, width=0.3, color=['black', 'grey'], 
               error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
   ax[1].set_xticks(np.arange(len(list(locations_names.keys()))))
