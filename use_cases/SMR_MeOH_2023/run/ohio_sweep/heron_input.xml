@@ -1,9 +1,9 @@
 <HERON>
-  <Case name="texas_smr">
+  <Case name="ohio_smr">
     <label name="scenario">ref</label>
-    <label name="location">south_texas_project</label>
-    <label name="fuel_region">west_south_central</label>
-    <label name="co2_location">texas</label>
+    <label name="location">davis_besse</label>
+    <label name="fuel_region">ohio</label>
+    <label name="co2_location">ohio</label>
     <mode>sweep</mode>
     <data_handling>
       <inner_to_outer>csv</inner_to_outer>  
@@ -27,7 +27,7 @@
     <economics>
       <ProjectTime>60</ProjectTime>
       <DiscountRate>0.1</DiscountRate>
-      <tax>0.21</tax>
+      <tax>0.2100</tax>
       <inflation>0.0218</inflation>
       <verbosity>0</verbosity>
     </economics>
@@ -69,12 +69,11 @@
       </economics>
     </Component>
 
-
     <Component name="htse">
       <produces resource="h2" dispatch="independent">
         <consumes>electricity</consumes>
         <capacity resource="electricity">
-          <sweep_values>-667.0,-598.0,-529.0,-460.0,-391.0,-323.0,-254.0,-185.0,-116.0,-47.0</sweep_values> 
+          <sweep_values>-667.0,-333.5</sweep_values> 
         </capacity>
         <minimum resource="electricity">
           
@@ -137,12 +136,11 @@
       </economics>
     </Component>
 
-
     <Component name="meoh">
       <produces resource="naphtha,diesel,jet_fuel" dispatch="fixed">
         <consumes>h2,electricity</consumes>
         <capacity resource="h2">
-          <sweep_values>-16762.0,-15031.0,-13299.0,-11568.0,-9837.0,-8106.0,-6375.0,-4643.0,-2912.0,-1181.0</sweep_values>
+          <sweep_values>-16761.7,-8380.85</sweep_values>
         </capacity>
         <transfer>
           <linear>
@@ -210,6 +208,8 @@
       </economics>
     </Component>
 
+
+  
     <Component name="electricity_market">
       <demands resource="electricity" dispatch="dependent">
         <capacity>
@@ -297,7 +297,7 @@
     <Component name="h2_storage">
       <stores resource="h2" dispatch="independent">
         <capacity resource="h2">
-          <sweep_values>10.0,625771.0,1251541.0,1877312.0,2503082.0,3128853.0,3754623.0,4380394.0,5006164.0,5631935.0</sweep_values> 
+          <sweep_values>10.0,5.0</sweep_values> 
         </capacity>
         <initial_stored>
           <fixed_value>0.01</fixed_value>
@@ -320,7 +320,6 @@
         </CashFlow>
       </economics>
     </Component>
-  
   
     <Component name="h2_import">
       <produces resource="h2" dispatch="independent">
@@ -359,11 +358,10 @@
         </CashFlow>
       </economics>
     </Component>
-
   </Components>
 
   <DataGenerators>
-    <ARMA name="price" variable="price">../../train/Output_stp_1_2012_2021_DA/arma.pk</ARMA>
+    <ARMA name="price" variable="price">../../train/Output_davis_besse_2012_2021_DA/arma.pk</ARMA>
     <Function name="functions">../functions.py</Function>
   </DataGenerators>
 </HERON>

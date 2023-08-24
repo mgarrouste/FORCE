@@ -1,9 +1,9 @@
 <HERON>
-  <Case name="nebraska_smr">
+  <Case name="illinois_smr">
     <label name="scenario">ref</label>
-    <label name="location">cooper</label>
-    <label name="fuel_region">nebraska</label>
-    <label name="co2_location">nebraska</label>
+    <label name="location">braidwood</label>
+    <label name="co2_location">illinois</label>
+    <label name="fuel_region">illinois</label>
     <mode>sweep</mode>
     <data_handling>
       <inner_to_outer>csv</inner_to_outer>  
@@ -27,7 +27,7 @@
     <economics>
       <ProjectTime>60</ProjectTime>
       <DiscountRate>0.1</DiscountRate>
-      <tax>0.2717</tax>
+      <tax>0.2960</tax>
       <inflation>0.0218</inflation>
       <verbosity>0</verbosity>
     </economics>
@@ -69,11 +69,12 @@
       </economics>
     </Component>
 
+
     <Component name="htse">
       <produces resource="h2" dispatch="independent">
         <consumes>electricity</consumes>
         <capacity resource="electricity">
-          <sweep_values>-667.0,-598.0,-529.0,-460.0,-391.0,-323.0,-254.0,-185.0,-116.0,-47.0</sweep_values> 
+          <sweep_values>-667.0,-333.5</sweep_values> 
         </capacity>
         <minimum resource="electricity">
           
@@ -141,7 +142,7 @@
       <produces resource="naphtha,diesel,jet_fuel" dispatch="fixed">
         <consumes>h2,electricity</consumes>
         <capacity resource="h2">
-          <sweep_values>-16762.0,-15031.0,-13299.0,-11568.0,-9837.0,-8106.0,-6375.0,-4643.0,-2912.0,-1181.0</sweep_values>
+          <sweep_values>-16761.7,-8380.85</sweep_values>
         </capacity>
         <transfer>
           <linear>
@@ -297,7 +298,7 @@
     <Component name="h2_storage">
       <stores resource="h2" dispatch="independent">
         <capacity resource="h2">
-          <sweep_values>10.0,312885.0,625771.0,938656.0,1251541.0,1564426.0,1877312.0,2190197.0,2503082.0,2815967.0</sweep_values> 
+          <sweep_values>10.0,5.0</sweep_values> 
         </capacity>
         <initial_stored>
           <fixed_value>0.01</fixed_value>
@@ -363,7 +364,7 @@
   </Components>
 
   <DataGenerators>
-    <ARMA name="price" variable="price">../../train/Output_cooper_2014_2021_DA/arma.pk</ARMA>
+    <ARMA name="price" variable="price">../../train/Output_braidwood_2012_2021_DA/arma.pk</ARMA>
     <Function name="functions">../functions.py</Function>
   </DataGenerators>
 </HERON>
