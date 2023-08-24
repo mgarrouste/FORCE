@@ -182,7 +182,7 @@ def plot_all_locations():
   axs.flat[-1].axis('off')
 
   all_to_csv.to_csv(os.path.join(dir, 'lwr_ft_cashflow_breakdown.csv'))
-  plt.savefig(os.path.join(dir, "total_cashflow_breakdown.png"))
+  plt.savefig(os.path.join(dir, "lwr_ft_total_cashflow_breakdown.png"))
 
 
 
