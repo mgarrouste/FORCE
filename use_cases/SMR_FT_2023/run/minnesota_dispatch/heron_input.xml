@@ -68,7 +68,7 @@
       <produces resource="h2" dispatch="independent">
         <consumes>electricity</consumes>
         <capacity resource="electricity">
-          <sweep_values debug_value="-705.0">-705.1,-352.55</sweep_values> 
+          <sweep_values debug_value="-705.1">-705.1,-352.55</sweep_values> 
         </capacity>
         <minimum resource="electricity">
           
@@ -137,7 +137,7 @@
       <produces resource="naphtha,diesel,jet_fuel" dispatch="fixed">
         <consumes>h2</consumes>
         <capacity resource="h2">
-          <sweep_values debug_value="-17719.0">-15493.4,-7746.7</sweep_values>
+          <sweep_values debug_value="-15493.4">-15493.4,-7746.7</sweep_values>
         </capacity>
         <transfer>
           <linear>
@@ -317,7 +317,7 @@
     <Component name="h2_storage">
       <stores resource="h2" dispatch="independent">
         <capacity resource="h2">
-          <sweep_values debug_value="47251.0">60751.0,30375.5</sweep_values> 
+          <sweep_values debug_value="60751.0">60751.0,30375.5</sweep_values> 
         </capacity>
         <initial_stored>
           <fixed_value>0.0</fixed_value>
