@@ -41,7 +41,7 @@ def plot_configurations(df_list):
     baseline_npv, baseline_npv_sd = get_final_npv(baseline)
 
     # Reference npv
-    ref = os.path.join(os.path.dirname(os.path.abspath(__file__)), loc+'_smr')
+    ref = os.path.join(os.path.dirname(os.path.abspath(__file__)), loc+'_reduced_8')
     ref_npv, ref_npv_sd = get_final_npv(ref)
 
     # Title for the row = location
@@ -75,7 +75,7 @@ def plot_configurations(df_list):
 def load_sweep_data(location): 
   # Path to sweep.csv for the location
   dir = os.path.dirname(os.path.abspath(__file__))
-  sweep_file = os.path.join(dir, location+'_smr', 'gold', 'sweep.csv')
+  sweep_file = os.path.join(dir, location+'_reduced_8', 'gold', 'sweep.csv')
   if os.path.isfile(sweep_file):
     df = pd.read_csv(sweep_file)
   else: 

@@ -83,7 +83,7 @@ def main():
   dir = os.path.dirname(os.path.abspath(__file__))
   os.chdir(dir)
   df = get_results()
-  df.to_csv(os.path.join(dir,'sweep_results.csv'))
+  df.to_csv(os.path.join(dir,'lwr_meoh_sweep_results.csv'))
   plot_hist(df)
 
 if __name__ == "__main__":

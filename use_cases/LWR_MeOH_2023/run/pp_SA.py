@@ -103,8 +103,10 @@ def plot_SA_locations(loc_dic, type='regular'):
     ind = np.arange(len(val_dic['low_values']))
     width=0.35
     if type=='regular': 
-      p1 = ax[i].bar(ind, val_dic['low_values'], width, yerr=val_dic['low_values_sd'], label='Low (Ref x0.75)')
-      p2 = ax[i].bar(ind, val_dic['high_values'], width, yerr=val_dic['high_values_sd'], label='High (Ref x1.25)')
+      p1 = ax[i].bar(ind, val_dic['low_values'], width, yerr=val_dic['low_values_sd'], label='Low (Ref x0.75)',
+        error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
+      p2 = ax[i].bar(ind, val_dic['high_values'], width, yerr=val_dic['high_values_sd'], label='High (Ref x1.25)',
+        error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
       ax[i].set_xticks(ind)
       ax[i].set_xticklabels(reg_variables)
     elif type=='ptc':
@@ -133,7 +135,7 @@ def plot_SA_locations(loc_dic, type='regular'):
   fig.legend(lines, labels, bbox_to_anchor=(0,1), ncol=1)
 
   fig.tight_layout()
-  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "SA_results_location_"+type+".png"))
+  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "lwr_meoh_SA_results_location_"+type+".png"))
 
 
 
@@ -146,8 +148,10 @@ def plot_SA_one_location(loc_dic, location, type='regular'):
   ind = np.arange(len(val_dic['low_values']))
   width=0.35
   if type=='regular': 
-    p1 = ax.bar(ind, val_dic['low_values'], width, yerr=val_dic['low_values_sd'], label='Low (Ref x0.75)')
-    p2 = ax.bar(ind, val_dic['high_values'], width, yerr=val_dic['high_values_sd'], label='High (Ref x1.25)')
+    p1 = ax.bar(ind, val_dic['low_values'], width, yerr=val_dic['low_values_sd'], label='Low (Ref x0.75)',
+      error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
+    p2 = ax.bar(ind, val_dic['high_values'], width, yerr=val_dic['high_values_sd'], label='High (Ref x1.25)',
+      error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
     ax.set_xticks(ind)
     ax.set_xticklabels(reg_variables)
   elif type=='ptc':
@@ -172,7 +176,7 @@ def plot_SA_one_location(loc_dic, location, type='regular'):
   fig.legend(lines, labels, bbox_to_anchor=(1,1), ncol=1)
 
   fig.tight_layout()
-  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "SA_results_location_"+location+'_'+type+".png"))
+  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "lwr_meoh_SA_results_location_"+location+'_'+type+".png"))
 
 def plot_SA_variable_v2(var_dic):
   ptc_df = pd.DataFrame()
@@ -214,7 +218,7 @@ def plot_SA_variable_v2(var_dic):
 
   sns.despine()
   fig.tight_layout()
-  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "SA_results_variable.png"))
+  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "lwr_meoh_SA_results_variable.png"))
 
 def plot_SA_variable_v3(var_dic):
   ptc_df = pd.DataFrame()
@@ -295,7 +299,7 @@ def plot_SA_variable_v3(var_dic):
   #ax_stp[1].legend( [r'$CO_2\; (\$30/ton)$', r'$CO_2 (\$60/ton)$'])
   sns.despine()
 
-  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "SA_results_variable.png"))
+  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "lwr_meoh_SA_results_variable.png"))
 
 
 def plot_SA_variable(var_dic):
@@ -323,7 +327,7 @@ def plot_SA_variable(var_dic):
   lines, labels = [sum(lol, []) for lol in zip(*lines_labels)]
   fig.legend(lines, labels, loc='lower right', ncol=1)
   fig.tight_layout()
-  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "SA_results_variable.png"))
+  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "lwr_meoh_SA_results_variable.png"))
 
 
 

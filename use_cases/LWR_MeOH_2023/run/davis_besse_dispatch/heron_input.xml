@@ -117,7 +117,7 @@
       <produces resource="naphtha,diesel,jet_fuel" dispatch="fixed">
         <consumes>h2,electricity</consumes>
         <capacity resource="h2">
-          <sweep_values debug_value="-21605">-21978.0,-10989.0</sweep_values>
+          <sweep_values debug_value="-21978">-21978.0,-10989.0</sweep_values>
         </capacity>
         <transfer>
           <linear>

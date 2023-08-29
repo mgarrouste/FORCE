@@ -94,8 +94,8 @@ def plot_lifetime_cashflows(lifetime_cashflows, axis, plant, dispatch_dir, title
   df = df.sort_values(by='value', axis=0, ascending=False)
   df.reset_index(inplace=True)
 
-  # In $M/NPP capacity (MWe)
-  df['value'] = df['value'].div(1e6*NPP_CAPACITIES[plant])
+  # In $bn
+  df['value'] = df['value'].div(1e9)#*NPP_CAPACITIES[plant])
 
   # Waterfall calculations
   # calculate running totals
@@ -135,10 +135,10 @@ def plot_lifetime_cashflows(lifetime_cashflows, axis, plant, dispatch_dir, title
       ax.text(i-.15, mid[i], f"{df[y][i]:,.2f}")
   # Baseline case as horizontal line
   baseline_NPV, std_NPV = get_baseline_NPV(plant)
-  baseline_NPV /=1e6
-  baseline_NPV /= NPP_CAPACITIES[plant]
+  baseline_NPV /=1e9
+  #baseline_NPV /= NPP_CAPACITIES[plant]
   ax.axhline(baseline_NPV, color='b', linewidth=2)
-  bau_text = 'BAU NPV: '+str(np.round(baseline_NPV,3))+" M$/MWe"
+  bau_text = 'BAU NPV: $'+str(np.round(baseline_NPV,3))+" bn"
   ax.text(5, baseline_NPV+0.1, bau_text, color='b')
 
   # Rename cashflows
@@ -158,7 +158,7 @@ def plot_all_locations():
   all_to_csv = pd.DataFrame()
 
   fig, axs = plt.subplots(3,2, figsize = (11,13), sharey= True,layout='constrained')
-  fig.supylabel('M$ 2020(USD) / MWe')
+  fig.supylabel('bn$ 2020(USD)')
   #title_letters = ['(a)', '(b)', '(c)', '(d)', '(e)']
 
   for ax,loc in zip(axs.flat, locations):

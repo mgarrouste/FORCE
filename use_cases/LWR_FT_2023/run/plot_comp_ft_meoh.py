@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import os
 import numpy as np
 import seaborn as sns
+import matplotlib
 
 locations_names = {'braidwood':'Braidwood', 'cooper':'Cooper', 'davis_besse':'Davis-Besse', 'prairie_island':'Prairie Island', 
                     'stp':'South Texas Project'}
@@ -33,6 +34,8 @@ def plot_hist(df_dic):
   ax.set_xlabel('')
   ax.legend(["FT", "MeOH"])
 
+  ax.yaxis.set_major_locator(matplotlib.ticker.MultipleLocator(100))
+  ax.set_ylim(-100+min(merged_df['delta_NPV_ft']), 100+max(merged_df['delta_NPV_meoh']))
   sns.despine(ax=ax, trim=True)
 
   fig.tight_layout()

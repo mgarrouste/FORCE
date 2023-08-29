@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 
-STORAGE_INIT = 0.01 # 1% filled at the beginning of the day
+STORAGE_INIT = 0.0 # 0% filled at the beginning of the day
 steps_data = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', 'data', 'HERON_data.xlsx')
 
 
@@ -181,7 +181,53 @@ def add_elec_consumption_meoh(case):
   with open(os.path.join(case, 'heron_input.xml'), 'wb') as f:
     tree.write(f)
 
+def get_opt_config(location):
+  """Get the optimal configuration of the location for SA inputs"""
+  dir = os.path.dirname(os.path.abspath(__file__))
+  sweep_results = pd.read_csv(os.path.join(dir,location+'_sweep', 'gold', 'sweep.csv'))
+  sweep_results = sweep_results[['htse_capacity', 'meoh_capacity', 'h2_storage_capacity']].iloc[0,:]
+  sweep_results = sweep_results.to_dict()
+  return sweep_results
 
+
+def sa_sweep_values(case):
+  tree = ET.parse(os.path.join(case, 'heron_input.xml'))
+  root = tree.getroot().find('Components')
+
+  case_name = case.split('/')[-1]
+  if 'davis_besse' in case_name:
+    location='davis_besse'
+  elif 'prairie_island' in case_name:
+    location='prairie_island'
+  else:
+    location = case.split('/')[-1].split('_')[0]
+  opt_dict = get_opt_config(location)
+
+  for comp in root.findall('Component'):
+    # Storage
+    if comp.get('name') =='h2_storage':
+      sweep_val_node = comp.find('stores').find('capacity').find('sweep_values')
+      sweep_values = [opt_dict['h2_storage_capacity'], opt_dict['h2_storage_capacity']/2]
+      sweep_values = [str(v) for v in sweep_values]
+      sweep_values = ','.join(sweep_values)
+      sweep_val_node.text = sweep_values
+    # FT
+    if comp.get('name') =='meoh':
+      sweep_val_node = comp.find('produces').find('capacity').find('sweep_values')
+      sweep_values = [opt_dict['meoh_capacity'], opt_dict['meoh_capacity']/2]
+      sweep_values = [str(v) for v in sweep_values]
+      sweep_values = ','.join(sweep_values)
+      sweep_val_node.text = sweep_values
+    # HTSE
+    if comp.get('name') =='htse':
+      sweep_val_node = comp.find('produces').find('capacity').find('sweep_values')
+      sweep_values = [opt_dict['htse_capacity'], opt_dict['htse_capacity']/2]
+      sweep_values = [str(v) for v in sweep_values]
+      sweep_values = ','.join(sweep_values)
+      sweep_val_node.text = sweep_values
+  
+  with open(os.path.join(case, 'heron_input.xml'), 'wb') as f:
+    tree.write(f)
 
 def main():
   parser = argparse.ArgumentParser()
@@ -201,7 +247,7 @@ def main():
   print("Cases to modify: {}\n".format(cases))
   for case in cases:
     init_storage(case)
-    #meoh_ratios(case)
+    meoh_ratios(case)
     reduced_arma_samples = True
     if '_sweep' in case:
       reduced_arma_samples = False
@@ -209,10 +255,12 @@ def main():
       reduced_arma_samples = False
     if reduced_arma_samples:
       arma_samples(case)
-    sweep_values_htse(case)
-    sweep_values_meoh(case)
-    add_elec_consumption_meoh(case)
-    sweep_values_storage(case)
+    #sweep_values_htse(case)
+    #sweep_values_meoh(case)
+    #add_elec_consumption_meoh(case)
+    #sweep_values_storage(case)
+    if ('sweep' not in case) and ('baseline' not in case):
+      sa_sweep_values(case)
 
       
 
