@@ -1,9 +1,9 @@
 <HERON>
-  <Case name="ohio_smr_100">
+  <Case name="minnesota_smr_20">
     <label name="scenario">ref</label>
-    <label name="location">davis_besse</label>
-    <label name="fuel_region">ohio</label>
-    <label name="co2_location">ohio</label>
+    <label name="location">prairie_island</label>
+    <label name="fuel_region">minnesota</label>
+    <label name="co2_location">minnesota</label>
     <mode>sweep</mode>
     <data_handling>
       <inner_to_outer>csv</inner_to_outer>  
@@ -27,7 +27,7 @@
     <economics>
       <ProjectTime>60</ProjectTime>
       <DiscountRate>0.1</DiscountRate>
-      <tax>0.2100</tax>
+      <tax>0.2874</tax>
       <inflation>0.0218</inflation>
       <verbosity>0</verbosity>
     </economics>
@@ -42,7 +42,7 @@
     <Component name="smr">
       <produces resource="electricity" dispatch="fixed">
         <capacity resource="electricity">
-          <fixed_value>1200</fixed_value> 
+          <fixed_value>480</fixed_value> 
         </capacity>
       </produces>
       <economics>
@@ -68,6 +68,7 @@
         </CashFlow>
       </economics>
     </Component>
+
 
     <Component name="htse">
       <produces resource="h2" dispatch="independent">
@@ -136,6 +137,7 @@
       </economics>
     </Component>
 
+    
     <Component name="meoh">
       <produces resource="naphtha,diesel,jet_fuel" dispatch="fixed">
         <consumes>h2,electricity</consumes>
@@ -318,6 +320,7 @@
         </CashFlow>
       </economics>
     </Component>
+
   
     <Component name="h2_import">
       <produces resource="h2" dispatch="independent">
@@ -359,7 +362,7 @@
   </Components>
 
   <DataGenerators>
-    <ARMA name="price" variable="price">../../train/Output_davis_besse_2012_2021_DA/arma.pk</ARMA>
+    <ARMA name="price" variable="price">../../train/Output_prairie_island_1_2013_2021_DA/arma.pk</ARMA>
     <Function name="functions">../functions.py</Function>
   </DataGenerators>
 </HERON>
