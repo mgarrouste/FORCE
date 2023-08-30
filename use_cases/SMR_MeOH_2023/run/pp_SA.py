@@ -223,10 +223,10 @@ def plot_SA_variable_v2(var_dic):
               error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
   ax[2].set_xticks(np.arange(len(list(locations_names.keys()))))
   ax[2].set_xticklabels(locations_names.values(), rotation=0)
-  ax[2].set_yscale('log')
+  #ax[2].set_yscale('log')
   ax[2].set_ylabel('Change in \nprofitability (%)')
   ax[2].set_xlabel('')
-  ax[2].legend( ['Module size 20MWe', 'Module size 100MWe'], bbox_to_anchor=(1,1))
+  ax[2].legend( ['Module size 40MWe', 'Module size 80MWe'], bbox_to_anchor=(1,1))
 
   sns.despine()
   fig.tight_layout()
