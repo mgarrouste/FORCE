@@ -180,6 +180,7 @@
           </driver>
           <reference_price>
             <fixed_value>-27050057.67</fixed_value>
+            <multiplier>0.75</multiplier>
           </reference_price>
         </CashFlow>
         <CashFlow name="meohVOM" type="repeating" period="year" taxable="True" inflation="None" mult_target="False">
@@ -188,6 +189,7 @@
           </driver>
           <reference_price>
             <fixed_value>-6314321.88</fixed_value>
+            <multiplier>0.75</multiplier>
           </reference_price>
         </CashFlow>
         <CashFlow name="co2_shipping" period="year" type="repeating" taxable="True" inflation="None" mult_target="False">
