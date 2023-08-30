@@ -71,9 +71,7 @@ def get_final_npv(case, baseline=False, opt_point={}):
     print('Results not found for {}'.format(case))
     return None
   df = pd.read_csv(sweep_file)
-  if not baseline and not opt_point:
-    df = df.iloc[:1,:]
-  else:
+  if baseline:
     df = df[df['smr_capacity']==BASELINE_SMR_CAP_REF]
   if opt_point:
     for comp_name, comp_capacity in opt_point.items():
@@ -82,7 +80,7 @@ def get_final_npv(case, baseline=False, opt_point={}):
     print('df empty')
     print(case)
     print(opt_point)
-    print(pd.read_csv(sweep_file)[['htse_capacity', 'meoh_capacity', 'h2_storage_capacity']])
+    print(pd.read_csv(sweep_file)[['htse_capacity', 'ft_capacity', 'h2_storage_capacity']])
   final_npv = float(df.mean_NPV.to_list()[0])
   std_npv = float(df.std_NPV.to_list()[0])
   return final_npv, std_npv

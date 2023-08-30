@@ -74,7 +74,7 @@ def load_SA_results_loc():
     for v in W_VARIABLES: 
       c = os.path.join(dir,loc+'_'+v)
       print(c)
-      c_npv, c_npv_sd = get_final_npv(c)
+      c_npv, c_npv_sd = get_final_npv(c, opt_point=opt_point)
       ddNPV = (c_npv-ref_npv)*100/np.abs(ref_npv-baseline_npv)
       ddNPV_sd = 2*100*np.sqrt((c_npv_sd/c_npv)**2 + 2*(ref_npv_sd/ref_npv)**2 + (baseline_npv_sd/baseline_npv)**2)
       var_dic[v]['value'].append(ddNPV)
@@ -223,7 +223,7 @@ def plot_SA_variable_v2(var_dic):
               error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
   ax[2].set_xticks(np.arange(len(list(locations_names.keys()))))
   ax[2].set_xticklabels(locations_names.values(), rotation=0)
-  ax[2].set_yscale('log')
+  #ax[2].set_yscale('log')
   ax[2].set_ylabel('Change in \nprofitability (%)')
   ax[2].set_xlabel('')
   ax[2].legend( ['Module size 40MWe', 'Module size 80MWe'], bbox_to_anchor=(1,1))
