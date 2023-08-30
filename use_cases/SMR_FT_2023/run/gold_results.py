@@ -12,36 +12,32 @@ def check_gold_dir(case):
 
 def check_run_status(case, results_df):
   case_name = case.split('/')[-1]
+  gold_length = 125
   if 'smr_' in case:
     SA = True
+    gold_length = 8 
   elif 'smr' in case:
-    SA = False
-    baseline = False
+    gold_length = 1000
   elif 'baseline' in case:
-    SA = False
-    baseline = True
+    gold_length = 2
+  elif 'reduced_5' in case:
+    gold_length = 125
+  elif 'reduced_6' in case:
+    gold_length = 216
+  elif 'reduced_7' in case: 
+    gold_length = 343
+  elif 'reduced_8' in case:
+    gold_length = 512
+  elif 'serial' in case:
+    gold_length = 1000
   else: 
-    SA = True
+    gold_length = 8
   length = len(results_df)
-  if SA:
-    if length<125:
-      print(f'Run not finished for {case_name}: \n only {length} runs')
-      save = False
-    else:
-      save = True
+  if length < gold_length: 
+    print(f'Run not finished for {case_name}: \n only {length} runs out of {gold_length} expected.')
+    save = False
   else:
-    if baseline:
-      if length<2: 
-        print(f'Run not finished for {case_name}: \n only {length} runs')
-        save = False
-      else:
-        save = True
-    else:
-      if length<1000:
-        print(f'Run not finished for {case_name}: \n only {length} runs')
-        save = False
-      else:
-        save = True
+    save = True
   return save
     
 
