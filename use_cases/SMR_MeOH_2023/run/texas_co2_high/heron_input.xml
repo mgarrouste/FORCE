@@ -206,8 +206,17 @@
             <Function method="h2_ptc_meoh">functions</Function>
           </reference_price>
         </CashFlow>
+        <CashFlow name="co2_cost" type="repeating" taxable="False" inflation="None" mult_target="False">
+          <driver>
+            <activity>h2</activity>
+          </driver>
+          <reference_price>
+            <fixed_value>0.372</fixed_value>
+          </reference_price>
+        </CashFlow>
       </economics>
     </Component> 
+    
     <Component name="electricity_market">
       <demands resource="electricity" dispatch="dependent">
         <capacity>
