@@ -4,16 +4,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+import numpy as np
 
 locations_names = {'illinois':'Illinois', 'minnesota':'Minnesota', 'nebraska':'Nebraska', 'ohio':'Ohio', 
                     'texas':'Texas'}
 REG_VARIABLES = ['capex', 'elec', 'om', 'synfuels']
 reg_variables =['CAPEX', 'Electricity\nprices', 'O&M', 'Synfuels\nprices']
 variables = ['CAPEX', 'Electricity\nprices', 'O&M', 'Synfuels\nprices','CO2', 'PTC']
-W_VARIABLES = ['co2_high', 'co2_low', 'ptc_000', 'ptc_100', 'ptc_270', 'smr_20', 'smr_100']
+W_VARIABLES = ['co2_high', 'co2_low', 'ptc_000', 'ptc_100', 'ptc_270', 'smr_40', 'smr_80']
 w_variables = ['CO2', 'PTC']
 total_var = W_VARIABLES+REG_VARIABLES
-size_var = ['smr_20', 'smr_100']
+size_var = ['smr_40', 'smr_80']
 ptc_var = ['ptc_000', 'ptc_100', 'ptc_270']
 co2_var = ['co2_low','co2_high']
 toplot_var = ['ptc_000', 'ptc_100', 'ptc_270','co2_low','co2_high']
@@ -195,7 +196,7 @@ def plot_SA_variable_v2(var_dic):
   # Error bars
   yerr_ptc = ptc_df[['ptc_000_sd', 'ptc_100_sd', 'ptc_270_sd']].to_numpy().T
   yerr_co2 = co2_df[['co2_low_sd', 'co2_high_sd']].to_numpy().T
-  yerr_size = size_df[['smr_20_sd', 'smr_100_sd']].to_numpy().T
+  yerr_size = size_df[['smr_40_sd', 'smr_80_sd']].to_numpy().T
 
   # PTC first
   ptc_df.plot(ax = ax[0], kind = "bar", y =['ptc_000_value', 'ptc_100_value', 'ptc_270_value'], 
@@ -217,7 +218,7 @@ def plot_SA_variable_v2(var_dic):
   ax[1].legend( [r'$CO_2 (\$60/ton)$', r'$CO_2\; (\$30/ton)$'], bbox_to_anchor=(1,1))
 
   # Size of module
-  size_df.plot(ax = ax[2], kind = "bar", y =['smr_20_value', 'smr_100_value'], 
+  size_df.plot(ax = ax[2], kind = "bar", y =['smr_40_value', 'smr_80_value'], 
               yerr=yerr_size, width=0.3, color=['blue', 'pink'], 
               error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
   ax[2].set_xticks(np.arange(len(list(locations_names.keys()))))
@@ -225,7 +226,7 @@ def plot_SA_variable_v2(var_dic):
   ax[2].set_yscale('log')
   ax[2].set_ylabel('Change in \nprofitability (%)')
   ax[2].set_xlabel('')
-  ax[2].legend( ['Module size 20MWe', 'Module size 100MWe'], bbox_to_anchor=(1,1))
+  ax[2].legend( ['Module size 40MWe', 'Module size 80MWe'], bbox_to_anchor=(1,1))
 
   sns.despine()
   fig.tight_layout()

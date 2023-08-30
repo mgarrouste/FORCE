@@ -1,5 +1,6 @@
 import glob, os, argparse, shutil
 import pandas as pd
+import numpy as np
 
 BASELINE_SMR_CAP_REF = 720.0
 
