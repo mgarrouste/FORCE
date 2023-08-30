@@ -10,9 +10,10 @@ locations_names = {'illinois':'Illinois', 'minnesota':'Minnesota', 'nebraska':'N
 REG_VARIABLES = ['capex', 'elec', 'om', 'synfuels']
 reg_variables =['CAPEX', 'Electricity\nprices', 'O&M', 'Synfuels\nprices']
 variables = ['CAPEX', 'Electricity\nprices', 'O&M', 'Synfuels\nprices','CO2', 'PTC']
-W_VARIABLES = ['co2_high', 'co2_low', 'ptc_000', 'ptc_100', 'ptc_270']
+W_VARIABLES = ['co2_high', 'co2_low', 'ptc_000', 'ptc_100', 'ptc_270', 'smr_20', 'smr_100']
 w_variables = ['CO2', 'PTC']
 total_var = W_VARIABLES+REG_VARIABLES
+size_var = ['smr_20', 'smr_100']
 ptc_var = ['ptc_000', 'ptc_100', 'ptc_270']
 co2_var = ['co2_low','co2_high']
 toplot_var = ['ptc_000', 'ptc_100', 'ptc_270','co2_low','co2_high']
@@ -22,6 +23,12 @@ variables_names = {'co2_high':r'$CO_2 (\$60/ton)$', 'co2_low':r'$CO_2\; (\$30/to
 total_variables = ['CO2 ($60/ton)', 'CO2 ($30/ton)', 'PTC ($0/kg-H2)','PTC ($1.0/kg-H2)','PTC ($2.7/kg-H2)', \
   'CAPEX', 'Electricity\nprices', 'O&M', 'Synfuels\nprices']
 
+def get_optimal_point(location):
+  results_df = pd.read_csv('smr_ft_results.csv')
+  results_df = results_df[results_df['location'] == location]
+  results_df = results_df[['htse_capacity', 'ft_capacity', 'h2_storage_capacity']]
+  results_df = results_df.to_dict(orient='records')[0]
+  return results_df
 
 def load_SA_results_loc(): 
   dir = os.path.dirname(os.path.abspath(__file__))
@@ -41,11 +48,12 @@ def load_SA_results_loc():
     high_values = []
     low_values_sd = []
     high_values_sd = []
+    opt_point = get_optimal_point(location=loc)
     for v in REG_VARIABLES: 
       low_case = os.path.join(dir,loc+'_'+v+'_0.75')
       high_case = os.path.join(dir,loc+'_'+v+'_1.25')
-      low_npv, low_npv_sd = get_final_npv(low_case)
-      high_npv, high_npv_sd = get_final_npv(high_case)
+      low_npv, low_npv_sd = get_final_npv(low_case, opt_point=opt_point)
+      high_npv, high_npv_sd = get_final_npv(high_case, opt_point=opt_point)
       low_ddNPV = (low_npv-ref_npv)*100/np.abs(ref_npv-baseline_npv)
       low_ddNPV_sd = 2*100*np.sqrt((low_npv_sd/low_npv)**2 + 2*(ref_npv_sd/ref_npv)**2 + (baseline_npv_sd/baseline_npv)**2)
       high_ddNPV = (high_npv-ref_npv)*100/np.abs(ref_npv-baseline_npv)
@@ -82,7 +90,7 @@ def load_SA_results_loc():
 def plot_SA_locations(loc_dic, type='regular'): 
 
   plt.style.use('seaborn-paper')
-  fig, axes = plt.subplots(3,2, figsize=(8,6))
+  fig, axes = plt.subplots(5,1, figsize=(4,9), sharex=True)
   ax = fig.axes
   i=0
   for loc, loc_name in locations_names.items():
@@ -113,14 +121,10 @@ def plot_SA_locations(loc_dic, type='regular'):
     sns.despine(ax=ax[i], trim=True)
     i+=1
     
-
-  # dont need last space for graph
-  ax[-1].axis('tight')
-  ax[-1].axis('off')
   # legend
   lines_labels = [ax[0].get_legend_handles_labels()]
   lines, labels = [sum(lol, []) for lol in zip(*lines_labels)]
-  fig.legend(lines, labels, bbox_to_anchor=(0,1), ncol=1)
+  fig.legend(lines, labels, ncol=1, loc='upper left')
 
   fig.tight_layout()
   fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "smr_ft_SA_results_location_"+type+".png"))
@@ -170,6 +174,8 @@ def plot_SA_one_location(loc_dic, location, type='regular'):
 def plot_SA_variable_v2(var_dic):
   ptc_df = pd.DataFrame()
   co2_df = pd.DataFrame()
+  size_df = pd.DataFrame()
+
   for var in ptc_var:
     val_dic = var_dic[var]
     ptc_df[var+'_value'] = val_dic['value']
@@ -178,22 +184,27 @@ def plot_SA_variable_v2(var_dic):
     val_dic = var_dic[var]
     co2_df[var+'_value'] = val_dic['value']
     co2_df[var+'_sd'] =val_dic['sd']
-  
+  for var in size_var:
+    val_dic = var_dic[var]
+    size_df[var+'_value'] = val_dic['value']
+    size_df[var+'_sd'] =val_dic['sd']
+
   plt.style.use('seaborn-paper')
-  fig, ax = plt.subplots(2,1, sharex=True)# figsize=(10,8))
+  fig, ax = plt.subplots(3,1, sharex=True)# figsize=(10,8))
   
   # Error bars
   yerr_ptc = ptc_df[['ptc_000_sd', 'ptc_100_sd', 'ptc_270_sd']].to_numpy().T
   yerr_co2 = co2_df[['co2_low_sd', 'co2_high_sd']].to_numpy().T
+  yerr_size = size_df[['smr_20_sd', 'smr_100_sd']].to_numpy().T
 
   # PTC first
   ptc_df.plot(ax = ax[0], kind = "bar", y =['ptc_000_value', 'ptc_100_value', 'ptc_270_value'], 
               yerr=yerr_ptc , width=0.3, color=['red', 'orange', 'green'], error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
   ax[0].set_xticks(np.arange(len(list(locations_names.keys()))))
   ax[0].set_xticklabels(locations_names.values(), rotation=0)
-  ax[0].set_ylabel('Change in profitability (%)')
+  ax[0].set_ylabel('Change in \nprofitability (%)')
   ax[0].set_xlabel('')
-  ax[0].legend( [r'$PTC\; (\$0/kg-H_2)$',r'$PTC\; (\$1.0/kg-H_2)$',r'$PTC\; (\$2.7/kg-H_2)$'])
+  ax[0].legend( [r'$PTC\; (\$0/kg-H_2)$',r'$PTC\; (\$1.0/kg-H_2)$',r'$PTC\; (\$2.7/kg-H_2)$'], bbox_to_anchor=(1,1))
 
   # CO2
   co2_df.plot(ax = ax[1], kind = "bar", y =['co2_high_value', 'co2_low_value'], 
@@ -201,14 +212,24 @@ def plot_SA_variable_v2(var_dic):
               error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
   ax[1].set_xticks(np.arange(len(list(locations_names.keys()))))
   ax[1].set_xticklabels(locations_names.values(), rotation=0)
-  ax[1].set_ylabel('Change in profitability (%)')
+  ax[1].set_ylabel('Change in \nprofitability (%)')
   ax[1].set_xlabel('')
-  ax[1].legend( [r'$CO_2 (\$60/ton)$', r'$CO_2\; (\$30/ton)$'])
+  ax[1].legend( [r'$CO_2 (\$60/ton)$', r'$CO_2\; (\$30/ton)$'], bbox_to_anchor=(1,1))
+
+  # Size of module
+  size_df.plot(ax = ax[2], kind = "bar", y =['smr_20_value', 'smr_100_value'], 
+              yerr=yerr_size, width=0.3, color=['blue', 'pink'], 
+              error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
+  ax[2].set_xticks(np.arange(len(list(locations_names.keys()))))
+  ax[2].set_xticklabels(locations_names.values(), rotation=0)
+  ax[2].set_yscale('log')
+  ax[2].set_ylabel('Change in \nprofitability (%)')
+  ax[2].set_xlabel('')
+  ax[2].legend( ['Module size 20MWe', 'Module size 100MWe'], bbox_to_anchor=(1,1))
 
   sns.despine()
   fig.tight_layout()
   fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "smr_ft_SA_results_variable.png"))
-
 
 
 

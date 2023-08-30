@@ -63,17 +63,25 @@ def save_sweep_results(case, force=False):
       print("Sorting and saving the latest sweep results to gold folder for case {}".format(case))
       sweep_results_df.to_csv(os.path.join(case, "gold", "sweep.csv"), index=False)
 
-def get_final_npv(case, baseline=False):
+def get_final_npv(case, baseline=False, opt_point={}):
   # Assumes sweep results csv file in gold folder and sorted
   sweep_file = os.path.join(".", case, "gold", 'sweep.csv')
   if not os.path.isfile(sweep_file):
     print('Results not found for {}'.format(case))
     return None
   df = pd.read_csv(sweep_file)
-  if not baseline:
+  if not baseline and not opt_point:
     df = df.iloc[:1,:]
   else:
     df = df[df['smr_capacity']==BASELINE_SMR_CAP_REF]
+  if opt_point:
+    for comp_name, comp_capacity in opt_point.items():
+      df = df[np.round(df[comp_name]) == np.round(comp_capacity)]
+  if df.empty:
+    print('df empty')
+    print(case)
+    print(opt_point)
+    print(pd.read_csv(sweep_file)[['htse_capacity', 'meoh_capacity', 'h2_storage_capacity']])
   final_npv = float(df.mean_NPV.to_list()[0])
   std_npv = float(df.std_NPV.to_list()[0])
   return final_npv, std_npv
