@@ -5,17 +5,11 @@
     <label name="fuel_region">minnesota</label>
     <label name="co2_location">minnesota</label>
     <mode>sweep</mode>
-    <data_handling>
-      <inner_to_outer>csv</inner_to_outer>  
-    </data_handling>
-    <parallel>
-      <runinfo>
-        <expectedTime>72:0:0</expectedTime>
-        <clusterParameters>-P re_gen</clusterParameters>
-        <memory>4gb</memory>
-      </runinfo>
-    </parallel>
-    
+    <debug>
+      <inner_samples>1</inner_samples>
+      <macro_steps>20</macro_steps>
+      <dispatch_plot>False</dispatch_plot>
+    </debug>
     <verbosity>debug</verbosity>
     <num_arma_samples>2</num_arma_samples>
     <time_discretization>
