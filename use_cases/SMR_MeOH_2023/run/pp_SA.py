@@ -4,7 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
-import numpy as np
 
 locations_names = {'illinois':'Illinois', 'minnesota':'Minnesota', 'nebraska':'Nebraska', 'ohio':'Ohio', 
                     'texas':'Texas'}
@@ -24,10 +23,11 @@ variables_names = {'co2_high':r'$CO_2 (\$60/ton)$', 'co2_low':r'$CO_2\; (\$30/to
 total_variables = ['CO2 ($60/ton)', 'CO2 ($30/ton)', 'PTC ($0/kg-H2)','PTC ($1.0/kg-H2)','PTC ($2.7/kg-H2)', \
   'CAPEX', 'Electricity\nprices', 'O&M', 'Synfuels\nprices']
 
+
 def get_optimal_point(location):
-  results_df = pd.read_csv('smr_ft_results.csv')
+  results_df = pd.read_csv('smr_meoh_results.csv')
   results_df = results_df[results_df['location'] == location]
-  results_df = results_df[['htse_capacity', 'ft_capacity', 'h2_storage_capacity']]
+  results_df = results_df[['htse_capacity', 'meoh_capacity', 'h2_storage_capacity']]
   results_df = results_df.to_dict(orient='records')[0]
   return results_df
 
@@ -74,7 +74,7 @@ def load_SA_results_loc():
     for v in W_VARIABLES: 
       c = os.path.join(dir,loc+'_'+v)
       print(c)
-      c_npv, c_npv_sd = get_final_npv(c, opt_point=opt_point)
+      c_npv, c_npv_sd = get_final_npv(c)
       ddNPV = (c_npv-ref_npv)*100/np.abs(ref_npv-baseline_npv)
       ddNPV_sd = 2*100*np.sqrt((c_npv_sd/c_npv)**2 + 2*(ref_npv_sd/ref_npv)**2 + (baseline_npv_sd/baseline_npv)**2)
       var_dic[v]['value'].append(ddNPV)
@@ -128,7 +128,7 @@ def plot_SA_locations(loc_dic, type='regular'):
   fig.legend(lines, labels, ncol=1, loc='upper left')
 
   fig.tight_layout()
-  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "smr_ft_SA_results_location_"+type+".png"))
+  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "smr_meoh_SA_results_location_"+type+".png"))
 
 
 
@@ -169,7 +169,7 @@ def plot_SA_one_location(loc_dic, location, type='regular'):
   fig.legend(lines, labels, bbox_to_anchor=(1,1), ncol=1)
 
   fig.tight_layout()
-  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "smr_ft_SA_results_location_"+location+'_'+type+".png"))
+  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "smr_meoh_SA_results_location_"+location+'_'+type+".png"))
 
 
 def plot_SA_variable_v2(var_dic):
@@ -223,14 +223,15 @@ def plot_SA_variable_v2(var_dic):
               error_kw=dict(ecolor='black',elinewidth=1, capthick=1, capsize=3))
   ax[2].set_xticks(np.arange(len(list(locations_names.keys()))))
   ax[2].set_xticklabels(locations_names.values(), rotation=0)
-  #ax[2].set_yscale('log')
+  ax[2].set_yscale('log')
   ax[2].set_ylabel('Change in \nprofitability (%)')
   ax[2].set_xlabel('')
-  ax[2].legend( ['Module size 40MWe', 'Module size 80MWe'], bbox_to_anchor=(1,1))
+  ax[2].legend( ['Module size 20MWe', 'Module size 100MWe'], bbox_to_anchor=(1,1))
 
   sns.despine()
   fig.tight_layout()
-  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "smr_ft_SA_results_variable.png"))
+  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "smr_meoh_SA_results_variable.png"))
+
 
 
 
