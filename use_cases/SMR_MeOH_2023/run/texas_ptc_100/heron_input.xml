@@ -203,7 +203,7 @@
             <activity>h2</activity>
           </driver>
           <reference_price>
-            <Function method="h2_ptc_meoh">functions</Function>
+            <Function method="h2_ptc_meoh_100">functions</Function>
           </reference_price>
         </CashFlow>
       </economics>
