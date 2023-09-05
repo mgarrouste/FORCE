@@ -57,7 +57,7 @@
             <activity>electricity</activity>
           </driver>
           <reference_price>
-            <fixed_value>23.2</fixed_value>
+            <fixed_value>-23.2</fixed_value>
           </reference_price>
         </CashFlow>
       </economics>
@@ -67,7 +67,7 @@
       <produces resource="h2" dispatch="independent">
         <consumes>electricity</consumes>
         <capacity resource="electricity">
-          <sweep_values debug_value='-667'>-667.0,-529.0,-391.0,-254.0,-116.0</sweep_values> 
+          <sweep_values debug_value="-667">-667.0,-333.5</sweep_values> 
         </capacity>
         <minimum resource="electricity">
           
@@ -134,7 +134,7 @@
       <produces resource="naphtha,diesel,jet_fuel" dispatch="fixed">
         <consumes>h2,electricity</consumes>
         <capacity resource="h2">
-          <sweep_values debug_value='-16761.7'>-16762.0,-13299.0,-9837.0,-6375.0,-2912.0</sweep_values>
+          <sweep_values debug_value="-16761.7">-16761.7,-8380.85</sweep_values>
         </capacity>
         <transfer>
           <linear>
@@ -291,7 +291,7 @@
     <Component name="h2_storage">
       <stores resource="h2" dispatch="independent">
         <capacity resource="h2">
-          <sweep_values debug_value='10'>10.0,178792.0,357583.0,536375.0,715166.0</sweep_values> 
+          <sweep_values debug_value="10">10.0,5.0</sweep_values> 
         </capacity>
         <initial_stored>
           <fixed_value>0.0</fixed_value>

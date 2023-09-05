@@ -63,7 +63,7 @@
             <activity>electricity</activity>
           </driver>
           <reference_price>
-            <fixed_value>23.2</fixed_value>
+            <fixed_value>-23.2</fixed_value>
           </reference_price>
         </CashFlow>
       </economics>
