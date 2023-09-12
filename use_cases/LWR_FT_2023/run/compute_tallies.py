@@ -13,6 +13,7 @@ FUEL_DENSITY = {'jet_fuel':0.8,
                 'diesel':0.85,
                 'naphtha':0.77} # kg/L
 GAL_to_L = 3.785 # L/gal
+locations =['braidwood', 'cooper', 'davis_besse', 'prairie_island', 'stp']
 
 def parse_meta(xml_file):
   """ Parse the ROM meta xml file to get the cluster multiplicity information
@@ -161,32 +162,61 @@ def plot_lifetime_tallies(lifetime_series, lifetime_std, save_path):
   fig.savefig(save_path)
   return None
 
+
+def combine_tallies():
+  total_df = pd.DataFrame()
+  counter=0
+  for loc in locations:
+    df_loc = pd.read_csv(os.path.join(loc+'_dispatch', loc+'_lifetime_tallies.csv'))
+    df_loc.set_axis(['tally', loc], axis=1, inplace=True)
+    df_loc.sort_values(by=['tally'], inplace=True)
+    if counter == 0: 
+      total_df['tally'] = df_loc['tally']
+    total_df[loc] = df_loc[loc]
+    counter += 1
+  total_df.to_csv('all_locations_tallies.csv', index=False)
+
+
+
 def main():
   parser = argparse.ArgumentParser()
-  parser.add_argument("location", type=str, help="Dispatch print location")
+  parser.add_argument("location", type=str, help="Name of NPP location to compute tallies for")
+  parser.add_argument("-c", "--combine", help="Combine tallies", type=bool, required=False, default=False)
   args = parser.parse_args()
   
   #Check dispatch result file
-  path = os.path.abspath(args.location)
-  print(path)
+  print(f'Computing tallies for location :{args.location}')
+  dir = os.path.dirname(os.path.abspath(__file__))
+  dispatch_folder = os.path.join(dir, args.location+'_dispatch')
+
   # Get ARMA location
-  case_dir = os.path.dirname(os.path.dirname(path))
-  heron_input_xml = os.path.join(case_dir, "heron_input.xml")
-  print(heron_input_xml)
+  heron_input_xml = os.path.join(dispatch_folder, "heron_input.xml")
   if not os.path.isfile(heron_input_xml):
-    exit("No heron input")
+    exit(f"No heron input here : {heron_input_xml}")
   else: 
     print("HERON input file found here: {}".format(heron_input_xml))
   rom_meta_xml = get_arma_path(heron_input_xml=heron_input_xml)
   print("arma path : {}".format(os.path.abspath(rom_meta_xml)))
+
+  # Find dispatch results
+  gold = os.path.join(dispatch_folder, 'gold', 'dispatch_print.csv')
+  if not os.path.isfile(gold):
+    exit(f'No golded dispatch results here : {gold}')
+  else: 
+    print(f'Dispatch results found here : {gold}')
+
   # Compute tallies for the duration of the project
-  print("Lifetime tallies: \n")
-  lifetime_tallies, lifetime_std = calculate_tallies(dispatch_file=path, rom_meta_xml=rom_meta_xml)
-  csv_path = os.path.join(os.path.dirname(args.location),"lifetime_tallies.csv")
+  print("\nLifetime tallies: \n")
+  lifetime_tallies, lifetime_std = calculate_tallies(dispatch_file=gold, rom_meta_xml=rom_meta_xml)
+  csv_path = os.path.join(dispatch_folder,args.location+"_lifetime_tallies.csv")
   lifetime_tallies.sort_index(axis=0, inplace=True)
   lifetime_tallies.to_csv(csv_path, header=None)
-  fig_path = os.path.join(os.path.dirname(args.location), "lifetime_tallies_elec_synfuels.png")
+  fig_path = os.path.join(dispatch_folder, args.location+"_lifetime_tallies_elec_synfuels.png")
   plot_lifetime_tallies(lifetime_tallies, lifetime_std, fig_path)
+
+  # Combine tallies
+  if args.combine: 
+    combine_tallies()
   
 
 if __name__ == '__main__':
