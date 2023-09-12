@@ -6,6 +6,7 @@ import numpy as np
 ITC_VALUE = 0.7
 STORAGE_INIT = 0.0 # 1% filled at the beginning of the day
 MACRS = 15
+SMR_VOM = -23.2
 locations  = ['illinois', 'minnesota', 'nebraska', 'ohio', 'texas']
 steps_data = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', 'data', 'HERON_model_data.xlsx')
 
@@ -347,12 +348,77 @@ def sa_sweep_values(case):
   with open(os.path.join(case, 'heron_input.xml'), 'wb') as f:
     tree.write(f)
 
+def vom_smr(case): 
+  tree = ET.parse(os.path.join(case, 'heron_input.xml'))
+  root = tree.getroot().find('Components')
+  for comp in root.findall('Component'):
+    if comp.get('name') =='smr':
+      nodes = comp.find('economics').findall('CashFlow')
+      for node in nodes: 
+        if node.get('name')=='smrVOM':
+          refprice = node.find('reference_price').find('fixed_value')
+          refprice.text = str(SMR_VOM)
+  
+  with open(os.path.join(case, 'heron_input.xml'), 'wb') as f:
+    tree.write(f)
+
+
+def module_sa():
+  dir = os.path.dirname(os.path.abspath(__file__))
+  for loc in locations: 
+    module_low = os.path.join(dir, loc+'_smr_40')
+    module_high = os.path.join(dir, loc+'_smr_80')
+
+    def correct_smr_capacity(case, capacity):
+      tree = ET.parse(os.path.join(case, 'heron_input.xml'))
+      root = tree.getroot().find('Components')
+      for comp in root.findall('Component'):
+        if comp.get('name') =='smr':
+          capacity_value = comp.find('produces').find('capacity').find('fixed_value')
+          capacity_value.text = str(capacity)
+      with open(os.path.join(case, 'heron_input.xml'), 'wb') as f:
+          tree.write(f)
+    correct_smr_capacity(module_low, 480)
+    correct_smr_capacity(module_high, 960)
+
+    module_dic = {module_low:'40_MWe', module_high:'80_MWe'}
+    for case_name, sheet_name in module_dic.items():
+      steps_df = pd.read_excel(steps_data, sheet_name=sheet_name, nrows=8)
+      htse_steps = list(steps_df['htse'])
+      htse_steps = [str(np.round(v,1)) for v in htse_steps]
+      htse_steps = ','.join(htse_steps)
+      ft_steps = list(steps_df['meoh'])
+      ft_steps = [str(np.round(v,1))  for v in ft_steps]
+      ft_steps = ','.join(ft_steps)
+      h2_steps = list(steps_df['storage'])
+      h2_steps = [str(np.round(v))  for v in h2_steps]
+      h2_steps = ','.join(h2_steps)
+
+      tree = ET.parse(os.path.join(case_name, 'heron_input.xml'))
+      root = tree.getroot().find('Components')
+      for comp in root.findall('Component'):
+          # Storage
+        if comp.get('name') =='h2_storage':
+          sweep_val_node = comp.find('stores').find('capacity').find('sweep_values')
+          sweep_val_node.text = h2_steps
+        # FT
+        if comp.get('name') =='meoh':
+          sweep_val_node = comp.find('produces').find('capacity').find('sweep_values')
+          sweep_val_node.text = ft_steps
+        # HTSE
+        if comp.get('name') =='htse':
+          sweep_val_node = comp.find('produces').find('capacity').find('sweep_values')
+          sweep_val_node.text = htse_steps
+        with open(os.path.join(case_name, 'heron_input.xml'), 'wb') as f:
+          tree.write(f)
+
 
 def main():
   parser = argparse.ArgumentParser()
-  parser.add_argument('-p', "--pattern", type=str, nargs='+', help="pattern in cases names or cases' names")
-  parser.add_argument('-c', "--case", type=str, help="case")
-  parser.add_argument('-r', '--reduced', type=bool, help='create reduced reference cases')
+  parser.add_argument('-p', "--pattern", type=str, nargs='+', help="pattern in cases names or cases' names", required=False)
+  parser.add_argument('-c', "--case", type=str, help="case", required=False)
+  parser.add_argument('-r', '--reduced', type=bool, help='create reduced reference cases', required=False)
+  parser.add_argument('-m', '--module', type=bool, help='Correct smr module size sa inputs', required=False )
   args = parser.parse_args()
   dir = os.path.dirname(os.path.abspath(__file__))
   if args.pattern:
@@ -365,13 +431,15 @@ def main():
   elif args.reduced:
     for number in range(5,9):
       create_reduced_inputs(number)
+  elif args.module: 
+    module_sa()
   else: 
     raise Exception("No case or input passed to this script!")
-  if not args.reduced:
+  if args.case or args.pattern:
     print("Cases to modify: {}\n".format(cases))
     for case in cases:
       #delete_double_itc(case)
-      #itc(case)
+      vom_smr(case)
       init_storage(case)
       meoh_ratios(case)
       reduced_arma_samples = True
