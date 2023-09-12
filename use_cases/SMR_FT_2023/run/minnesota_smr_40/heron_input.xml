@@ -42,7 +42,7 @@
     <Component name="smr">
       <produces resource="electricity" dispatch="fixed">
         <capacity resource="electricity">
-          <fixed_value>240</fixed_value> 
+          <fixed_value>480</fixed_value> 
         </capacity>
       </produces>
       <economics>
@@ -74,7 +74,7 @@
       <produces resource="h2" dispatch="independent">
         <consumes>electricity</consumes>
         <capacity resource="electricity">
-          <sweep_values>-705.1,-352.55</sweep_values> 
+          <sweep_values>-465.1,-410.8,-356.5,-302.2,-248.0,-193.7,-139.4,-85.1</sweep_values> 
         </capacity>
         <minimum resource="electricity">
           
@@ -143,7 +143,7 @@
       <produces resource="naphtha,diesel,jet_fuel" dispatch="fixed">
         <consumes>h2</consumes>
         <capacity resource="h2">
-          <sweep_values>-15493.4,-7746.7</sweep_values>
+          <sweep_values>-11688.0,-10323.8,-8959.6,-7595.4,-6231.2,-4867.0,-3502.8,-2138.6</sweep_values>
         </capacity>
         <transfer>
           <linear>
@@ -323,7 +323,7 @@
     <Component name="h2_storage">
       <stores resource="h2" dispatch="independent">
         <capacity resource="h2">
-          <sweep_values>60751.0,30375.5</sweep_values> 
+          <sweep_values>10.0,40073.0,80146.0,120219.0,160292.0,200365.0,240438.0,280511.0</sweep_values> 
         </capacity>
         <initial_stored>
           <fixed_value>0.0</fixed_value>
