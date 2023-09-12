@@ -98,8 +98,9 @@ def get_baseline_NPV(case):
   if os.path.isfile(baseline_file):
     df = pd.read_csv(baseline_file)
     # Assume the right case is printed on the first line
-    mean_NPV = float(df.iloc[0,:].mean_NPV)
-    std_NPV = float(df.iloc[0,:].std_NPV)
+    df.set_index('smr_capacity', inplace=True)
+    mean_NPV = float(df.at[720.0,'mean_NPV'])
+    std_NPV = float(df.loc[720.0,'std_NPV'])
   else:
     raise FileNotFoundError("Baseline results not found")
   return mean_NPV, std_NPV
