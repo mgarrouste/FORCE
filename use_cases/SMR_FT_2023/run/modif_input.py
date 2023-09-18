@@ -303,7 +303,7 @@ def main():
       vom_smr(case)
       init_storage(case)
       project_lifetime(case, lifetime=60)
-      if (not 'reduced' in case) and (not 'sweep' in case): 
+      if (not 'reduced' in case) and (not 'sweep' in case) and (not 'smr' in case): 
         sa_sweep_values(case)
       #add_depreciation(case)
       

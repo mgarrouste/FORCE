@@ -31,7 +31,7 @@ def plot_hist(sweep_df):
   ax[0].set_ylabel(r'$\$M \;USD(2020)$')
   ax[0].set_xlabel('')
   ax[0].yaxis.set_major_locator(matplotlib.ticker.MultipleLocator(100))
-  ax[0].set_ylim(-100+min(sweep_df['baseline_NPV']), 100+max(sweep_df['mean_NPV']))
+  ax[0].set_ylim(-100+min(sweep_df['baseline_NPV']), 200+max(sweep_df['mean_NPV']))
   sns.despine(ax=ax[0], trim=True)
 
 

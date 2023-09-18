@@ -29,12 +29,9 @@ def plot_configurations(df_list):
     df = df_list[row]
 
     # Absolute values and manageable units
-    df['ft_capacity'] = np.abs(df['ft_capacity'])/1e3
+    df['ft_capacity'] = np.round(np.abs(df['ft_capacity'])/1e3,1)
     df['htse_capacity'] = np.abs(df['htse_capacity'])
     df['h2_storage_capacity'] = df['h2_storage_capacity']/1e3
-
-    # Only feasible runs
-    df = df[df['mean_NPV']> -1e9]
     
     # Baseline npv
     baseline = os.path.join(os.path.dirname(os.path.abspath(__file__)), loc+'_baseline')
@@ -55,6 +52,7 @@ def plot_configurations(df_list):
 
       # Compute change in profitability
       var_df['ddNPV'] = (var_df['mean_NPV']-ref_npv)*100/np.abs(ref_npv-baseline_npv)
+      var_df = var_df[var_df['ddNPV']> -200]
       if var =='ft_capacity':
         leg_var = 'h2_storage_capacity'        
       elif var=='h2_storage_capacity':

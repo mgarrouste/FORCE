@@ -74,7 +74,11 @@ def load_SA_results_loc():
     for v in W_VARIABLES: 
       c = os.path.join(dir,loc+'_'+v)
       print(c)
-      c_npv, c_npv_sd = get_final_npv(c, opt_point=opt_point)
+      if 'smr' in v:
+        module_sa = True
+      else: 
+        module_sa = False
+      c_npv, c_npv_sd = get_final_npv(c, module_sa = module_sa, opt_point=opt_point)
       ddNPV = (c_npv-ref_npv)*100/np.abs(ref_npv-baseline_npv)
       ddNPV_sd = 2*100*np.sqrt((c_npv_sd/c_npv)**2 + 2*(ref_npv_sd/ref_npv)**2 + (baseline_npv_sd/baseline_npv)**2)
       var_dic[v]['value'].append(ddNPV)
