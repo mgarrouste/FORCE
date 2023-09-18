@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+from matplotlib.ticker import MultipleLocator
 
 locations_names = {'illinois':'Illinois', 'minnesota':'Minnesota', 'nebraska':'Nebraska', 'ohio':'Ohio', 
                     'texas':'Texas'}
@@ -119,6 +120,8 @@ def plot_SA_locations(loc_dic, type='regular'):
     ax[i].axhline(0, color='grey', linewidth=0.8)
     ax[i].set_ylabel('Change in\nprofitability (%)')
     ax[i].set_title(loc_name)
+    ax[i].yaxis.set_major_locator(MultipleLocator(25))
+    ax[i].set_ylim(-100,100)
     sns.despine(ax=ax[i], trim=True)
     i+=1
     
@@ -206,6 +209,8 @@ def plot_SA_variable_v2(var_dic):
   ax[0].set_ylabel('Change in \nprofitability (%)')
   ax[0].set_xlabel('')
   ax[0].legend( [r'$PTC\; (\$0/kg-H_2)$',r'$PTC\; (\$1.0/kg-H_2)$',r'$PTC\; (\$2.7/kg-H_2)$'], bbox_to_anchor=(1,1))
+  ax[0].yaxis.set_major_locator(MultipleLocator(100))
+  ax[0].set_ylim(-400,0)
 
   # CO2
   co2_df.plot(ax = ax[1], kind = "bar", y =['co2_high_value', 'co2_low_value'], 
@@ -216,6 +221,8 @@ def plot_SA_variable_v2(var_dic):
   ax[1].set_ylabel('Change in \nprofitability (%)')
   ax[1].set_xlabel('')
   ax[1].legend( [r'$CO_2 (\$60/ton)$', r'$CO_2\; (\$30/ton)$'], bbox_to_anchor=(1,1))
+  ax[1].yaxis.set_major_locator(MultipleLocator(50))
+  ax[1].set_ylim(-100,0)
 
   # Size of module
   size_df.plot(ax = ax[2], kind = "bar", y =['smr_40_value', 'smr_80_value'], 
@@ -227,6 +234,8 @@ def plot_SA_variable_v2(var_dic):
   ax[2].set_ylabel('Change in \nprofitability (%)')
   ax[2].set_xlabel('')
   ax[2].legend( ['Module size 40MWe', 'Module size 80MWe'], bbox_to_anchor=(1,1))
+  ax[2].yaxis.set_major_locator(MultipleLocator(25))
+  ax[2].set_ylim(-50,50)
 
   sns.despine()
   fig.tight_layout()
