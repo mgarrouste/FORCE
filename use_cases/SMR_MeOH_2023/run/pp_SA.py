@@ -100,11 +100,15 @@ def load_SA_results_loc():
       print(c)
       c_npv, c_npv_sd = get_final_npv(c)
       if 'smr_40' in v:
-        baseline_npv, baseline_npv_sd = get_final_npv(baseline, baseline=True, baseline_cap=480)
+        baseline_npv_smr, baseline_npv_sd_smr = get_final_npv(baseline, baseline=True, baseline_cap=480)
       elif 'smr_80' in v: 
-        baseline_npv, baseline_npv_sd = get_final_npv(baseline, baseline=True, baseline_cap=960)
-      ddNPV = (c_npv-ref_npv)*100/np.abs(ref_npv-baseline_npv)
-      ddNPV_sd = 2*100*np.sqrt((c_npv_sd/c_npv)**2 + 2*(ref_npv_sd/ref_npv)**2 + (baseline_npv_sd/baseline_npv)**2)
+        baseline_npv_smr, baseline_npv_sd_smr = get_final_npv(baseline, baseline=True, baseline_cap=960)
+      if 'smr' in v:
+        ddNPV = (c_npv-baseline_npv_smr - (ref_npv-baseline_npv))*100/np.abs(ref_npv-baseline_npv)
+        ddNPV_sd = 2*100*np.sqrt((c_npv_sd/c_npv)**2 + 2*(ref_npv_sd/ref_npv)**2 + 2*(baseline_npv_sd/baseline_npv)**2 +(baseline_npv_sd_smr/baseline_npv_smr)**2)
+      else:
+        ddNPV = (c_npv-ref_npv)*100/np.abs(ref_npv-baseline_npv)
+        ddNPV_sd = 2*100*np.sqrt((c_npv_sd/c_npv)**2 + 2*(ref_npv_sd/ref_npv)**2 + (baseline_npv_sd/baseline_npv)**2)
       var_dic[v]['value'].append(ddNPV)
       var_dic[v]['sd'].append(ddNPV_sd)
       if 'co2' in c:
@@ -237,7 +241,7 @@ def plot_SA_variable_v2(var_dic):
   ax[0].set_xlabel('')
   ax[0].legend( [r'$PTC\; (\$0/kg-H_2)$',r'$PTC\; (\$1.0/kg-H_2)$',r'$PTC\; (\$2.7/kg-H_2)$'], bbox_to_anchor=(1,1))
   ax[0].yaxis.set_major_locator(MultipleLocator(100))
-  ax[0].set_ylim(-400,0)
+  ax[0].set_ylim(-500,0)
 
   # CO2
   co2_df.plot(ax = ax[1], kind = "bar", y =['co2_high_value', 'co2_low_value'], 
@@ -249,7 +253,7 @@ def plot_SA_variable_v2(var_dic):
   ax[1].set_xlabel('')
   ax[1].legend( [r'$CO_2 (\$60/ton)$', r'$CO_2\; (\$30/ton)$'], bbox_to_anchor=(1,1))
   ax[1].yaxis.set_major_locator(MultipleLocator(50))
-  ax[1].set_ylim(-100,0)
+  ax[1].set_ylim(-150,0)
 
   # Size of module
   size_df.plot(ax = ax[2], kind = "bar", y =['smr_40_value', 'smr_80_value'], 
@@ -261,8 +265,8 @@ def plot_SA_variable_v2(var_dic):
   ax[2].set_ylabel('Change in \nprofitability (%)')
   ax[2].set_xlabel('')
   ax[2].legend( ['Module size 40MWe', 'Module size 80MWe'], bbox_to_anchor=(1,1))
-  ax[2].yaxis.set_major_locator(MultipleLocator(25))
-  ax[2].set_ylim(-50,50)
+  ax[2].yaxis.set_major_locator(MultipleLocator(50))
+  ax[2].set_ylim(-100,100)
 
   sns.despine()
   fig.tight_layout()
