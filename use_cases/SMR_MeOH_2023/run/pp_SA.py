@@ -1,5 +1,4 @@
 import os
-from gold_results import get_final_npv
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -23,6 +22,7 @@ variables_names = {'co2_high':r'$CO_2 (\$60/ton)$', 'co2_low':r'$CO_2\; (\$30/to
                     'capex':'CAPEX', 'elec':'Electricity\nprices', 'om':'O&M', 'synfuels':'Synfuels\nprices'}
 total_variables = ['CO2 ($60/ton)', 'CO2 ($30/ton)', 'PTC ($0/kg-H2)','PTC ($1.0/kg-H2)','PTC ($2.7/kg-H2)', \
   'CAPEX', 'Electricity\nprices', 'O&M', 'Synfuels\nprices']
+BASELINE_SMR_CAP_REF = 720
 
 
 def get_optimal_point(location):
@@ -31,6 +31,29 @@ def get_optimal_point(location):
   results_df = results_df[['htse_capacity', 'meoh_capacity', 'h2_storage_capacity']]
   results_df = results_df.to_dict(orient='records')[0]
   return results_df
+
+def get_final_npv(case, baseline=False, opt_point={}, baseline_cap=BASELINE_SMR_CAP_REF):
+  # Assumes sweep results csv file in gold folder and sorted
+  sweep_file = os.path.join(".", case, "gold", 'sweep.csv')
+  if not os.path.isfile(sweep_file):
+    print('Results not found for {}'.format(case))
+    return None
+  df = pd.read_csv(sweep_file)
+  if not baseline and not opt_point:
+    df = df.iloc[:1,:]
+  else:
+    df = df[df['smr_capacity']==baseline_cap]
+  if opt_point:
+    for comp_name, comp_capacity in opt_point.items():
+      df = df[np.round(df[comp_name]) == np.round(comp_capacity)]
+  if df.empty:
+    print('df empty')
+    print(case)
+    print(opt_point)
+    print(pd.read_csv(sweep_file)[['htse_capacity', 'meoh_capacity', 'h2_storage_capacity']])
+  final_npv = float(df.mean_NPV.to_list()[0])
+  std_npv = float(df.std_NPV.to_list()[0])
+  return final_npv, std_npv
 
 def load_SA_results_loc(): 
   dir = os.path.dirname(os.path.abspath(__file__))
@@ -43,7 +66,7 @@ def load_SA_results_loc():
     var_dic[v] = {'value':[], 'sd':[]}
   for loc in locations_names.keys(): 
     baseline = os.path.join(dir, loc+'_baseline')
-    baseline_npv, baseline_npv_sd = get_final_npv(baseline)
+    baseline_npv, baseline_npv_sd = get_final_npv(baseline, baseline=True)
     ref = os.path.join(dir, loc+'_reduced_8')
     ref_npv, ref_npv_sd = get_final_npv(ref)
     low_values = []
@@ -76,6 +99,10 @@ def load_SA_results_loc():
       c = os.path.join(dir,loc+'_'+v)
       print(c)
       c_npv, c_npv_sd = get_final_npv(c)
+      if 'smr_40' in v:
+        baseline_npv, baseline_npv_sd = get_final_npv(baseline, baseline=True, baseline_cap=480)
+      elif 'smr_80' in v: 
+        baseline_npv, baseline_npv_sd = get_final_npv(baseline, baseline=True, baseline_cap=960)
       ddNPV = (c_npv-ref_npv)*100/np.abs(ref_npv-baseline_npv)
       ddNPV_sd = 2*100*np.sqrt((c_npv_sd/c_npv)**2 + 2*(ref_npv_sd/ref_npv)**2 + (baseline_npv_sd/baseline_npv)**2)
       var_dic[v]['value'].append(ddNPV)
