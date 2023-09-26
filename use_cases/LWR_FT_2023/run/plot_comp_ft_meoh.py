@@ -32,14 +32,14 @@ def plot_hist(df_dic):
   ax.set_xticklabels(locations_names.values(), rotation=0)
   ax.set_ylabel(r'$\Delta(NPV) \;\$M \;USD(2020)$')
   ax.set_xlabel('')
-  ax.legend(["FT", "MeOH"])
+  ax.legend(["FT", "MTD"])
 
   ax.yaxis.set_major_locator(matplotlib.ticker.MultipleLocator(100))
   ax.set_ylim(-100+min(merged_df['delta_NPV_ft']), 100+max(merged_df['delta_NPV_meoh']))
   sns.despine(ax=ax, trim=True)
 
   fig.tight_layout()
-  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "comparison_ft_meoh.png"))
+  fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "comparison_ft_meoh_lwr.png"))
   return None
 
 
@@ -103,7 +103,7 @@ def main():
   meoh = df_dic['MeOH']
   meoh['pathway'] = 'MeOH'
   to_save = pd.concat([ft, meoh], ignore_index=True)
-  to_save.to_csv(os.path.join(dir,'comparison_ft_meoh_results.csv'))
+  to_save.to_csv(os.path.join(dir,'comparison_ft_meoh_lwr_results.csv'))
   plot_hist(df_dic)
 
 if __name__ == "__main__":
