@@ -201,7 +201,7 @@ def plot_SA_variable_v2(var_dic):
   ax[1].set_xticklabels(locations_names.values(), rotation=0)
   ax[1].set_ylabel('Change in profitability (%)')
   ax[1].set_xlabel('')
-  ax[1].legend( [r'$CO_2 (\$60/ton)$', r'$CO_2\; (\$30/ton)$'])
+  ax[1].legend( [r'$CO_2 (\$30/ton)$', r'$CO_2\; (\$60/ton)$'])
 
   sns.despine()
   fig.tight_layout()

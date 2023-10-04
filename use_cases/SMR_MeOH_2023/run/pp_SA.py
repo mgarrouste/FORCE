@@ -264,7 +264,7 @@ def plot_SA_variable_v2(var_dic):
   #ax[2].set_yscale('log')
   ax[2].set_ylabel('Change in \nprofitability (%)')
   ax[2].set_xlabel('')
-  ax[2].legend( ['Module size 40MWe', 'Module size 80MWe'], bbox_to_anchor=(1,1))
+  ax[2].legend( ['Plant capacity 480MWe', 'Plant capacity 960MWe'], bbox_to_anchor=(1,1))
   ax[2].yaxis.set_major_locator(MultipleLocator(50))
   ax[2].set_ylim(-100,100)
 
