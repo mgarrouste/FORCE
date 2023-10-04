@@ -118,63 +118,7 @@ def find_lower_nearest_idx(array, value):
       idx = i
   return idx
 
-def co2_supply_curve_comb(data,meta):
-  """
-    Determines the cost of CO2 as a function of the quantity asked for, 
-    For HTSE and FT combined component cases
-    Based on preliminary data from D. Wendt analysis for Braidwood NPP
-    @ In, data, dict, request for data
-    @ In, meta, dict, state information
-    @ Out, data, dict, filled data
-    @ In, meta, dict, state information
-  """
-  co2_cost = 0
-  comp_cap = meta['HERON']['RAVEN_vars']['htse_ft_capacity'] #MWe (negative value)
-  elec_to_h2_rate = 25.13 #kg-H2/MWe
-  h2_to_co2_rate = 6.58/1.06 #kg-Co2/kg-h2
-  comp_cap = np.abs(comp_cap)
-  co2_demand_year = 365*24*comp_cap*elec_to_h2_rate*h2_to_co2_rate #(kg-CO2/year) neg
-  # Get the data for the NPP
-  labels = meta['HERON']['Case'].get_labels()
-  location = labels['location']
-  location_path = '../data/'+str(location)+'_co2.csv'
-  df = pd.read_csv(os.path.join(os.path.dirname(__file__), location_path))
-  cost_data = df.iloc[:,-1].to_numpy()
-  co2_demand_data = df.iloc[:,-2].to_numpy()
-  diff = np.absolute(co2_demand_data-co2_demand_year)
-  idx = np.argmin(diff)
-  co2_cost = cost_data[idx]
-  data = {'reference_price': -co2_cost*co2_demand_year}
-  return data, meta
-
 def co2_supply_curve(data, meta):
-  """
-    Determines the cost of CO2 as a function of the quantity asked for, 
-    Based on data from D. Wendt analysis on CO2 feedstock
-    @ In, data, dict, request for data
-    @ In, meta, dict, state information
-    @ Out, data, dict, filled data
-    @ In, meta, dict, state information
-  """
-  co2_cost = 0
-  ft_cap = meta['HERON']['RAVEN_vars']['ft_capacity'] #kg-H2
-  h2_rate = 1.06
-  co2_rate = 6.58
-  co2_demand_year = 365*24*np.abs(ft_cap)*co2_rate/h2_rate #(kg/year)
-  # Get the data for the NPP
-  labels = meta['HERON']['Case'].get_labels()
-  location = labels['location']
-  location_path = '../data/'+str(location)+'_co2.csv'
-  df = pd.read_csv(os.path.join(os.path.dirname(__file__), location_path))
-  cost_data = df.iloc[:,-1].to_numpy()
-  co2_demand_data = df.iloc[:,-2].to_numpy()
-  diff = np.absolute(co2_demand_data-co2_demand_year)
-  idx = np.argmin(diff)
-  co2_cost = cost_data[idx]
-  data = {'reference_price': -co2_cost*co2_demand_year}
-  return data, meta 
-
-def co2_supply_curve_test(data, meta):
   """
     Determines the cost of CO2 as a function of the quantity asked for, 
     Based on data from D. Wendt analysis on CO2 feedstock
