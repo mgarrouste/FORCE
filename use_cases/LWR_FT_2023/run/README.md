@@ -24,5 +24,10 @@ Sensitivities explored:
 - ptc_000, ptc_100, ptc_270: Hydrogen production tax credit reduced to $0, $1, and $2.7/kg-h2
 - synfuels_0.75 and synfuels_1.25: Syfnuel prices perturbed x0.75 and x1.25
 
-
+### Scripts usage and usefulness
+- functions.py: N/A // For modeling supply curves, prices from csv,...
+- pp_SA.py: Launch with python // Generates plots for results of sensitivity analysis
+- pp_configurations: Launch with python // Generates plots for exploration of synfuel IES configurations
+- plot_sweeps.py: Launch with python // Generates main results for synfuel IES vs. BAU case
+-
 
