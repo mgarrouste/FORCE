@@ -13,7 +13,7 @@ case_names = ['ptc_000', 'ptc_100', 'ptc_270', 'sweep']
 def compute_lin_reg_coefs(PTC, mean_NPV):
   x = np.array(PTC).reshape((-1,1))
   y = np.array(mean_NPV)
-  model = LinearRegression.fit(x,y)
+  model = LinearRegression().fit(x,y)
   a = model.coef_
   b = model.intercept_
   r_squared = model.score(x,y)
@@ -39,17 +39,19 @@ def build_reg_table():
     loc_dic['location'] = location
     mean_NPV_list, baseline_NPV = get_npv_data(location)
     a, b, r_squared = compute_lin_reg_coefs(PTC, mean_NPV_list)
-    loc_dic['a'] = a
-    loc_dic['b'] = b
-    loc_dic['r_squared'] = r_squared
+    loc_dic['a'] = float(a)
+    loc_dic['b'] = float(b)
+    loc_dic['r_squared'] = float(r_squared)
     ptc_be = (baseline_NPV-b)/a
-    loc_dic['ptc_breakeven'] = ptc_be
+    loc_dic['ptc_breakeven'] = float(ptc_be)
     dic_list.append(loc_dic)
   return dic_list
 
 
 def main():
-  build_reg_table()
+  reg_df = pd.DataFrame.from_dict(build_reg_table())
+  print(reg_df)
+  reg_df.to_csv(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'breakeven_ptc.csv'), index=False)
 
 if __name__ == "__main__":
   main()
